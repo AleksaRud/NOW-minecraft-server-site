@@ -39,7 +39,7 @@
 
 <style scoped>
   .router-link-active{
-    
+    box-sizing: border-box;
     /*background-color: #87BBA2;*/
     color: #FFFFFF;
     border-bottom: #a3d9e0 4px solid;
@@ -48,12 +48,13 @@
     border: 0;
   }
   a{
+    height: 80px;
     box-sizing: border-box;
     text-decoration: none;
     color:#a3d9e0;
     font-size: 16px;
     font-weight: 600;
-    padding: 28px 32px;
+    padding: 28px 28px;
     transition: all 0.3s;
     display: flex;
     flex-direction: row;
@@ -61,11 +62,13 @@
     gap: 4px;
   }
   a:active{
+    box-sizing: border-box;
     text-decoration: none;
     color: #FFFFFF;
     border-bottom: #a3d9e0 4px solid;
   }
   a:hover, a:focus{
+    box-sizing: border-box;
     text-decoration: none;
     color: #FFFFFF;
     /*background-color: #87BBA2;*/
@@ -79,6 +82,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
     /*background-color: #5D737E;*/
     height: fit-content;
   }
@@ -91,10 +96,11 @@
   .logo{
     width: 64px;
     height: 64px;
-    background-image: url('./assets/logo.svg');
+    border-radius: 32px;
+    background-image: url('./assets/logo2.png');
     background-repeat: no-repeat;
     background-size: contain;
-  }
+  }/*
   .tasks-icon{
     width: 28px;
     height: 28px;
@@ -108,6 +114,6 @@
     background-image: url('./assets/users.svg');
     background-repeat: no-repeat;
     background-size: contain;
-  }
+  }*/
 </style>
 
