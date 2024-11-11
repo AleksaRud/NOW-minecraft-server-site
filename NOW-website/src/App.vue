@@ -1,30 +1,113 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  
+  <div class="header">
+    <div class="logo"></div>
+    <div class="group">
+      <RouterLink to="/">
+        <div class="tasks-icon"></div>
+        Главная
+      </RouterLink>
+      <RouterLink to="/aboutserver">
+        <div class="users-icon"></div>
+        О сервере
+      </RouterLink>
+      <RouterLink to="/players">
+        <div class="users-icon"></div>
+        Игроки
+      </RouterLink>
+      <RouterLink to="/projects">
+        <div class="users-icon"></div>
+        Проекты
+      </RouterLink>
+      <RouterLink to="/shop">
+        <div class="users-icon"></div>
+        Магазин
+      </RouterLink>
+    </div>
+    <RouterLink to="/account" id="account" class="account">
+      <div class="users-icon"></div>
+      Личный кабинет
+    </RouterLink>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+    <RouterView/>
+  
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+  .router-link-active{
+    
+    /*background-color: #87BBA2;*/
+    color: #FFFFFF;
+    border-bottom: #a3d9e0 4px solid;
+  }
+  .router-link-active[id='account']{
+    border: 0;
+  }
+  a{
+    box-sizing: border-box;
+    text-decoration: none;
+    color:#a3d9e0;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 28px 32px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+  a:active{
+    text-decoration: none;
+    color: #FFFFFF;
+    border-bottom: #a3d9e0 4px solid;
+  }
+  a:hover, a:focus{
+    text-decoration: none;
+    color: #FFFFFF;
+    /*background-color: #87BBA2;*/
+    border-bottom: #a3d9e0 4px solid;
+  }
+  .account:hover, .account:focus{
+    border: 0;
+  }
+  
+  .header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /*background-color: #5D737E;*/
+    height: fit-content;
+  }
+  .group{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: fit-content;
+  }
+  .logo{
+    width: 64px;
+    height: 64px;
+    background-image: url('./assets/logo.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .tasks-icon{
+    width: 28px;
+    height: 28px;
+    background-image: url('./assets/task.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .users-icon{
+    width: 28px;
+    height: 28px;
+    background-image: url('./assets/users.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 </style>
+
