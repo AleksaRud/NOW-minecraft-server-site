@@ -33,8 +33,25 @@
       Личный кабинет
     </RouterLink>
   </div>
-    <RouterView/>
+  <RouterView/>
   
+  <div class="footer">
+    <div class="footer-links">
+      <div class="links">
+        <div>О сервере</div>
+        <div>Проекты</div>
+        <div>Участники</div>
+        <div>Магазин</div>
+      </div>
+      <div class="links">
+        <div>Пользовательское соглашение</div>
+        <div>Discord</div>
+        <div>Telegram</div>
+        <div>Поддержка</div>
+      </div>
+    </div>
+    <div>Not an official Minecraft product. We are in no way affiliated with or endorsed by Mojang Synergies AB, Microsoft Corporation or other rightsholders.</div>
+  </div>
 </template>
 
 <style scoped>
@@ -115,5 +132,26 @@
     background-repeat: no-repeat;
     background-size: contain;
   }*/
+
+  .footer{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 64px;
+    padding: 72px 64px;
+    border-top: #1f3c5b 1px solid;
+    box-shadow: 0px 0px 4px #1f3c5b;
+  }
+  .footer-links{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .links{
+    display: flex;
+    flex-direction: row;
+    gap: 64px;
+  }
 </style>
 
