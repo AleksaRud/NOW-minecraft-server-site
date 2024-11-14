@@ -8,9 +8,9 @@ const theme = {
     "colorError": "#fd723f",
     "colorInfo": "#3d84bd",
     "colorBorder": "#424242",
-    
     "colorBgContainer": "transparent",
     "colorText": "rgba(255, 255, 255, 0.85)",
+    "fontSize": 18,
   },
 }
 export { theme }

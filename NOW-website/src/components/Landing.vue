@@ -1,5 +1,44 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 
+
+let news_cards = ref([
+    {
+        pic: "../assets/logo2.png",
+        date: "31.10.2024",
+        title: "Украшение спавна к Хеллоину",
+        discription: "Бу! Испугался? Не бойся, я друг, я тебя не обижу. Иди сюда, иди ко мне, сядь рядом со мной, посмотри мне в глаза. Ты видишь меня? Я тоже тебя вижу. Давай смотреть друг на друга до тех пор, пока наши глаза не устанут. Ты не хочешь? Почему? Что-то не так?",
+        btn_tytle: "",
+        btn_link: "", 
+    },
+    {
+        pic: "../assets/logo2.png",
+        date: "16.08.2024",
+        title: "Завершение набора новичков",
+        discription: "Набор новичков на сервер завершён! Теперь к нам присоедились 2 человека. Если у вас не получилось пройти, не расстраивайтесь, в будущем будем проводить ещё наборы",
+        btn_tytle: "",
+        btn_link: "", 
+    },
+    {
+        pic: "../assets/logo2.png",
+        date: "14.08.2024",
+        title: "Набираем новых участников на сервер!",
+        discription: "Поздравляю всех с началом первого набора новичков на наш сервер! Время проведения набора до 00:00 по МСК 16 августа. Итоги будут подведены на стриме 16 августа",
+        btn_tytle: "Подробнее о наборе",
+        btn_link:"https://t.me/now_minecraft_server/34", 
+    },
+    {
+        pic: "../assets/logo2.png",
+        date: "20.07.2024",
+        title: "Старт 1 сезона!",
+        discription: "",
+        btn_tytle: "",
+        btn_link: "", 
+    },
+])
+function goToLink( link: string ){
+    window.location.href = link;
+}
 </script>
 
 <template>
@@ -26,13 +65,13 @@
             </div>
         </div>
         <div class="offer-join1">
-            <div>
+            <div class="group">
                 <div class="title">Присоединяйся к растущему сообществу по серверу!</div>
                 <div class="buttons">
                     
-                    <a-button>Discord</a-button>
-                    <a-button>Telegram</a-button>
-                    <a-button>Межсезонье</a-button>    
+                    <a-button class="btn">Discord</a-button>
+                    <a-button class="btn">Telegram</a-button>
+                    <a-button class="btn">Межсезонье</a-button>    
                     
                 </div>
             </div>
@@ -41,22 +80,14 @@
         <div class="news-block">
             <div class="title">Последние новости</div>
             <div class="news">
-                <div class="news-card">
-                    <div class="date">16.08.2024</div>
-                    <div class="news-title">Завершение первого набора новичков!</div>
-                    <div>Набор новичков на сервер завершён! Теперь к нам присоедились 2 человека. Если у вас не получилось пройти, не расстраивайтесь, в будущем будем проводить ещё наборы</div>
+                
+                <div v-for="card in news_cards" class="news-card" style="background-image: url(card.pic);">
+                    <div class="date">{{ card.date }}</div>
+                    <div class="news-title">{{ card.title }}</div>
+                    <div>{{ card.discription }}</div>
+                    <a-button type="link" v-if="card.btn_link" @click = goToLink(card.btn_link)>{{ card.btn_tytle }}</a-button>
                 </div>
-                <div class="news-card">
-                    <div class="date">14.08.2024</div>
-                    <div class="news-title">Набираем новых участников на сервер!</div>
-                    <div>Поздравляю всех с началом первого набора новичков на наш сервер! Время проведения набора до 00:00 по МСК 16 августа. Итоги будут подведены на стриме 16 августа</div>
-                    <div>Подробнее о наборе</div>
-                </div>
-                <div class="news-card">
-                    <div class="date">20.07.2024</div>
-                    <div class="news-title">Старт 1 сезона!</div>
-                    <div></div>
-                </div>
+
             </div>
         </div>
         <div class="players-projects">
@@ -170,7 +201,73 @@
         height: 164px;
         background-color: #5a8fba;
     }
-
-
+    .offer-join1{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 32px;
+    }
+    .offer-join1 .group{
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .offer-join1 .title{
+        font-size: 40px;
+    }
+    .offer-join1 .buttons{
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .btn{
+        box-sizing: border-box;
+        height: 64px;
+        text-align: left;
+    }
+    .offer-join1 .pic{
+        width: 75%;
+        background-color: #5a8fba;
+    }
+    .news-block{
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .news-block .title{
+        font-size: 40px;
+    }
+    .news{
+        width: 1340px;
+        overflow-x: auto;
+        
+        
+        display: flex;
+        flex-direction: row;
+        gap: 64px;
+        
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-x:scroll;
+        
+    }
     
+    .news-card{
+        min-width: 320px;
+        height: 540px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 32px;
+        gap: 8px;
+        font-size: 18px;
+        background-size: cover;
+        background-position: center;
+        background-color: #1f3c5b;
+    }
+    .date, .news-title{
+        font-size: 32px;
+    }
 </style>
