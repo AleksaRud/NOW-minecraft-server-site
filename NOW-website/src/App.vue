@@ -1,57 +1,58 @@
 <script setup lang="ts">
-
+import {theme} from './theme'
 </script>
 
 <template>
-  
-  <div class="header">
-    <div class="logo"></div>
-    <div class="group">
-      <RouterLink to="/">
-        <div class="tasks-icon"></div>
-        Главная
-      </RouterLink>
-      <RouterLink to="/aboutserver">
+  <a-config-provider :theme = "theme">
+    <div class="header">
+      <div class="logo"></div>
+      <div class="group">
+        <RouterLink to="/">
+          <div class="tasks-icon"></div>
+          Главная
+        </RouterLink>
+        <RouterLink to="/aboutserver">
+          <div class="users-icon"></div>
+          О сервере
+        </RouterLink>
+        <RouterLink to="/players">
+          <div class="users-icon"></div>
+          Игроки
+        </RouterLink>
+        <RouterLink to="/projects">
+          <div class="users-icon"></div>
+          Проекты
+        </RouterLink>
+        <RouterLink to="/shop">
+          <div class="users-icon"></div>
+          Магазин
+        </RouterLink>
+      </div>
+      <RouterLink to="/account" id="account" class="account">
         <div class="users-icon"></div>
-        О сервере
-      </RouterLink>
-      <RouterLink to="/players">
-        <div class="users-icon"></div>
-        Игроки
-      </RouterLink>
-      <RouterLink to="/projects">
-        <div class="users-icon"></div>
-        Проекты
-      </RouterLink>
-      <RouterLink to="/shop">
-        <div class="users-icon"></div>
-        Магазин
+        Личный кабинет
       </RouterLink>
     </div>
-    <RouterLink to="/account" id="account" class="account">
-      <div class="users-icon"></div>
-      Личный кабинет
-    </RouterLink>
-  </div>
-  <RouterView/>
-  
-  <div class="footer">
-    <div class="footer-links">
-      <div class="links">
-        <div>О сервере</div>
-        <div>Проекты</div>
-        <div>Участники</div>
-        <div>Магазин</div>
+    <RouterView/>
+    
+    <div class="footer">
+      <div class="footer-links">
+        <div class="links">
+          <div>О сервере</div>
+          <div>Проекты</div>
+          <div>Участники</div>
+          <div>Магазин</div>
+        </div>
+        <div class="links">
+          <div>Пользовательское соглашение</div>
+          <div>Discord</div>
+          <div>Telegram</div>
+          <div>Поддержка</div>
+        </div>
       </div>
-      <div class="links">
-        <div>Пользовательское соглашение</div>
-        <div>Discord</div>
-        <div>Telegram</div>
-        <div>Поддержка</div>
-      </div>
+      <div>Not an official Minecraft product. We are in no way affiliated with or endorsed by Mojang Synergies AB, Microsoft Corporation or other rightsholders.</div>
     </div>
-    <div>Not an official Minecraft product. We are in no way affiliated with or endorsed by Mojang Synergies AB, Microsoft Corporation or other rightsholders.</div>
-  </div>
+  </a-config-provider>
 </template>
 
 <style scoped>

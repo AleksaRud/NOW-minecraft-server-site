@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 
-
 </script>
 
 <template>
@@ -13,15 +12,15 @@
             Добро пожаловать в Non-ordinary World, приватный сервер Minecraft, где каждый игрок может найти что-то для себя. Здесь вас ждут захватывающие приключения, креативные постройки и дружелюбное сообщество. Исследуйте мир, полный тайн и загадок, стройте невероятные сооружения и участвуйте в увлекательных событиях!
         </div>
         <div class="offers">
-            <div class="offer">
+            <div class="offer1">
                 <div class="pic1"></div>
                 <div class="text">Присоединяйтесь к активному и дружелюбному сообществу игроков</div>
             </div>
-            <div class="offer">
+            <div class="offer2">
                 <div class="pic2"></div>
                 <div class="text">Участвуйте в регулярных ивентах и конкурсах с призами</div>
             </div>
-            <div class="offer">
+            <div class="offer3">
                 <div class="pic3"></div>
                 <div class="text">Создавайте шедевры без ограничений!</div>
             </div>
@@ -30,9 +29,11 @@
             <div>
                 <div class="title">Присоединяйся к растущему сообществу по серверу!</div>
                 <div class="buttons">
-                    <button>Discord</button>
-                    <button>Telegram</button>
-                    <button>Межсезонье</button>    
+                    
+                    <a-button>Discord</a-button>
+                    <a-button>Telegram</a-button>
+                    <a-button>Межсезонье</a-button>    
+                    
                 </div>
             </div>
             <div class="pic"></div>
@@ -140,17 +141,36 @@
         flex-direction: column;
         gap: 88px;
     }
-    .offer{
-        
+    .offer1, .offer2, .offer3{
         display: flex;
         flex-direction: row;
         gap: 88px;
         font-size: 32px;
+        width: 100%;
+        align-items: center;
+    }
+    .offer1{
+        justify-content: flex-start;
+    }
+    .offer2{
+        justify-content: flex-end;
+        
+    }
+    .offer3{
+        justify-content: center;
+    }
+    .offer2 .text{
+        width: 45%;
+    }
+    .text{
+        max-width: 60%;
     }
     .pic1, .pic2, .pic3{
         width: 164px;
         height: 164px;
         background-color: #5a8fba;
     }
+
+
     
 </style>
