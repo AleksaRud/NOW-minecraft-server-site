@@ -137,14 +137,14 @@ function goToLink( link: string ){
             </div>
         </div>
         <div class="offer-join2">
-            <div>
+            <div class="group">
                 <div class="title">Стань участником растущего майнкрафт сервера!</div>
                 <div class="sub-title"> Следующий набор скоро</div>
             </div>
             <div class="buttons">
-                <button>Discord</button>
-                <button>Telegram</button>
-                <button>Межсезонье</button>    
+                <a-button class="btn">Discord</a-button>
+                <a-button class="btn">Telegram</a-button>
+                <a-button class="btn">Межсезонье</a-button>      
             </div>
         </div>
     </div>
@@ -306,7 +306,7 @@ function goToLink( link: string ){
         height: 320px;
         background-color: #1f3c5b;
     }
-    .btn{
+    .buildings .btn{
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -405,5 +405,36 @@ function goToLink( link: string ){
     }
     .comment5 .block{
         width: 280px;
+    }
+    .offer-join2{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 80px;
+        padding: 140px 160px;
+        box-sizing: border-box;
+    }
+    .offer-join2 .title{
+        font-size: 48px;
+    }
+    .offer-join2 .sub-title{
+        font-size: 32px;
+    }
+    .offer-join2 .group{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 32px;
+    }
+    .offer-join2 .buttons{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .offer-join2 .btn{
+        width: 280px;
+        text-align: center;
     }
 </style>
