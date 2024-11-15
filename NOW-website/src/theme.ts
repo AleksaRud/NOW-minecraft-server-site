@@ -11,6 +11,7 @@ const theme = {
     "colorBgContainer": "transparent",
     "colorText": "rgba(255, 255, 255, 0.85)",
     "fontSize": 18,
+    "colorBgTextHover": "#1f3c5b66",
   },
 }
 export { theme }

@@ -94,35 +94,46 @@ function goToLink( link: string ){
             <div class="title">Постройки наший игроков</div>
             <div class="buildings">
                 <div class="building1"></div>
-                <div>
+                <div class="group">
                     <div class="building2"></div>
-                    <button>
+                    <a-button type="text" ghost class="btn">
                         <div>Посмотреть все</div>
                         <div class="icon"></div>
-                    </button>
+                    </a-button>
                 </div>
             </div>
         </div>
         <div class="comments">
             <div class="comment1">
-                <div class="nickname">Обамка</div>
-                <div>Саша- у меня всё под контролем. коля- ай ай (RIP)</div>
+                <div class="block">
+                    <div class="nickname">Bylka</div>
+                    <div>Какой кирпич, это МРАМОР ИТАЛЬЯНСКИЙ!</div>
+                </div>
             </div>
             <div class="comment2">
-                <div class="nickname">MrShaurma</div>
-                <div>Ну я делал прилесным дамам комплименты потом ходил туда сюда за энергосами потом я общался с Ксюшей пока Александра настраивала скины а в конце Александра сделала аконтовку дома и офнула стрим</div>
+                <div class="block">
+                    <div class="nickname">Обамка</div>
+                    <div>Саша- у меня всё под контролем. коля- ай ай (RIP)</div>
+                </div>
             </div>
             <div class="comment3">
-                <div class="nickname">Bylka</div>
-                <div>Какой кирпич, это МРАМОР ИТАЛЬЯНСКИЙ!</div>
+                <div class="block">
+                    <div class="nickname">MrShaurma</div>
+                    <div>Ну я делал прилесным дамам комплименты потом ходил туда сюда за энергосами потом я общался с Ксюшей пока Александра настраивала скины а в конце Александра сделала аконтовку дома и офнула стрим</div>
+                </div>
             </div>
+            
             <div class="comment4">
-                <div class="nickname">ExE_GS</div>
-                <div>ЪЮЪ</div>
+                <div class="block">
+                    <div class="nickname">ExE_GS</div>
+                    <div>ЪЮЪ</div>
+                </div>
             </div>
             <div class="comment5">
-                <div class="nickname">boy with the tie</div>
-                <div>ehh.. хочу поиграть с вами. Ну ладно! тегните как будете набирать людей</div>
+                <div class="block">
+                    <div class="nickname">boy with the tie</div>
+                    <div>ehh.. хочу поиграть с вами. Ну ладно! тегните как будете набирать людей</div>
+                </div>
             </div>
         </div>
         <div class="offer-join2">
@@ -239,17 +250,13 @@ function goToLink( link: string ){
         font-size: 40px;
     }
     .news{
-        width: 1340px;
-        overflow-x: auto;
-        
-        
+        width: 1340px;        
         display: flex;
         flex-direction: row;
         gap: 64px;
         
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-x:scroll;
         
     }
     
@@ -269,5 +276,134 @@ function goToLink( link: string ){
     }
     .date, .news-title{
         font-size: 32px;
+    }
+    .players-projects{
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+    }
+    .players-projects .title{
+        font-size: 40px;
+    }
+    .buildings{
+        display: flex;
+        flex-direction: row;
+        gap: 24px;
+    }
+    .building1{
+        width: 800px;
+        height: 620px;
+        background-color: #1f3c5b;
+    }
+    .buildings .group{
+        display: flex;
+        flex-direction: column;
+        gap: 96px;
+        align-items: center;
+    }
+    .building2{
+        width: 480px;
+        height: 320px;
+        background-color: #1f3c5b;
+    }
+    .btn{
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+        width: 240px;
+        font-size: 28px;
+        height: 116px;
+        padding-top: 20px;
+    }
+    .icon{
+        width: 160px;
+        height: 160px;
+        background-image: url('../assets/arrow_rigth.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    .comments{
+        
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        
+    }
+    .comment1{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .comment1 .block{
+        width: 300px;
+    }
+    .block{
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 36px;
+        border-radius: 32px;
+        background-color: #1f3c5b;
+        font-size: 20px;
+        align-items: center;
+        text-align: center;
+        transition: all 0.6s;
+    }
+    .block:hover{
+        box-shadow: 0px 0px 8px 4px #3b5b8c;
+    }
+    .nickname{
+        font-size: 32px;
+    }
+    .comment2{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: -40px;
+    }
+    .comment2 .block{
+        width: 320px;
+    }
+    .comment3{
+        box-sizing: border-box;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-left: 40px;
+        margin-top: -20px;
+    }
+    .comment3 .block{
+        width: 380px;
+        
+    }
+    .comment4{
+        box-sizing: border-box;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 80px;
+        margin-top: 40px;
+    }
+    .comment4 .block{
+        width: 180px;
+    }
+    .comment5{
+        box-sizing: border-box;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding-right: 40px;
+        margin-top: -40px;
+        
+    }
+    .comment5 .block{
+        width: 280px;
     }
 </style>
