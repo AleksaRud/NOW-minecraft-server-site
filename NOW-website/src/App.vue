@@ -110,6 +110,7 @@ import {theme} from './theme'
     flex-direction: row;
     justify-content: center;
     height: fit-content;
+    
   }
   .logo{
     width: 64px;
