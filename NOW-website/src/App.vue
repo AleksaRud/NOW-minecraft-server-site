@@ -4,58 +4,65 @@ import {theme} from './theme'
 
 <template>
   <a-config-provider :theme = "theme">
-    <div class="header">
-      <div class="logo"></div>
-      <div class="group">
-        <RouterLink to="/">
-          <div class="tasks-icon"></div>
-          Главная
-        </RouterLink>
-        <RouterLink to="/aboutserver">
+    <div class="app">
+      <div class="header">
+        <div class="logo"></div>
+        <div class="group">
+          <RouterLink to="/">
+            <div class="tasks-icon"></div>
+            Главная
+          </RouterLink>
+          <RouterLink to="/aboutserver">
+            <div class="users-icon"></div>
+            О сервере
+          </RouterLink>
+          <RouterLink to="/players">
+            <div class="users-icon"></div>
+            Игроки
+          </RouterLink>
+          <RouterLink to="/projects">
+            <div class="users-icon"></div>
+            Проекты
+          </RouterLink>
+          <RouterLink to="/shop">
+            <div class="users-icon"></div>
+            Магазин
+          </RouterLink>
+        </div>
+        <RouterLink to="/account" id="account" class="account">
           <div class="users-icon"></div>
-          О сервере
-        </RouterLink>
-        <RouterLink to="/players">
-          <div class="users-icon"></div>
-          Игроки
-        </RouterLink>
-        <RouterLink to="/projects">
-          <div class="users-icon"></div>
-          Проекты
-        </RouterLink>
-        <RouterLink to="/shop">
-          <div class="users-icon"></div>
-          Магазин
+          Личный кабинет
         </RouterLink>
       </div>
-      <RouterLink to="/account" id="account" class="account">
-        <div class="users-icon"></div>
-        Личный кабинет
-      </RouterLink>
-    </div>
-    <RouterView/>
-    
-    <div class="footer">
-      <div class="footer-links">
-        <div class="links">
-          <div>О сервере</div>
-          <div>Проекты</div>
-          <div>Участники</div>
-          <div>Магазин</div>
+      <RouterView style="margin-top: 80px;"/>
+      
+      <div class="footer">
+        <div class="footer-links">
+          <div class="links">
+            <div>О сервере</div>
+            <div>Проекты</div>
+            <div>Участники</div>
+            <div>Магазин</div>
+          </div>
+          <div class="links">
+            <div>Пользовательское соглашение</div>
+            <div>Discord</div>
+            <div>Telegram</div>
+            <div>Поддержка</div>
+          </div>
         </div>
-        <div class="links">
-          <div>Пользовательское соглашение</div>
-          <div>Discord</div>
-          <div>Telegram</div>
-          <div>Поддержка</div>
-        </div>
+        <div>Not an official Minecraft product. We are in no way affiliated with or endorsed by Mojang Synergies AB, Microsoft Corporation or other rightsholders.</div>
       </div>
-      <div>Not an official Minecraft product. We are in no way affiliated with or endorsed by Mojang Synergies AB, Microsoft Corporation or other rightsholders.</div>
     </div>
   </a-config-provider>
 </template>
 
 <style scoped>
+  .app{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+  }
   .router-link-active{
     box-sizing: border-box;
     /*background-color: #87BBA2;*/
@@ -97,6 +104,7 @@ import {theme} from './theme'
   }
   
   .header{
+    box-sizing: border-box;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -107,7 +115,7 @@ import {theme} from './theme'
     height: fit-content;
     position: fixed;
     backdrop-filter: blur(10px);
-    background-color: #1216197e;
+    background-color: #121619c6;
   }
   .group{
     display: flex;

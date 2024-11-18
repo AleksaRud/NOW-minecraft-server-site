@@ -131,6 +131,7 @@ function goToLink( link: string ){
         
     }
     .landing-page{
+        max-width: 1440px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
