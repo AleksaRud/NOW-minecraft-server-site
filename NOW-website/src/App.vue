@@ -97,6 +97,7 @@ import {theme} from './theme'
   }
   
   .header{
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -104,6 +105,9 @@ import {theme} from './theme'
     padding: 0 20px;
     /*background-color: #5D737E;*/
     height: fit-content;
+    position: fixed;
+    backdrop-filter: blur(10px);
+    background-color: #1216197e;
   }
   .group{
     display: flex;

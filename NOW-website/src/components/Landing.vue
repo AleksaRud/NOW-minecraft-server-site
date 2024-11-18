@@ -1,42 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { news_cards } from './news';
 
 const tg_link = "https://t.me/now_minecraft_server";
 const discord_link = "https://discord.gg/zbJr6Utm3P";
-let news_cards = ref([
-    {
-        pic: '@/assets/cat.jpg',
-        date: "31.10.2024",
-        title: "Украшение спавна к Хеллоину",
-        discription: "Бу! Испугался? Не бойся, я друг, я тебя не обижу. Иди сюда, иди ко мне, сядь рядом со мной, посмотри мне в глаза. Ты видишь меня? Я тоже тебя вижу. Давай смотреть друг на друга до тех пор, пока наши глаза не устанут. Ты не хочешь? Почему? Что-то не так?",
-        btn_tytle: "",
-        btn_link: "", 
-    },
-    {
-        pic: "@/assets/logo2.png",
-        date: "16.08.2024",
-        title: "Завершение набора новичков",
-        discription: "Набор новичков на сервер завершён! Теперь к нам присоедились 2 человека. Если у вас не получилось пройти, не расстраивайтесь, в будущем будем проводить ещё наборы",
-        btn_tytle: "",
-        btn_link: "", 
-    },
-    {
-        pic: "@/assets/logo2.png",
-        date: "14.08.2024",
-        title: "Набираем новых участников на сервер!",
-        discription: "Поздравляю всех с началом первого набора новичков на наш сервер! Время проведения набора до 00:00 по МСК 16 августа. Итоги будут подведены на стриме 16 августа",
-        btn_tytle: "Подробнее о наборе",
-        btn_link:"https://t.me/now_minecraft_server/34", 
-    },
-    {
-        pic: "@/assets/logo2.png",
-        date: "20.07.2024",
-        title: "Старт 1 сезона!",
-        discription: "",
-        btn_tytle: "",
-        btn_link: "", 
-    },
-])
+
 function goToLink( link: string ){
     window.open(link, '_blank');
 }
@@ -82,11 +50,15 @@ function goToLink( link: string ){
             <div class="title">Последние новости</div>
             <div class="news">
                 
-                <div v-for="card in news_cards" class="news-card" v-bind:style="{ 'background-image': 'url(' + card.pic + ')' }">
-                    <div class="date">{{ card.date }}</div>
-                    <div class="news-title">{{ card.title }}</div>
-                    <div>{{ card.discription }}</div>
-                    <a-button type="link" v-if="card.btn_link" @click = goToLink(card.btn_link)>{{ card.btn_tytle }}</a-button>
+                <div v-for="card in news_cards" class="news-card" v-bind:style="{ background: 'linear-gradient(#3f3d3d00 18%,#070707ce 90%), url(' + card.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }">
+                    <div>
+                        <div class="date">{{ card.date }}</div>
+                        <div class="news-title">{{ card.title }}</div>
+                    </div>
+                    <div>
+                        <div>{{ card.discription }}</div>
+                        <a-button type="link" v-if="card.btn_link" @click = goToLink(card.btn_link)>{{ card.btn_tytle }}</a-button>
+                    </div>  
                 </div>
 
             </div>
@@ -156,6 +128,7 @@ function goToLink( link: string ){
 <style scoped>
     a{
         text-decoration: none;
+        
     }
     .landing-page{
         display: flex;
@@ -276,13 +249,12 @@ function goToLink( link: string ){
         justify-content: flex-end;
         align-items: flex-start;
         padding: 32px;
-        gap: 8px;
-        font-size: 18px;
-        background-size: cover;
-  background-position: center;
+        gap: 16px;
+        font-size: 16px;
+        border-radius: 16px;
     }
     .date, .news-title{
-        font-size: 32px;
+        font-size: 28px;
     }
     .players-projects{
         display: flex;
@@ -329,7 +301,7 @@ function goToLink( link: string ){
         background-image: url('../assets/arrow_rigth.svg');
         background-repeat: no-repeat;
         background-size: contain;
-        /*margin-left: 100px;*/
+        background-position: center;
     }
 
     .comments{
