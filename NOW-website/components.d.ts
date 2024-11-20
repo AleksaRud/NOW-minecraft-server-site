@@ -11,6 +11,8 @@ declare module 'vue' {
     AButton: typeof import('ant-design-vue/es')['Button']
     Account: typeof import('./src/components/Account.vue')['default']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
+    ATabPane: typeof import('ant-design-vue/es')['TabPane']
+    ATabs: typeof import('ant-design-vue/es')['Tabs']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Landing: typeof import('./src/components/Landing.vue')['default']
     MerchShop: typeof import('./src/components/MerchShop.vue')['default']

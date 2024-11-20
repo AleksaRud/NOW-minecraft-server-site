@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { news_cards } from './news';
-
+import { goToLink } from './links';
 const tg_link = "https://t.me/now_minecraft_server";
 const discord_link = "https://discord.gg/zbJr6Utm3P";
 
-function goToLink( link: string ){
-    window.open(link, '_blank');
-}
+
 </script>
 
 <template>
@@ -70,7 +67,7 @@ function goToLink( link: string ){
                 <div class="group">
                     <div class="building2"></div>
                     <RouterLink to="/projects">
-                        <a-button type="text" ghost class="btn">
+                        <a-button type="text" class="btn">
                             <div>Посмотреть все</div>
                             <div class="icon"></div>
                         </a-button>

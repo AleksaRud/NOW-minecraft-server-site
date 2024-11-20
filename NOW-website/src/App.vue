@@ -62,6 +62,7 @@ import {theme} from './theme'
     display: flex;
     flex-direction: column;
     align-items:center;
+    justify-content: space-between;
   }
   .router-link-active{
     box-sizing: border-box;
