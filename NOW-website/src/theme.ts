@@ -13,5 +13,18 @@ const theme = {
     "fontSize": 18,
     "colorBgTextHover": "#1f3c5b66",
   },
+  components: {
+    Tabs: {
+      "colorPrimary": "#a3d9e0",
+      "colorPrimaryHover": "#a3d9e0",
+      
+      "colorSplit": "transparent",
+      "colorBgContainer": "transparent",
+      "colorText": "rgba(255, 255, 255)",
+      "fontSize": 28,
+      "colorBgTextHover": "#1f3c5b66",
+      "lineWidth": 2,
+    }
+  }
 }
 export { theme }

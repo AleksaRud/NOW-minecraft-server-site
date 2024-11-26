@@ -34,7 +34,7 @@ import {theme} from './theme'
           Личный кабинет
         </RouterLink>
       </div>
-      <RouterView style="margin-top: 80px;"/>
+      <RouterView style="margin-top: 80px; z-index: 0;"/>
       
       <div class="footer">
         <div class="footer-links">
@@ -107,6 +107,7 @@ import {theme} from './theme'
   .header{
     box-sizing: border-box;
     width: 100%;
+    z-index: 1;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
