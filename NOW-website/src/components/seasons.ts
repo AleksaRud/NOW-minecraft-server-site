@@ -1,4 +1,6 @@
 import { ref } from 'vue';
+import { makeParagraphs } from './textFormatter';
+
 const seasons = ref([
     {
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cat.jpg`,
@@ -32,14 +34,6 @@ const seasons = ref([
         world_save: "", 
     },
 ])
-
-function makeParagraphs( text: string ){
-    let paragraphs = text.split('\n');
-    for( let i = 0; i < paragraphs.length; i++){
-        paragraphs[i] = '<div>' + paragraphs[i] + '</div>';
-    };
-    return paragraphs.join('');
-}
 
 for(let i=0; i<seasons.value.length; i++){
     seasons.value[i].description = makeParagraphs(seasons.value[i].description);
