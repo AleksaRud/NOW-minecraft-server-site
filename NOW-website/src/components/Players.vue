@@ -48,7 +48,7 @@ const activeKey = ref(0);
         min-height: 540px;
     }
     .about{
-        max-width: 60%;
+        width: 55%;
         display: flex;
         flex-direction: column;
         gap: 36px;

@@ -22,7 +22,7 @@ const players = ref([
                 card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
                 info: 'Я Кеил или же просто Коля. имею самую отдалённую базу, а мой дом ещё даже не построен (когда-нибудь точно построю, обещаю).'
                     + '\nРазвожу грибы, грибочки, грибочечки. люблю слушать музыку и придумывать грандиозные планы, которые никогда не переходят в действие..'
-                    + '\nА также помните, не стоит меня ландшафт у меня на базе, потому что..'
+                    + '\nА также помните, не стоит менять ландшафт у меня на базе, потому что..'
                     + '\n"НАФИГА МНЕ ТУТ ТВОИ ДЕРЕВЬЯ!"',
                 links: [],
             },
@@ -58,7 +58,7 @@ const players = ref([
             {
                 nickname: 'KatyaMiki',
                 card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
-                info: '',
+                info: 'Катуя Мики, из-за одного человечка осталась без пиджаков, поэтому вынуждена надевать футболки',
                 links: [],
             },
             {
@@ -73,7 +73,7 @@ const players = ref([
             },
             {
                 nickname: 'Dr_Elec_',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/Dr_Elec.png`,
                 info: '',
                 links: [],
             },
