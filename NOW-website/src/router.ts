@@ -6,7 +6,7 @@ import MerchShop from './components/MerchShop.vue'
 import Account from './components/Account.vue'
 import PageNotFound from './components/PageNotFound.vue'
 
-import { createWebHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter} from 'vue-router'
 
 const router = createRouter({
   routes: [
@@ -19,7 +19,10 @@ const router = createRouter({
     {path: '/:pathMatch(.*)*', component: PageNotFound},
   ],
   history: createWebHistory(),
-  
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 }
+  },
 })
 
 export default router
