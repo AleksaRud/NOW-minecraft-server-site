@@ -4,7 +4,7 @@ import Players from './components/Players.vue'
 import Projects from './components/Projects.vue'
 import MerchShop from './components/MerchShop.vue'
 import Account from './components/Account.vue'
-
+import PageNotFound from './components/PageNotFound.vue'
 
 import { createWebHistory, createRouter } from 'vue-router'
 
@@ -16,6 +16,7 @@ const router = createRouter({
     {path:'/projects', component: Projects},
     {path:'/shop', component: MerchShop},
     {path:'/account', component: Account},
+    {path: '/:pathMatch(.*)*', component: PageNotFound},
   ],
   history: createWebHistory(),
   

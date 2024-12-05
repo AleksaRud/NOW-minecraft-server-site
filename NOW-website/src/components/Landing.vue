@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { news_cards } from './news';
-import { goToLink } from './links';
-const tg_link = "https://t.me/now_minecraft_server";
-const discord_link = "https://discord.gg/zbJr6Utm3P";
+import { goToLink, tg_link, discord_link } from './links';
+
 
 
 </script>

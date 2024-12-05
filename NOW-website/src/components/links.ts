@@ -16,4 +16,7 @@ function getSource( link: string ){
     }
 } 
 
-export {goToLink, getSource}
+const tg_link = "https://t.me/now_minecraft_server";
+const discord_link = "https://discord.gg/zbJr6Utm3P";
+
+export {goToLink, getSource, tg_link, discord_link}
