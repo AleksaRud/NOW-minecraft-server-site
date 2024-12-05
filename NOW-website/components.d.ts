@@ -18,6 +18,7 @@ declare module 'vue' {
     MerchShop: typeof import('./src/components/MerchShop.vue')['default']
     PageNotFound: typeof import('./src/components/PageNotFound.vue')['default']
     Players: typeof import('./src/components/Players.vue')['default']
+    Preloader: typeof import('./src/components/Preloader.vue')['default']
     Projects: typeof import('./src/components/Projects.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

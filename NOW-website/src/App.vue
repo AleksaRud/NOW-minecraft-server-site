@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import {theme} from './theme'
+import Preloader from './components/Preloader.vue';
+import { ref, onMounted } from 'vue';
+const show = ref<boolean>(true);
+
+const showToggle = (): void => {
+  setTimeout(() => {
+    show.value = false;
+  }, 4000);
+};
+
+onMounted(() => {
+  showToggle();
+});
 </script>
 
 <template>
-  <a-config-provider :theme = "theme">
+  <Preloader />
+  <a-config-provider v-if="!show" :theme = "theme">
     <div class="app">
       <div class="header">
         <div class="logo"></div>
