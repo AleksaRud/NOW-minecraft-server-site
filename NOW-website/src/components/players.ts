@@ -63,7 +63,7 @@ const players = ref([
             },
             {
                 nickname: 'Pandalin_OwO',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/Pandalin.png`,
                 info: 'Я вроде бы вменяемая, со мной приятно общаться. За мир во всем мире, но ох уж эти криперы... Побочный эффект - немного матерюсь. Люблю играть с ребятами на сервере.'
                     + '\nПонимаете, я играю в Майн не ради модов, я играю в него ради строительства......андерстент?',
                 links: [
@@ -74,7 +74,7 @@ const players = ref([
             {
                 nickname: 'Dr_Elec_',
                 card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/Dr_Elec.png`,
-                info: '',
+                info: 'Если вы меня не позовёте, я сам приду',
                 links: [],
             },
             {

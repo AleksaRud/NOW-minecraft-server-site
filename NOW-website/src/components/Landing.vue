@@ -329,6 +329,7 @@ import { goToLink, tg_link, discord_link } from './links';
         text-align: center;
         transition: all 0.6s;
     }
+    
     .block:hover{
         box-shadow: 0px 0px 8px 4px #3b5b8c;
         transform: scale(1.05);
@@ -416,5 +417,240 @@ import { goToLink, tg_link, discord_link } from './links';
     .offer-join2 .btn{
         width: 280px;
         text-align: center;
+    }
+
+
+    @media(max-width:425px){
+        .landing-page{
+            width: 100%;
+            gap: 100px;
+            padding: 80px 20px 0px 20px;
+            box-sizing: border-box;
+            align-items: center;
+        }
+        .welcome{
+            gap: 16px;
+        }
+        .title{
+            font-size: 32px;
+        }
+        .sub-title{
+            width: 80%;
+            font-size: 16px;
+        }
+        .about-server{
+            width: 90%;
+            font-size: 18px;
+        }
+        .offers{
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .offer1, .offer2, .offer3{
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            font-size: 16px;
+            width: 100%;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        .pic1, .pic2, .pic3{
+            width: 40px;
+            height: 40px;
+        }
+
+        .offer-join1{
+            width: 90%;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 12px;
+            /*background-color: #5a8fba;*/
+        }
+        .offer-join1 .group{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            /*backdrop-filter: brightness(50%);*/
+        }
+        .offer-join1 .title{
+            font-size: 24px;
+        }
+        .offer-join1 .buttons{
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .btn{
+            box-sizing: border-box;
+            height: 32px;
+            text-align: left;
+        }
+        .offer-join1 .pic{
+            display: none;
+        }
+
+        .news-block{
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        .news-block .title{
+            font-size: 24px;
+        }
+        .news{
+            width: 360px;        
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            
+        }
+        
+        .news-card{
+            min-width: 300px;
+            width: 300px;
+            height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 16px;
+            gap: 8px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+        .date, .news-title{
+            font-size: 20px;
+        }
+        .players-projects{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        .players-projects .title{
+            font-size: 24px;
+        }
+        .buildings{
+            display: flex;
+            width: 400px;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 0px;
+            padding: 0;
+            margin: 0;
+        }
+        .building2{
+            width: 360px;
+        }
+        .building1{
+            display: none;
+        }
+        .buildings .group{
+            gap: 12px;
+        }
+        .buildings .btn{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            width: 240px;
+            font-size: 20px;
+            height: 116px;
+            padding-top: 20px;
+        }
+        .icon{
+            width: 40px;
+            height: 40px;
+            background-image: url('../assets/arrow_rigth.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
+
+        .comments{
+            width: 370px;
+            height: 210px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: scroll;
+            gap: 8px;
+        }
+        .comment1, .comment2, .comment3, .comment4, .comment5{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            width: 180px;
+            height: 100%;
+            display: block;
+        }
+        .block{
+            margin: 0;
+            box-sizing: border-box;
+            max-width: 180px;
+            width: 180px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #1f3c5b;
+            font-size: 12px;
+            align-items: center;
+            text-align: left;
+            text-wrap: wrap;
+        }
+        .block:hover{
+            box-shadow: none;
+            transform:none;
+        }
+        .nickname{
+            font-size: 18px;
+        }
+        .offer-join2{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            padding: 80px 60px;
+            box-sizing: border-box;
+            background: rgb(31,60,91);
+            background: radial-gradient(circle, rgba(31,60,91,1) 8%, rgba(18,22,25,1) 40%);
+        }
+        .offer-join2 .title{
+            font-size: 28px;
+        }
+        .offer-join2 .sub-title{
+            font-size: 16px;
+        }
+        .offer-join2 .group{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 16px;
+        }
+        .offer-join2 .buttons{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+        .offer-join2 .btn{
+            text-align: center;
+            font-size: 16px;
+        }
     }
 </style>

@@ -13,6 +13,8 @@ const showToggle = (): void => {
 onMounted(() => {
   showToggle();
 });
+
+let isHidden = ref (true);
 </script>
 
 <template>
@@ -21,32 +23,36 @@ onMounted(() => {
     <div class="app">
       <div class="header">
         <div class="logo"></div>
-        <div class="group">
-          <RouterLink to="/">
-            <div class="tasks-icon"></div>
-            Главная
-          </RouterLink>
-          <RouterLink to="/aboutserver">
-            <div class="users-icon"></div>
-            О сервере
-          </RouterLink>
-          <RouterLink to="/players">
-            <div class="users-icon"></div>
-            Игроки
-          </RouterLink>
-          <RouterLink to="/projects">
-            <div class="users-icon"></div>
-            Проекты
-          </RouterLink>
-          <RouterLink to="/shop">
-            <div class="users-icon"></div>
-            Магазин
-          </RouterLink>
+          <div class="burger" v-if="isHidden" @click="isHidden = !isHidden"></div>
+          <div class="burger-menu" v-if="!isHidden">
+            <div class="burger" @click="isHidden = !isHidden"></div>
+            <div class="group">
+              <RouterLink to="/">
+                <div class="tasks-icon"></div>
+                Главная
+              </RouterLink>
+              <RouterLink to="/aboutserver">
+                <div class="users-icon"></div>
+                О сервере
+              </RouterLink>
+              <RouterLink to="/players">
+                <div class="users-icon"></div>
+                Игроки
+              </RouterLink>
+              <RouterLink to="/projects">
+                <div class="users-icon"></div>
+                Проекты
+              </RouterLink>
+              <RouterLink to="/shop">
+                <div class="users-icon"></div>
+                Магазин
+              </RouterLink>
+            </div>
+            <RouterLink to="/account" id="account" class="account">
+              <div class="users-icon"></div>
+              Личный кабинет
+            </RouterLink>
         </div>
-        <RouterLink to="/account" id="account" class="account">
-          <div class="users-icon"></div>
-          Личный кабинет
-        </RouterLink>
       </div>
       <RouterView style="margin-top: 80px; z-index: 0;"/>
       
@@ -73,6 +79,7 @@ onMounted(() => {
 
 <style scoped>
   .app{
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items:center;
@@ -116,6 +123,10 @@ onMounted(() => {
   }
   .account:hover, .account:focus{
     border: 0;
+  }
+
+  .burger{
+    display: none;
   }
   
   .header{
@@ -182,6 +193,60 @@ onMounted(() => {
     display: flex;
     flex-direction: row;
     gap: 64px;
+  }
+
+  @media(max-width:425px){
+    .header{
+      width: 100%;
+      flex-direction: row;
+      box-sizing: border-box;
+      padding: 0px 10px;
+      position: fixed;
+    }
+    .header .group{
+      display: flex;
+      flex-direction: column;
+      
+    }
+    .burger{ 
+      display: block;
+      background-image: url('./assets/burger-menu.svg');
+      width: 40px;
+      height: 40px;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+    .burger-menu{
+      height: 100vh;
+    }
+    .burger-menu a{
+      font-size: 16px;
+    }
+    a{
+      font-size: 12px;
+      padding: 16px;
+      height: fit-content;
+    }
+    .footer{
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 20px;
+      padding: 24px 20px;
+      font-size: 12px;
+    }
+    .footer-links{
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+    .links{
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 45%;
+    }
   }
 </style>
 

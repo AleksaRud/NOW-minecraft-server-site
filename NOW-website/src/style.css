@@ -3,7 +3,7 @@ body{
   padding: 0;
   font-family: 'Arial';
   background-color: #121619;
-  
+  box-sizing: border-box;
   color: aliceblue;
 }
 
@@ -12,7 +12,6 @@ body{
   width: 4px;
   height: 8px;
 }
-
 /* Track */
 /*
 ::-webkit-scrollbar-track {
