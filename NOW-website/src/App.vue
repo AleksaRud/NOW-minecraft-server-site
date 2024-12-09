@@ -14,7 +14,7 @@ onMounted(() => {
   showToggle();
 });
 
-let isHidden = ref (true);
+let isHidden = ref (false);
 </script>
 
 <template>
@@ -23,9 +23,10 @@ let isHidden = ref (true);
     <div class="app">
       <div class="header">
         <div class="logo"></div>
+        <!---
           <div class="burger" v-if="isHidden" @click="isHidden = !isHidden"></div>
           <div class="burger-menu" v-if="!isHidden">
-            <div class="burger" @click="isHidden = !isHidden"></div>
+            <div class="burger" @click="isHidden = !isHidden"></div> --->
             <div class="group">
               <RouterLink to="/">
                 <div class="tasks-icon"></div>
@@ -52,7 +53,7 @@ let isHidden = ref (true);
               <div class="users-icon"></div>
               Личный кабинет
             </RouterLink>
-        </div>
+        <!---</div>--->
       </div>
       <RouterView style="margin-top: 80px; z-index: 0;"/>
       
