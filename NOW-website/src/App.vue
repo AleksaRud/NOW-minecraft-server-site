@@ -2,6 +2,7 @@
 import {theme} from './theme'
 import Preloader from './components/Preloader.vue';
 import { ref, onMounted } from 'vue';
+import { discord_link, goToLink, tg_link } from './components/links';
 const show = ref<boolean>(true);
 
 const showToggle = (): void => {
@@ -60,16 +61,32 @@ let isHidden = ref (false);
       <div class="footer">
         <div class="footer-links">
           <div class="links">
-            <div>О сервере</div>
-            <div>Проекты</div>
-            <div>Участники</div>
-            <div>Магазин</div>
+            <RouterLink to="/aboutserver">
+              <a-button type="link" class="link">
+                О сервере
+              </a-button>
+            </RouterLink>
+            <RouterLink to="/projects">
+              <a-button type="link" class="link">
+                Проекты
+              </a-button>
+            </RouterLink>
+            <RouterLink to="/players">
+              <a-button type="link" class="link">
+                Участники
+              </a-button>
+            </RouterLink>
+            <RouterLink to="/shop">
+              <a-button type="link" class="link">
+                Магазин
+              </a-button>
+            </RouterLink>
           </div>
           <div class="links">
-            <div>Пользовательское соглашение</div>
-            <div>Discord</div>
-            <div>Telegram</div>
-            <div>Поддержка</div>
+            <a-button type="link" class="link">Пользовательское соглашение</a-button>
+            <a-button type="link" class="link" @click="goToLink(discord_link)">Discord</a-button>
+            <a-button type="link" class="link" @click="goToLink(tg_link)">Telegram</a-button>
+            <a-button type="link" class="link" @click="goToLink(discord_link)">Поддержка</a-button>
           </div>
         </div>
         <div>Not an official Minecraft product. We are in no way affiliated with or endorsed by Mojang Synergies AB, Microsoft Corporation or other rightsholders.</div>
@@ -125,7 +142,7 @@ let isHidden = ref (false);
   .account:hover, .account:focus{
     border: 0;
   }
-
+  
   .burger{
     display: none;
   }
@@ -195,7 +212,23 @@ let isHidden = ref (false);
     flex-direction: row;
     gap: 64px;
   }
-
+  .links a{
+    color: #FFFFFF;
+    border-bottom: none;
+    font-size: 16px;
+    font-weight: 300;
+    padding: 0;
+    height: fit-content;
+    width: auto;
+  }
+  .links a:hover, .links a:active, .links a:focus{
+    border: none;
+  }
+  .link{
+    color:#FFFFFF;
+    padding: 0;
+    font-size: 16px;
+  }
   @media(max-width:425px){
     .header{
       width: 100%;

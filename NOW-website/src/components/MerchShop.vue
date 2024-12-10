@@ -21,7 +21,7 @@ import { products } from './products';
         flex-wrap: wrap;
         justify-content: center;
         gap: 20px;
-        padding: 100px;
+        padding: 100px 0;
     }
     .product-card{
 
