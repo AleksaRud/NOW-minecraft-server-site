@@ -216,6 +216,10 @@ import { goToLink, tg_link, discord_link } from './links';
     .offer-join1 .pic{
         width: 75%;
         background-color: #5a8fba;
+        background-image: url('../assets/chill.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: right;
     }
     .news-block{
         display: flex;
@@ -270,6 +274,10 @@ import { goToLink, tg_link, discord_link } from './links';
         width: 800px;
         height: 620px;
         background-color: #1f3c5b;
+        background-image: url('../assets/projects/Mystery_Shack.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
     }
     .buildings .group{
         display: flex;
@@ -281,6 +289,10 @@ import { goToLink, tg_link, discord_link } from './links';
         width: 480px;
         height: 320px;
         background-color: #1f3c5b;
+        background-image: url('../assets/projects/Mystery_Shack.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
     }
     .buildings .btn{
         display: flex;
@@ -423,7 +435,7 @@ import { goToLink, tg_link, discord_link } from './links';
     @media(max-width:425px){
         .landing-page{
             width: 100%;
-            gap: 100px;
+            gap: 120px;
             padding: 80px 20px 0px 20px;
             box-sizing: border-box;
             align-items: center;
@@ -432,15 +444,16 @@ import { goToLink, tg_link, discord_link } from './links';
             gap: 16px;
         }
         .title{
-            font-size: 32px;
+            font-size: 44px;
+            text-align: center;
         }
         .sub-title{
             width: 80%;
-            font-size: 16px;
+            font-size: 18px;
         }
         .about-server{
             width: 90%;
-            font-size: 18px;
+            font-size: 16px;
         }
         .offers{
             max-width: 80%;
@@ -486,8 +499,9 @@ import { goToLink, tg_link, discord_link } from './links';
         }
         .btn{
             box-sizing: border-box;
-            height: 32px;
+            height: 36px;
             text-align: left;
+            font-size: 16px;
         }
         .offer-join1 .pic{
             display: none;

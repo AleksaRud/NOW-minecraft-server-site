@@ -60,5 +60,29 @@ import { goToLink, discord_link } from './links';
         width: 160px;
         height: 60px;
     }
-    
+    @media(max-width: 425px) {
+        .page-not-found{
+            gap: 64px;
+        }
+        .text{
+            gap: 16px;
+        }
+        .title{
+            font-size: 32px;
+        }
+        .hint{
+            font-size: 18px;
+            text-align: center;
+        }
+        .buttons{
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn{
+            height: 48px;
+            text-align: center;
+        }
+    }
 </style>

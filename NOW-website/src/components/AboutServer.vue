@@ -9,7 +9,7 @@ const activeKey = ref(0);
 
 <template>
     <div class="tabs">
-        <a-tabs v-model:activeKey="activeKey" centered>
+        <a-tabs v-model:activeKey="activeKey" centered class="a-tabs">
             <a-tab-pane v-for="(season, id) in seasons" :key="id" :tab="season.name" class="tab">
                 <div class="pic" v-bind:style="{ background: 'url(' + season.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
                 <div class="info">
@@ -62,5 +62,29 @@ const activeKey = ref(0);
     .hint{
         font-size: 16px;
         color: #999999;
+    }
+
+    @media(max-width: 425px) {
+        .tabs{
+            padding: 20px 0 40px 0;
+        }
+        .tab{
+            font-size: 16px;
+            gap: 32px;
+        }
+        .info{
+            gap: 20px;
+        }
+        .group{
+            font-size: 20px;
+            gap: 0;
+            justify-content: space-between;
+        }
+        .hint{
+            font-size: 14px;
+        }
+        .info .text{
+            gap: 12px;
+        }
     }
 </style>

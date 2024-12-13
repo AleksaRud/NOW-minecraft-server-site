@@ -24,15 +24,6 @@ const seasons = ref([
         hint: "Сезон ещё идёт, поэтому информацию будет обновляться...",
         world_save: "", 
     },
-    {
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cat.jpg`,
-        period: "31.10.2024",
-        minecraft_version: "1.21",
-        name: "Сезон 2",
-        description: "Скоро",
-        hint: "",
-        world_save: "", 
-    },
 ])
 
 for(let i=0; i<seasons.value.length; i++){

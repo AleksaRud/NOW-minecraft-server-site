@@ -11,42 +11,6 @@ const showToggle = (): void => {
 onMounted(() => {
   showToggle();
 });
-/*
-document.addEventListener('DOMContentLoaded', () => {
-    const dvdLogo = document.getElementById('square') as HTMLElement;
-    const preloader = document.getElementById('preloader') as HTMLElement;
-    let posX = 0;
-    let posY = 0;
-    let velocityX = 6;
-    let velocityY = 6;
-
-    function updatePosition() {
-        const maxX = preloader.offsetWidth- dvdLogo.offsetWidth;
-        const maxY = preloader.offsetHeight - dvdLogo.offsetHeight;
-
-        posX += velocityX;
-        posY += velocityY;
-
-        if (posX <= 0 || posX >= maxX) {
-            velocityX *= -1;
-        }
-
-        if (posY <= 0 || posY >= maxY) {
-            velocityY *= -1;
-        }
-
-        dvdLogo.style.left = `${posX}px`;
-        dvdLogo.style.top = `${posY}px`;
-
-        requestAnimationFrame(updatePosition);
-    }
-
-    updatePosition();
-
-
-});
-
-*/
 </script>
 
 <template>
@@ -130,5 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 .fade-enter, .fade-leave-to{
     opacity: 0;
+}
+
+@media(max-width: 425px) {
+  .square{
+    scale: 0.8;
+  }
 }
 </style>

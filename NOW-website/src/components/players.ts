@@ -34,7 +34,7 @@ const players = ref([
             },
             {
                 nickname: 'Raniya',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/Raniya.png`,
                 info: 'Художник, явный любитель Undertale/Deltarune, в целом тихий человек.',
                 links: [
                     'https://www.youtube.com/@DeltaRana44_ru',
@@ -51,13 +51,13 @@ const players = ref([
             },
             {
                 nickname: 'TishkaGamer',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/TishkaGamer.png`,
                 info: 'Тиша, 18 лет. Любит тырить у Кати пиджаки, в одном из таких ходит постоянно. Раньше носила бинты, сейчас их нет. По крайней мере на видимых частях тела. Любит кофе и энергетики, и кофе с энергетиком. Придерживается правила не убивать мирных животных в Майнкрафте. Уходит когда кто-то это делает. Взяла за правило никогда не приручать кошек и собак, по итогу есть и кот и собака. Играет только с сохранением инвентаря и не стесняется.',
                 links: [],
             },
             {
                 nickname: 'KatyaMiki',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/KatyaMiki.png`,
                 info: 'Катуя Мики, из-за одного человечка осталась без пиджаков, поэтому вынуждена надевать футболки',
                 links: [],
             },
@@ -79,14 +79,14 @@ const players = ref([
             },
             {
                 nickname: 'BylkaWin',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/BylkaWin.png`,
                 info: 'Весёлый человек, немного крот. Часто выкапывается непонятно где' 
                     + '\n“Какой кирпич? ЭТО МРАМОР ИТАЛЬЯНСКИЙ!”',
                 links: [],
             },
             {
                 nickname: 'ExEGS',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/ExEGS.jpg`,
                 info: 'Я Экзек, иногда нормальный, иногда упоротый' 
                     + '\nКопаю чанки на серве по преколу.' 
                     + '\nКак хобби занимаюсь программированием своей игры.',
