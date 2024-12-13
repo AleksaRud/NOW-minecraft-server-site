@@ -54,5 +54,24 @@ import { products } from './products';
         line-height: 1.3em;
         height: 2.6em;
     }
-    
+    @media(max-width: 425px) {
+        .catalog{
+            width: 90%;
+            padding: 40px 0;
+            gap: 16px;
+        }
+        .product-card{
+            padding: 16px;
+            gap: 16px;
+            border-radius: 8px;
+        }
+        .pic{
+            width: 140px;
+            height: 140px;
+        }
+        .name, .price{
+            font-size: 14px;
+            width: 140px;
+        }
+    }
 </style>
