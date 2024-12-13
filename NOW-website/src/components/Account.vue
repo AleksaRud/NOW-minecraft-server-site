@@ -8,7 +8,7 @@
         <div class="account-info">
             <div class="photo">
                 <div class="pic"></div>
-                <a-button>Сменить фото</a-button>
+                <a-button class="btn">Сменить фото</a-button>
             </div>
             <div class="info">
                 <div class="group1">
@@ -207,6 +207,76 @@
     }
     .btn{
         height: 40px;
+    }
+
+    @media (max-width: 425px) {
+        .account{
+            width: 80%;
+            padding: 40px 0;
+            
+            gap: 40px;
+        }
+        .account-info{
+            flex-direction: column;
+            gap: 24px;
+        }
+        .photo{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        .pic{
+            width: 100px;
+            height: 100px;
+           
+            border-radius: 30px;
+        }
+        .info{
+            gap: 20px;
+        }
+        .info-group{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 20px;
+        }
+        .info-group .hint{
+            font-size: 14px;
+        }
+        .statistics{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .statistics .title{
+            font-size: 24px;
+        }
+        .stat-data{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .stat-data .group{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+        .cathegory{
+            width: 100%;
+            
+            gap: 16px;
+            font-weight: 300;
+            font-size: 14px;
+            
+        }
+        .cathegory-name{
+            font-size: 16px;
+        }
+        
         
     }
 </style>
