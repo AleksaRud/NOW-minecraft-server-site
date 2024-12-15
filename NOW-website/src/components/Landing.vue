@@ -36,8 +36,9 @@ import { goToLink, tg_link, discord_link } from './links';
                     
                     <a-button class="btn" @click = goToLink(discord_link)>Discord</a-button>
                     <a-button class="btn" @click = goToLink(tg_link)>Telegram</a-button>
-                    <a-button class="btn" >Межсезонье</a-button>    
-                    
+                    <RouterLink to="/middleseasons" style="width: 100%;">
+                        <a-button class="btn" >Межсезонье</a-button>    
+                    </RouterLink>
                 </div>
             </div>
             <div class="pic"></div>
@@ -115,7 +116,9 @@ import { goToLink, tg_link, discord_link } from './links';
             <div class="buttons">
                 <a-button class="btn" @click = goToLink(discord_link)>Discord</a-button>
                 <a-button class="btn" @click = goToLink(tg_link)>Telegram</a-button>
-                <a-button class="btn">Межсезонье</a-button>      
+                <RouterLink to="/middleseasons">
+                    <a-button class="btn" >Межсезонье</a-button>    
+                </RouterLink>     
             </div>
         </div>
     </div>
@@ -209,6 +212,7 @@ import { goToLink, tg_link, discord_link } from './links';
         gap: 16px;
     }
     .btn{
+        width: 100%;
         box-sizing: border-box;
         height: 64px;
         text-align: left;

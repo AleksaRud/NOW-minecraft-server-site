@@ -131,6 +131,7 @@
         background: url('../assets/players_cards/season1/AlexaVain.png'), #5a8fba;
         background-size: cover;
         background-repeat: no-repeat;
+        border-radius: 40px;
     }
     .info{
         display: flex;

@@ -19,7 +19,7 @@ const players = ref([
             },
             {
                 nickname: 'Kail_DC',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/Kail_DC.png`,
                 info: 'Я Кеил или же просто Коля. имею самую отдалённую базу, а мой дом ещё даже не построен (когда-нибудь точно построю, обещаю).'
                     + '\nРазвожу грибы, грибочки, грибочечки. люблю слушать музыку и придумывать грандиозные планы, которые никогда не переходят в действие..'
                     + '\nА также помните, не стоит менять ландшафт у меня на базе, потому что..'
@@ -28,7 +28,7 @@ const players = ref([
             },
             {
                 nickname: 'Ksenon303',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/Ksenon303.png`,
                 info: 'Мне зовут Наташа, но так же меня можно называть Ксю.  Люблю роботов, фурей и ещё что-то нибудь. Играю в некоторые игры. Пью чай и чай, иногда кофе. Но чай.  Кстати, чай поставьте:)',
                 links: [],
             },
@@ -42,7 +42,7 @@ const players = ref([
             },
             {
                 nickname: 'AntikA',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AlexaVain.png`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/AnTikA.png`,
                 info: 'Самопровозглашенный батя сервера, потому что как и тот, "ушёл за хлебом". Иногда возвращается, но все время без хлеба. Умеет создавать видимость работы. В целом очень добрый и заботливый, если не злить.',
                 links: [
                     'https://vk.com/an_arts_info',
@@ -86,7 +86,7 @@ const players = ref([
             },
             {
                 nickname: 'ExEGS',
-                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/ExEGS.jpg`,
+                card: `${import.meta.env.VITE_BASE_URL}/src/assets/players_cards/season1/ExEGS.png`,
                 info: 'Я Экзек, иногда нормальный, иногда упоротый' 
                     + '\nКопаю чанки на серве по преколу.' 
                     + '\nКак хобби занимаюсь программированием своей игры.',

@@ -52,6 +52,7 @@ function closeModal(){
         justify-content: center;
         align-items: center;
         width: 100%;
+        padding: 100px 0;
     }
     .columns{
         margin: 80px 0;
@@ -87,7 +88,13 @@ function closeModal(){
     .info:hover{
         opacity: 1;
     }
+    .modal{
+        display: none;
+    }
     @media(max-width: 425px) {
+        .projects{
+            padding: 80px 0 40px 0;
+        }
         .columns{
             margin: 40px 0;
             column-count: 2;

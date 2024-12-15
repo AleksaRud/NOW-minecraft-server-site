@@ -233,6 +233,7 @@ function closeMenu(){
     padding: 72px 64px;
     border-top: #1f3c5b 1px solid;
     box-shadow: 0px 0px 4px #1f3c5b;
+    z-index: -1;
   }
   .footer-links{
     display: flex;

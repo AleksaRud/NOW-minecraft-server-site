@@ -12,7 +12,7 @@ const pageWidth = document.documentElement.scrollWidth;
         <a-tabs v-model:activeKey="activeKey" centered>
             <a-tab-pane v-for="(season_group, id) in players" :key="id" :tab="(players.length >= 2) ? season_group.season : ''" class="tab"  v-if="pageWidth > 425">
                 <div v-for="(player, ind) in season_group.players_list" class="player" v-bind:style="(ind % 2) ? {flexDirection:'row-reverse'} : {flexDirection:'row'}">
-                    <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #5a8fba', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
+                    <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
                     <div class="about">
                         <div class="nickname">{{ player.nickname }}</div>
                         <div class="info" v-html="player.info"></div>
@@ -25,7 +25,7 @@ const pageWidth = document.documentElement.scrollWidth;
             <a-tab-pane v-for="(season_group, id) in players" :key="id" :tab="(players.length >= 2) ? season_group.season : ''" class="tab"  v-if="pageWidth <= 425">
                 <div v-for="(player, ind) in season_group.players_list" class="player">
                     <div class="card-and-name" v-bind:style="(ind % 2) ? {flexDirection:'row-reverse'} : {flexDirection:'row'}">
-                        <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #5a8fba', backgroundPosition: 'top', backgroundSize: 'cover' }"></div>
+                        <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: 'top', backgroundSize: 'cover' }"></div>
                         <div class="nickname">{{ player.nickname }}</div>
                     </div>
                     
@@ -62,6 +62,7 @@ const pageWidth = document.documentElement.scrollWidth;
     .card{
         min-width: 384px;
         min-height: 540px;
+        border-radius: 36px;
     }
     .about{
         width: 55%;
