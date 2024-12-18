@@ -3,7 +3,7 @@ import { makeParagraphs } from './textFormatter';
 
 const seasons = ref([
     {
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cat.jpg`,
+        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/chill.png`,
         period: "31.10.2024-",
         minecraft_version: "1.21",
         name: "1 Сезон",
@@ -16,12 +16,12 @@ const seasons = ref([
         world_save: "", 
     },
     {
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cat.jpg`,
-        period: "31.10.2024",
-        minecraft_version: "1.21",
+        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/village.jpg`,
+        period: "01.02.2025-",
+        minecraft_version: "1.20",
         name: "Межсезонье",
         description: "Скоро..",
-        hint: "Сезон ещё идёт, поэтому информацию будет обновляться...",
+        hint: "",
         world_save: "", 
     },
 ])

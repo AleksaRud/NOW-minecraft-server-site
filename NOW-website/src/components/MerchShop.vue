@@ -6,7 +6,7 @@ import { products } from './products';
 <template>
     <div class="catalog">
         <div class="product-card" v-for="product in products">
-            <div class="pic" v-bind:style="{ background: 'url(' + product.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
+            <div class="pic" v-bind:style="{ background: 'url(' + product.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
             <div class="name">{{ product.name }}</div>
             <div class="price"> {{ product.price }}</div> 
         </div>

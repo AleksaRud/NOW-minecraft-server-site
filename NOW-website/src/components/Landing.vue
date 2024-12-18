@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import { news_cards } from './news';
 import { goToLink, tg_link, discord_link } from './links';
-
-
-
 </script>
 
 <template>
@@ -188,9 +185,30 @@ import { goToLink, tg_link, discord_link } from './links';
         max-width: 60%;
     }
     .pic1, .pic2, .pic3{
-        width: 164px;
-        height: 164px;
-        background-color: #5a8fba;
+        width: 100px;
+        height: 100px;
+        outline: 8px #5A8FBA solid;
+        outline-offset: 32px;
+        border-radius: 4px;
+    }
+    .pic1{
+        background-image: url('../assets/community.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .pic2{
+        background-image: url('../assets/gift.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .pic3{
+        background-image: url('../assets/cubes.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        
+        background-position: center;
     }
     .offer-join1{
         width: 100%;
@@ -224,6 +242,7 @@ import { goToLink, tg_link, discord_link } from './links';
         background-repeat: no-repeat;
         background-size: cover;
         background-position: right;
+        border-radius: 16px;
     }
     .news-block{
         display: flex;
@@ -282,6 +301,7 @@ import { goToLink, tg_link, discord_link } from './links';
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
+        border-radius: 20px;
     }
     .buildings .group{
         display: flex;
@@ -293,10 +313,11 @@ import { goToLink, tg_link, discord_link } from './links';
         width: 480px;
         height: 320px;
         background-color: #1f3c5b;
-        background-image: url('../assets/projects/Mystery_Shack.png');
+        background-image: url('../assets/projects/skameyka.png');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
+        border-radius: 20px;
     }
     .buildings .btn{
         display: flex;
@@ -468,16 +489,26 @@ import { goToLink, tg_link, discord_link } from './links';
         .offer1, .offer2, .offer3{
             display: flex;
             flex-direction: row;
-            gap: 20px;
+            gap: 40px;
             font-size: 16px;
             width: 100%;
             align-items: center;
             justify-content: flex-start;
         }
-        
+        .offer1 .text, .offer2 .text, .offer3 .text{
+            width: fit-content;
+            max-width: auto;
+            height: 4.8em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
         .pic1, .pic2, .pic3{
             width: 40px;
             height: 40px;
+            outline: 2px #5A8FBA solid;
+            outline-offset: 8px;
+            border-radius: 4px;
         }
 
         .offer-join1{
@@ -485,13 +516,11 @@ import { goToLink, tg_link, discord_link } from './links';
             display: flex;
             flex-direction: column-reverse;
             gap: 12px;
-            /*background-color: #5a8fba;*/
         }
         .offer-join1 .group{
             display: flex;
             flex-direction: column;
             gap: 8px;
-            /*backdrop-filter: brightness(50%);*/
         }
         .offer-join1 .title{
             font-size: 24px;
