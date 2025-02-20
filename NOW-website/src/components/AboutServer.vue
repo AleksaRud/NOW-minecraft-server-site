@@ -4,14 +4,15 @@ import { goToLink } from './links';
 import { seasons } from './seasons';
 
 const activeKey = ref(0);
-
+const pageWidth = document.documentElement.scrollWidth;
+const position  = (pageWidth >= 425) ? 'center' : '60%';
 </script>
 
 <template>
     <div class="tabs">
         <a-tabs v-model:activeKey="activeKey" centered class="a-tabs">
             <a-tab-pane v-for="(season, id) in seasons" :key="id" :tab="season.name" class="tab">
-                <div class="pic" v-bind:style="{ background: 'url(' + season.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
+                <div class="pic" v-bind:style="{ background: 'url(' + season.pic + ')', backgroundPosition: position, backgroundSize: 'cover' }"></div>
                 <div class="info">
                     <div class="group">
                         <div>{{ season.period }}</div>

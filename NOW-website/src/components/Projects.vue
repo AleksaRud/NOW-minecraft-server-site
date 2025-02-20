@@ -114,6 +114,7 @@ function closeModal(){
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
+            text-align: center;
             gap: 20px;
             padding: 30px 20px;
             width: 380px;
