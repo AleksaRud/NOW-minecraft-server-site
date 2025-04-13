@@ -1,20 +1,47 @@
 <script lang="ts" setup>
-import { products } from './products';
+import { categories } from './categories';
 
 </script>
 
 <template>
-    <div class="catalog">
-        <div class="product-card" v-for="product in products">
-            <div class="pic" v-bind:style="{ background: 'url(' + product.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
-            <div class="name">{{ product.name }}</div>
-            <div class="price"> {{ product.price }}</div> 
+
+    <div class="shop">
+
+        <div class="categories">
+            
+                <div v-for="category in categories">
+                    <RouterLink :to="`/catalog/${category.category_id}`" class="category" >
+                        <div class="pic" v-bind:style="{ background: 'url(' + category.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
+                        <div class="name">{{ category.name }}</div>
+                    </RouterLink>
+                </div>
+            
         </div>
     </div>
+
 </template>
 
 <style scoped>
-    .catalog{
+  a{
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #FFFFFF;
+  }
+  a:active, a:hover, a:focus{
+    text-decoration: none;
+    color: #FFFFFF;
+  }
+    .shop{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 80px 0;
+    }
+    .categories{
         width: 80%;
         display: flex;
         flex-direction: row;
@@ -23,7 +50,7 @@ import { products } from './products';
         gap: 20px;
         padding: 100px 0;
     }
-    .product-card{
+    .category{
 
         padding: 16px;
         display: flex;
@@ -33,19 +60,18 @@ import { products } from './products';
         gap: 28px;
         transition: all 0.3s;
     }
-    .product-card:hover{
+    .category:hover{
         transform: scale(1.05);
     }
+
     .pic{   
         width: 240px;
         height: 240px;
         border-radius: 4px;
     }
-    .name, .price{
+    .name{
         font-size: 20px;
         width: 240px;
-    }
-    .name{
         display: -webkit-box; 
         -webkit-box-orient: vertical; 
         overflow: hidden; 

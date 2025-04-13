@@ -23,9 +23,9 @@ import { goToLink, discord_link } from './links';
 
 <style scoped>
     .page-not-found{
-        top: -80px;
+        /*top: -80px;*/
         box-sizing: border-box;
-        position: absolute;
+        /*position: absolute;*/
         width: 100%;
         height: 100%;
         background-color: #121619;
@@ -34,6 +34,7 @@ import { goToLink, discord_link } from './links';
         justify-content: center;
         align-items: center;
         gap: 80px;
+        height: 90vh;
     }
     .text{
         width: 70%;
