@@ -5,13 +5,17 @@
     let route = useRoute();
     const category_catalog = ref(products.value.filter((item) => item.category_id == route.params.category));
     let product_status = [...new Set(category_catalog.value.map((item) => item.status))];
-    const filter_status = ref(product_status.map((status, is_checked) => {return {status: status, is_checked: true}}));
+    const filter_status = ref(product_status.map((status, is_checked) => {return {status: status, is_checked: false}}));
     const filtered_catalog = ref(category_catalog.value);
 
     function UpdateCatalog(e:Event){
-        filtered_catalog.value = category_catalog.value.filter((item) => filter_status.value.some(status_obj =>
-            status_obj.status === item.status && status_obj.is_checked === true
-        ));
+        if(filter_status.value.every((item) => item.is_checked == false)){
+            filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
+        }else{
+            filtered_catalog.value = category_catalog.value.filter((item) => filter_status.value.some(status_obj =>
+                status_obj.status === item.status && status_obj.is_checked === true
+            ) && item.price <= price.value[1] && item.price >= price.value[0]);
+        }
     }
 
     const formatter = (value: number) => {
@@ -24,7 +28,14 @@
     };
 
     const onAfterChange = (value: number) => {
-        filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
+        //filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
+        if(filter_status.value.every((item) => item.is_checked == false)){
+            filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
+        }else{
+            filtered_catalog.value = category_catalog.value.filter((item) => filter_status.value.some(status_obj =>
+                status_obj.status === item.status && status_obj.is_checked === true
+            ) && item.price <= price.value[1] && item.price >= price.value[0]);
+        }
     };
 </script>
 <template>
