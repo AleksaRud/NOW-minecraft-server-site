@@ -11,7 +11,7 @@ import { categories } from './categories';
             
                 <div v-for="category in categories">
                     <RouterLink :to="`/catalog/${category.category_id}`" class="category" >
-                        <div class="pic" v-bind:style="{ background: 'url(' + category.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
+                        <div class="pic" v-bind:style="{ background: 'url(' + category.pic + '), #a5b8e388', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
                         <div class="name">{{ category.name }}</div>
                     </RouterLink>
                 </div>
@@ -76,9 +76,10 @@ import { categories } from './categories';
         -webkit-box-orient: vertical; 
         overflow: hidden; 
         text-overflow: ellipsis; 
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         line-height: 1.3em;
-        height: 2.6em;
+        height: 1.8em;
+        text-align: center;
     }
     @media(max-width: 425px) {
         .catalog{

@@ -69,7 +69,7 @@ function closeMenu(){
               <div class="users-icon"></div>
               Проекты
             </RouterLink>
-            <RouterLink to="/shop" @click="closeMenu()">
+            <RouterLink to="/catalog" @click="closeMenu()">
               <div class="users-icon"></div>
               Магазин
             </RouterLink>
@@ -101,7 +101,7 @@ function closeMenu(){
                 Участники
               </a-button>
             </RouterLink>
-            <RouterLink to="/shop">
+            <RouterLink to="/catalog">
               <a-button type="link" class="link">
                 Магазин
               </a-button>

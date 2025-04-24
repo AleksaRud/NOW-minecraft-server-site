@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 const categories = ref([
     {
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/stickers.jpg`,
+        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/shop/categories/accessuaries.png`,
         name: 'Аксессуары',
         category_id: 'accessories',
     },
@@ -12,17 +12,17 @@ const categories = ref([
         category_id: 'notebooks',
     },
     {
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/kind_kail.jpg`,
+        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/shop/categories/cups.png`,
         name: 'Кружки',
         category_id: 'cups',
     },
     {
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/exegs_cute.jpg`,
+        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/just_rana.jpg`,
         name: 'Открытки',
         category_id: 'postcards',
     },
     {
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
+        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/shop/categories/stickers.jpg`,
         name: 'Наклейки и стикеры',
         category_id: 'stickers',
     },

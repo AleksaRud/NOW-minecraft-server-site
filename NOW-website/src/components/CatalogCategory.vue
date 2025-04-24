@@ -1,9 +1,12 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
-    import { products } from './components/products';
+    import { products } from './products';
+    import { categories } from './categories';
     import { ref } from 'vue';
     let route = useRoute();
-    const category_catalog = ref(products.value.filter((item) => item.category_id == route.params.category));
+    const selected_category = ref(categories.value.find((item) => item.category_id == route.params.category_id));
+ 
+    const category_catalog = ref(products.value.filter((item) => item.category_id == route.params.category_id));
     let product_status = [...new Set(category_catalog.value.map((item) => item.status))];
     const filter_status = ref(product_status.map((status, is_checked) => {return {status: status, is_checked: false}}));
     const filtered_catalog = ref(category_catalog.value);
@@ -39,60 +42,117 @@
     };
 </script>
 <template>
+    <div class="catalog-page">
+        <a-breadcrumb>
+            <a-breadcrumb-item><RouterLink to="/catalog">Каталог</RouterLink></a-breadcrumb-item>
+            <a-breadcrumb-item>{{ selected_category?.name }}</a-breadcrumb-item>
+        </a-breadcrumb>
+
+        <div class="category-name">
+            {{ selected_category?.name }}
+        </div>
         <div class="category-catalog">
-            {{ $route.params.category }}
             <div class="filters">
+                <div class="hint">Статус</div>
                 <div class="checkboxes">
                     <a-checkbox v-model:checked="status.is_checked" v-for="status in filter_status" @change = "UpdateCatalog">
                         {{ status.status }}
                     </a-checkbox>
                 </div>
-                <a-slider v-model:value="price" range :step="1" :tip-formatter="formatter" @change="onChange" @afterChange="onAfterChange" />
-                <a-input-number :formatter="formatter" v-model:value="price[0]" :min="50" :max="100"/>
-                <a-input-number :formatter="formatter" v-model:value="price[1]" :min="0" :max="50"/>
+                <div class="hint">Цена</div>
+                <a-slider v-model:value="price" range :step="1" :tip-formatter="formatter" @change="onChange" @afterChange="onAfterChange" class="price-slider"/>
+                <div class="price-inputs">
+                    <a-input-number :formatter="formatter" v-model:value="price[0]" :min="50" :max="100" class="price-input"/>
+                    <a-input-number :formatter="formatter" v-model:value="price[1]" :min="0" :max="50" class="price-input"/>
+                </div>
 
             </div>
-            <div class="catalog">
-                <div v-for="product in filtered_catalog" class="product-card">
-
-                    <div class="pic" v-bind:style="{ background: 'url(' + product.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
-                    <div class="name">{{ product.name }}</div>
-                    <div class="status"> {{ product.status }}</div>
-                    <div class="price"> {{ product.price }}</div> 
-
+            <div class="catalog">    
+                <div v-for="product in filtered_catalog">
+                    <RouterLink :to="{
+                        name: 'Product',
+                        params: {
+                            category_id: product.category_id,
+                            product_id: product.product_id
+                        }
+                    }" class="product-card" >
+                        <div class="pic" v-bind:style="{ background: 'url(' + product.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
+                        <div class="name">{{ product.name }}</div>
+                        <div class="status"> {{ product.status }}</div>
+                        <div class="price"> {{ product.price }}</div> 
+                    </RouterLink>
                 </div>
             </div>
         </div>
+    </div>
 </template>
 <style scoped>
- a{
+ .category-catalog a{
     box-sizing: border-box;
     text-decoration: none;
     color: #FFFFFF;
   }
-  a:active, a:hover, a:focus{
+  .category-catalog a:active, .category-catalog a:hover, .category-catalog a:focus{
     text-decoration: none;
     color: #FFFFFF;
+  }
+  .catalog-page{
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px 100px 100px 100px;
+  }
+  .category-name{
+    font-size: 1.8em;
+    font-weight: 600;
   }
     .category-catalog{
         width: 100%;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-between;
+        align-items: flex-start;
         gap: 20px;
-        padding: 100px 0;
+        box-sizing: border-box;
     }
-
+    .filters{
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 20px;
+        padding: 32px 36px;
+        border: #1f3c5b solid 2px;
+        border-radius: 12px;
+    }
+    .filters .hint{
+        font-size: 1.4em;
+        font-weight: 600;
+    }
+    .filters .price-slider{
+        width: 95%;
+    }
+    .filters .price-inputs{
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
+    .filters .price-inputs .price-input{
+        width: 100px;
+    }
     .catalog{
-        width: 80%;
+        width: 70%;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 20px;
-        padding: 100px 0;
+        align-items: center;
+        gap: 40px;
+        /*padding: 0px 40px;*/
     }
     .product-card{
 
@@ -101,7 +161,7 @@
         flex-direction: column;
         background-color: #1f3c5b;
         border-radius: 12px;
-        gap: 28px;
+        gap: 20px;
         transition: all 0.3s;
     }
     .product-card:hover{

@@ -2,7 +2,7 @@ import { ref } from 'vue'
 
 const products = ref([
     {
-        product_id:'',
+        product_id:'1',
         category_id:'stickers',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/stickers.jpg`,
         name: 'Стикеры - NOW 1 сезон',
@@ -11,16 +11,16 @@ const products = ref([
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'2',
         category_id:'postcards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/panda.jpg`,
         name: 'Открытка - Pandalin “Лето”',
         description: '',
         price: 10,
-        status:'Скоро в продаже',
+        status:'Возможен предзаказ',
     },
     {        
-        product_id:'',
+        product_id:'3',
         category_id:'postcards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/kind_kail.jpg`,
         name: 'Открытка - KailDC ”Добрый модер”',
@@ -29,16 +29,16 @@ const products = ref([
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'4',
         category_id:'postcards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/exegs_cute.jpg`,
-        name: 'Открытка - ExEGS ”Просто робот”',
+        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/just_rana.jpg`,
+        name: 'Открытка - Raniya ”Просто Раниш”',
         description: '',
         price: 10,
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'5',
         category_id:'cards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
         name: 'Набор тематических карточек (4 шт.)',
@@ -47,7 +47,7 @@ const products = ref([
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'6',
         category_id:'cards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
         name: 'Набор тематических карточек (6 шт.)',
@@ -56,7 +56,7 @@ const products = ref([
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'7',
         category_id:'cards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
         name: 'Набор тематических карточек (8 шт.)',
@@ -65,7 +65,7 @@ const products = ref([
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'8',
         category_id:'cards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
         name: 'Набор тематических карточек (12 шт.)',
@@ -74,7 +74,7 @@ const products = ref([
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'9',
         category_id:'cards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
         name: 'Набор тематических карточек (12 шт.)',
@@ -83,7 +83,7 @@ const products = ref([
         status:'Скоро в продаже',
     },
     {
-        product_id:'',
+        product_id:'10',
         category_id:'cards',
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
         name: 'Набор тематических карточек (12 шт.)',

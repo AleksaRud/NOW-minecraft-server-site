@@ -24,8 +24,13 @@ const theme = {
       "fontSize": 28,
       "colorBgTextHover": "#1f3c5b66",
       "lineWidth": 2,
+    },
+    Breadcrumb: {
+      "colorTextDescription": "rgba(255, 255, 255, 0.5)",
+      "colorText": "rgba(255, 255, 255)",
     }
-  }
+  },
+
 }
 
 const theme_mobile = {
