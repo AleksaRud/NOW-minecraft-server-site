@@ -37,7 +37,6 @@ const picStyle = ref({
 const picElement = ref<HTMLElement | null>(null);
 
 const mouseenterHandler = (event: Event) => {
-  console.log('mouseenter');
   picStyle.value.backgroundSize = '150%';
 };
 
@@ -65,18 +64,15 @@ const mousemoveHandler = (event: Event) => {
   offsetY = Math.min(Math.max(offsetY, -maxOffsetY), maxOffsetY);
   
   picStyle.value.backgroundPosition = `calc(50% + ${offsetX}px) calc(50% + ${offsetY}px)`;
-  console.log('mousemove', { mouseX, mouseY, offsetX, offsetY });
 };
 
 const mouseleaveHandler = (event: Event) => {
-  console.log('mouseleave');
   picStyle.value.backgroundSize = '100%';
   picStyle.value.backgroundPosition = 'calc(50% + 0px) calc(50% + 0px)';
 };
 
 onMounted(() => {
   if (!picElement.value) {
-    console.error("Элемент для картинки не найден");
     return;
   }
   

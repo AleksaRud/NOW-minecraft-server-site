@@ -1,12 +1,13 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
-    import { products } from './products';
+    import { products, sortProducts } from './products';
     import { categories } from './categories';
     import { ref } from 'vue';
     let route = useRoute();
     const selected_category = ref(categories.value.find((item) => item.category_id == route.params.category_id));
- 
+    
     const category_catalog = ref(products.value.filter((item) => item.category_id == route.params.category_id));
+    sortProducts(category_catalog.value)
     let product_status = [...new Set(category_catalog.value.map((item) => item.status))];
     const filter_status = ref(product_status.map((status, is_checked) => {return {status: status, is_checked: false}}));
     const filtered_catalog = ref(category_catalog.value);

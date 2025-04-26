@@ -1,6 +1,30 @@
 import { ref } from 'vue'
 import { makeParagraphs } from './textFormatter';
-const products = ref([
+type Product = {
+    product_id: string;
+    category_id: string;
+    pic: string;
+    name: string;
+    description: string;
+    characteristics: string;
+    price: number;
+    status: string;
+  };
+  
+  function sortProducts(products: Product[]): Product[] {
+    const statusOrder: Record<string, number> = {
+      "В наличии": 0,
+      "Скоро в продаже": 1,
+      "Нет в наличии": 2,
+    };
+  
+    return products.sort((a, b) => {
+      const prioA = statusOrder[a.status] ?? 99;
+      const prioB = statusOrder[b.status] ?? 99;
+      return prioA - prioB;
+    });
+  }
+const products = ref<Product[]>([
     {
         product_id:'1',
         category_id:'stickers',
@@ -118,4 +142,4 @@ function getStatusColor(status: string){
     }
 }
 
-export {products, getStatusColor}
+export {products, getStatusColor, sortProducts}
