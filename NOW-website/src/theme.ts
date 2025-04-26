@@ -1,3 +1,4 @@
+import { Button } from "antd"
 
 const theme = {
   token: {
@@ -28,7 +29,18 @@ const theme = {
     Breadcrumb: {
       "colorTextDescription": "rgba(255, 255, 255, 0.5)",
       "colorText": "rgba(255, 255, 255)",
+    },
+    Input: {
+      "colorTextDisabled": "rgba(255,255,255)"
+    },
+    Button: {
+      "controlOutlineWidth": 0,
+      "colorTextLightSolid": "#FFFFFF",
+      "colorPrimary": "#3d84bd",
+      "colorPrimaryActive": "#3d84bd",
+      "colorPrimaryHover": "#7bb3dc"
     }
+ 
   },
 
 }

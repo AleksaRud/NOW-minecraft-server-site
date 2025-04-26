@@ -62,8 +62,8 @@
                 <div class="hint">Цена</div>
                 <a-slider v-model:value="price" range :step="1" :tip-formatter="formatter" @change="onChange" @afterChange="onAfterChange" class="price-slider"/>
                 <div class="price-inputs">
-                    <a-input-number :formatter="formatter" v-model:value="price[0]" :min="50" :max="100" class="price-input"/>
-                    <a-input-number :formatter="formatter" v-model:value="price[1]" :min="0" :max="50" class="price-input"/>
+                    <a-input-number :controls="false" :formatter="formatter" v-model:value="price[0]" :min="50" :max="100" class="price-input"/>
+                    <a-input-number :controls="false" :formatter="formatter" v-model:value="price[1]" :min="0" :max="50" class="price-input"/>
                 </div>
 
             </div>
