@@ -4,6 +4,7 @@
     
     import { categories } from './categories';
     import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { review } from './review';
     let route = useRoute();
     const product = ref(products.value.find((item) => item.product_id == route.params.product_id && item.category_id == route.params.category_id))
     
@@ -24,6 +25,7 @@
                 break;
             }
     }
+    const product_reviews = ref(review.value.filter((item) => item.product_id == route.params.product_id));
 
 
 
@@ -87,6 +89,7 @@ onBeforeUnmount(() => {
   picElement.value.removeEventListener('mousemove', mousemoveHandler);
   picElement.value.removeEventListener('mouseleave', mouseleaveHandler);
 });
+
 </script>
 <template>
     <div class="product-page">
@@ -118,6 +121,12 @@ onBeforeUnmount(() => {
         </div>
         <div v-else>
             <p>Товар не найден.</p>
+        </div>
+        <div class="reviews">
+            <div class="review" v-for="review in product_reviews">
+                <a-rate :value="review.rate" disabled allow-half/>
+            </div>
+
         </div>
     </div>
 </template>
