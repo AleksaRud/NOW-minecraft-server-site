@@ -46,6 +46,27 @@ const reviews = ref<Review[]>([
         advantages: '345345aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaa',
         disadvantages: '11'
     },
+    
+    {
+        review_id: '4',
+        product_id: '3',
+        date: dayjs('20.02.2025', 'DD.MM.YYYY'),
+        user_id: '12345',
+        rate: 5,
+        text: 'asdgshdgh',
+        advantages: '345345aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaa',
+        disadvantages: '11'
+    },
+    {
+        review_id: '5',
+        product_id: '4',
+        date: dayjs('20.02.2025', 'DD.MM.YYYY'),
+        user_id: '12345',
+        rate: 5,
+        text: 'Да',
+        advantages: '',
+        disadvantages: ''
+    },
 ])
 
 export { reviews }

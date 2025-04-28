@@ -97,7 +97,7 @@ const stars = [5, 4, 3, 2, 1];
 
 const distribution = computed<Record<number, number>>(() => {
   const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-  reviews.value.forEach((review) => {
+    product_reviews.value.forEach((review) => {
     const star = Math.round(review.rate);
     if (star >= 1 && star <= 5) {
       counts[star] += 1;
@@ -106,7 +106,7 @@ const distribution = computed<Record<number, number>>(() => {
   return counts;
 });
 
-const totalReviews = computed(() => reviews.value.length);
+const totalReviews = computed(() => product_reviews.value.length);
 
 function percentFor(star: number): number {
   if (totalReviews.value === 0) return 0;
