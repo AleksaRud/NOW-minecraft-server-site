@@ -16,6 +16,7 @@ declare module 'vue' {
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputNumber: typeof import('ant-design-vue/es')['InputNumber']
+    AProgress: typeof import('ant-design-vue/es')['Progress']
     ARate: typeof import('ant-design-vue/es')['Rate']
     ASlider: typeof import('ant-design-vue/es')['Slider']
     ATabPane: typeof import('ant-design-vue/es')['TabPane']

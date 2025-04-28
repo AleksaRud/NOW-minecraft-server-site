@@ -15,7 +15,7 @@ type Review = {
     advantages: string,
     disadvantages: string,
   };
-const review = ref<Review[]>([
+const reviews = ref<Review[]>([
     {
         review_id: '1',
         product_id: '2',
@@ -30,22 +30,22 @@ const review = ref<Review[]>([
         review_id: '2',
         product_id: '2',
         date: dayjs('17.04.2025', 'DD.MM.YYYY'),
-        user_id: 'asdser',
+        user_id: '111',
         rate: 4,
         text: 'asdgshdgh',
         advantages: '345345',
         disadvantages: '11'
     },
     {
-        review_id: '2',
+        review_id: '3',
         product_id: '2',
         date: dayjs('20.02.2025', 'DD.MM.YYYY'),
-        user_id: '123434',
+        user_id: '12345',
         rate: 4.7,
         text: 'asdgshdgh',
-        advantages: '345345',
+        advantages: '345345aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaa',
         disadvantages: '11'
     },
 ])
 
-export { review }
+export { reviews }

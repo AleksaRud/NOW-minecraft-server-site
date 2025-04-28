@@ -1,14 +1,16 @@
 import { ref } from 'vue'
 import { makeParagraphs } from './textFormatter';
+import { reviews } from './review';
 type Product = {
-    product_id: string;
-    category_id: string;
-    pic: string;
-    name: string;
-    description: string;
-    characteristics: string;
-    price: number;
-    status: string;
+    product_id: string,
+    category_id: string,
+    pic: string,
+    name: string,
+    description: string,
+    characteristics: string,
+    price: number,
+    status: string,
+    rate:number,
   };
   
   function sortProducts(products: Product[]): Product[] {
@@ -34,6 +36,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 10,
         status:'Скоро в продаже',
+        rate: 0,
     },
     {
         product_id:'2',
@@ -44,6 +47,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 10,
         status:'Нет в наличии',
+        rate: 0,
     },
     {        
         product_id:'3',
@@ -54,6 +58,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 10,
         status:'В наличии',
+        rate: 0,
     },
     {
         product_id:'4',
@@ -64,6 +69,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 10,
         status:'Скоро в продаже',
+        rate: 0,
     },
     {
         product_id:'5',
@@ -74,6 +80,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 5,
         status:'Скоро в продаже',
+        rate: 0,
     },
     {
         product_id:'6',
@@ -84,6 +91,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 10,
         status:'Скоро в продаже',
+        rate: 0,
     },
     {
         product_id:'7',
@@ -94,6 +102,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 15,
         status:'Скоро в продаже',
+        rate: 0,
     },
     {
         product_id:'8',
@@ -104,6 +113,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 20,
         status:'Скоро в продаже',
+        rate: 0,
     },
     {
         product_id:'9',
@@ -114,6 +124,7 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 20,
         status:'Скоро в продаже',
+        rate: 0,
     },
     {
         product_id:'10',
@@ -124,11 +135,14 @@ const products = ref<Product[]>([
         characteristics: 'Размеры: А5, материал: мелованный картон 300г',
         price: 20,
         status:'Скоро в продажеa',
+        rate: 0,
     },
 ])
+
 for(let i=0; i<products.value.length; i++){
     products.value[i].description = makeParagraphs(products.value[i].description);
 }
+
 function getStatusColor(status: string){
     switch(true){
         case status.includes('В наличии'):
@@ -141,5 +155,23 @@ function getStatusColor(status: string){
             return { color: '#e6eef5', background_color: '#c7d4e040'};
     }
 }
-
-export {products, getStatusColor, sortProducts}
+function updateProductRates() {
+    products.value.forEach((product) => {
+      const productReviews = reviews.value.filter(
+        (review) => review.product_id === product.product_id
+      );
+  
+      if (productReviews.length > 0) {
+        const total = productReviews.reduce(
+          (sum, review) => sum + review.rate,
+          0
+        );
+        product.rate = total / productReviews.length;
+        product.rate = Math.round(product.rate * 10) / 10;
+      } else {
+        product.rate = 0;
+      }
+    });
+  }
+  
+export {products, getStatusColor, sortProducts, updateProductRates}

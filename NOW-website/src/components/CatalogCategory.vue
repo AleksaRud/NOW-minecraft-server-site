@@ -1,8 +1,9 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
-    import { products, sortProducts } from './products';
+    import { products, sortProducts, updateProductRates } from './products';
     import { categories } from './categories';
-    import { ref } from 'vue';
+    import { onMounted, ref, watch } from 'vue';
+import { reviews } from './review';
     let route = useRoute();
     const selected_category = ref(categories.value.find((item) => item.category_id == route.params.category_id));
     
@@ -41,6 +42,18 @@
             ) && item.price <= price.value[1] && item.price >= price.value[0]);
         }
     };
+    onMounted(() => {
+        updateProductRates();
+    });
+
+    // Если список отзывов меняется динамически, можно следить за изменениями
+    watch(
+        () => reviews.value,
+        () => {
+            updateProductRates();
+        },
+        { deep: true }
+    );
 </script>
 <template>
     <div class="catalog-page">
@@ -78,7 +91,16 @@
                         }
                     }" class="product-card" >
                         <div class="pic" v-bind:style="{ background: 'url(' + product.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
-                        <div class="name">{{ product.name }}</div>
+                        <div class="group">
+                            <div class="name">
+                                {{ product.name }}
+                            </div>
+
+                            <div class="rate">
+                                <div>{{ product.rate }}</div>
+                                <div class="star"></div>
+                            </div>
+                        </div>
                         <div class="status"> {{ product.status }}</div>
                         <div class="price"> {{ product.price }}</div> 
                     </RouterLink>
@@ -169,15 +191,22 @@
         transform: scale(1.05);
     }
     .pic{   
-        width: 240px;
-        height: 240px;
+        width: 260px;
+        height: 260px;
         border-radius: 4px;
     }
-    .name, .price, .status{
+    .product-card .group, .price, .status{
         font-size: 20px;
-        width: 240px;
+        width: 260px;
+    }
+    .product-card .group{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
     }
     .name{
+        width: 240px;
         display: -webkit-box; 
         -webkit-box-orient: vertical; 
         overflow: hidden; 
@@ -185,6 +214,17 @@
         -webkit-line-clamp: 2;
         line-height: 1.3em;
         height: 2.6em;
+    }
+    .product-card .group .rate{
+        display: flex;
+        flex-direction: row;
+        align-items:flex-end;
+    }
+    .star{
+        width: 24px;
+        height: 24px;
+        background-image: url('../assets/star.svg');
+        background-size: contain;
     }
     @media(max-width: 425px) {
         .catalog{

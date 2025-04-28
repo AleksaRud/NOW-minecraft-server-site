@@ -1,5 +1,3 @@
-import { Button } from "antd"
-
 const theme = {
   token: {
     "colorPrimary": "#7bb3dc",
@@ -39,8 +37,8 @@ const theme = {
       "colorPrimary": "#3d84bd",
       "colorPrimaryActive": "#3d84bd",
       "colorPrimaryHover": "#7bb3dc"
-    }
- 
+    },
+    
   },
 
 }
