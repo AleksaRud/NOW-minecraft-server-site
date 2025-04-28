@@ -5,8 +5,7 @@
     import { categories } from './categories';
     import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
     import { reviews } from './review';
-import { users } from './users';
-
+    import { users } from './users';
 
     let route = useRoute();
     const product = ref(products.value.find((item) => item.product_id == route.params.product_id && item.category_id == route.params.category_id))
@@ -29,95 +28,94 @@ import { users } from './users';
             }
     }
     const product_reviews = ref(reviews.value.filter((item) => item.product_id == route.params.product_id));
+    product_reviews.value.sort((a, b) => b.date.diff(a.date));
 
 
+    const picStyle = ref({
+    background: product.value ? `url(${product.value.pic}) #a5b8e3` : '',
+    backgroundPosition: 'calc(50% + 0px) calc(50% + 0px)',
+    backgroundSize: '100%',
+    backgroundRepeat: 'no-repeat'
+    });
 
-const picStyle = ref({
-  background: product.value ? `url(${product.value.pic}) #a5b8e3` : '',
-  backgroundPosition: 'calc(50% + 0px) calc(50% + 0px)',
-  backgroundSize: '100%',
-  backgroundRepeat: 'no-repeat'
-});
+    const picElement = ref<HTMLElement | null>(null);
 
-const picElement = ref<HTMLElement | null>(null);
+    const mouseenterHandler = (event: Event) => {
+    picStyle.value.backgroundSize = '150%';
+    };
 
-const mouseenterHandler = (event: Event) => {
-  picStyle.value.backgroundSize = '150%';
-};
+    const mousemoveHandler = (event: Event) => {
+    const mouseEvent = event as MouseEvent;
+    if (!picElement.value) return;
+    
+    const rect = picElement.value.getBoundingClientRect();
+    const mouseX = mouseEvent.clientX - rect.left;
+    const mouseY = mouseEvent.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-const mousemoveHandler = (event: Event) => {
-  const mouseEvent = event as MouseEvent;
-  if (!picElement.value) return;
-  
-  const rect = picElement.value.getBoundingClientRect();
-  const mouseX = mouseEvent.clientX - rect.left;
-  const mouseY = mouseEvent.clientY - rect.top;
-  
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
+    const diffX = mouseX - centerX;
+    const diffY = mouseY - centerY;
+    
+    const factor = 1;
+    let offsetX = -diffX * factor;
+    let offsetY = -diffY * factor;
+    
+    const maxOffsetX = rect.width * 0.25;
+    const maxOffsetY = rect.height * 0.25;
+    offsetX = Math.min(Math.max(offsetX, -maxOffsetX), maxOffsetX);
+    offsetY = Math.min(Math.max(offsetY, -maxOffsetY), maxOffsetY);
+    
+    picStyle.value.backgroundPosition = `calc(50% + ${offsetX}px) calc(50% + ${offsetY}px)`;
+    };
 
-  const diffX = mouseX - centerX;
-  const diffY = mouseY - centerY;
-  
-  const factor = 1;
-  let offsetX = -diffX * factor;
-  let offsetY = -diffY * factor;
-  
-  const maxOffsetX = rect.width * 0.25;
-  const maxOffsetY = rect.height * 0.25;
-  offsetX = Math.min(Math.max(offsetX, -maxOffsetX), maxOffsetX);
-  offsetY = Math.min(Math.max(offsetY, -maxOffsetY), maxOffsetY);
-  
-  picStyle.value.backgroundPosition = `calc(50% + ${offsetX}px) calc(50% + ${offsetY}px)`;
-};
+    const mouseleaveHandler = (event: Event) => {
+    picStyle.value.backgroundSize = '100%';
+    picStyle.value.backgroundPosition = 'calc(50% + 0px) calc(50% + 0px)';
+    };
 
-const mouseleaveHandler = (event: Event) => {
-  picStyle.value.backgroundSize = '100%';
-  picStyle.value.backgroundPosition = 'calc(50% + 0px) calc(50% + 0px)';
-};
-
-onMounted(() => {
-  if (!picElement.value) {
-    return;
-  }
-  
-  picElement.value.addEventListener('mouseenter', mouseenterHandler);
-  picElement.value.addEventListener('mousemove', mousemoveHandler);
-  picElement.value.addEventListener('mouseleave', mouseleaveHandler);
-});
-
-onBeforeUnmount(() => {
-  if (!picElement.value) return;
-  picElement.value.removeEventListener('mouseenter', mouseenterHandler);
-  picElement.value.removeEventListener('mousemove', mousemoveHandler);
-  picElement.value.removeEventListener('mouseleave', mouseleaveHandler);
-});
-
-const stars = [5, 4, 3, 2, 1];
-
-const distribution = computed<Record<number, number>>(() => {
-  const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    product_reviews.value.forEach((review) => {
-    const star = Math.round(review.rate);
-    if (star >= 1 && star <= 5) {
-      counts[star] += 1;
+    onMounted(() => {
+    if (!picElement.value) {
+        return;
     }
-  });
-  return counts;
-});
+    
+    picElement.value.addEventListener('mouseenter', mouseenterHandler);
+    picElement.value.addEventListener('mousemove', mousemoveHandler);
+    picElement.value.addEventListener('mouseleave', mouseleaveHandler);
+    });
 
-const totalReviews = computed(() => product_reviews.value.length);
+    onBeforeUnmount(() => {
+    if (!picElement.value) return;
+    picElement.value.removeEventListener('mouseenter', mouseenterHandler);
+    picElement.value.removeEventListener('mousemove', mousemoveHandler);
+    picElement.value.removeEventListener('mouseleave', mouseleaveHandler);
+    });
 
-function percentFor(star: number): number {
-  if (totalReviews.value === 0) return 0;
-  return Math.round((100 * (distribution.value[star] || 0)) / totalReviews.value);
-}
+    const stars = [5, 4, 3, 2, 1];
 
-onMounted(() => {
+    const distribution = computed<Record<number, number>>(() => {
+    const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        product_reviews.value.forEach((review) => {
+        const star = Math.round(review.rate);
+        if (star >= 1 && star <= 5) {
+        counts[star] += 1;
+        }
+    });
+    return counts;
+    });
+
+    const totalReviews = computed(() => product_reviews.value.length);
+
+    function percentFor(star: number): number {
+    if (totalReviews.value === 0) return 0;
+    return Math.round((100 * (distribution.value[star] || 0)) / totalReviews.value);
+    }
+
+    onMounted(() => {
         updateProductRates();
     });
 
-    // Если список отзывов меняется динамически, можно следить за изменениями
     watch(
         () => reviews.value,
         () => {
