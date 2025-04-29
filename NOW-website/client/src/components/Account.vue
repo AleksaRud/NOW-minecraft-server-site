@@ -1,10 +1,14 @@
 <script lang="ts" setup>
+import LoginForm from './LoginForm.vue';
+
 
 
 </script>
 
 <template>
+    
     <div class="account">
+        <LoginForm/>
         <div class="account-info">
             <div class="photo">
                 <div class="pic"></div>

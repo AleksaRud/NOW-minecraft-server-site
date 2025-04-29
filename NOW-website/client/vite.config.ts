@@ -15,10 +15,18 @@ export default defineConfig({
       ],
     }),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000', // адрес вашего сервера Express
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-    },
+    }
   }
 })
-
