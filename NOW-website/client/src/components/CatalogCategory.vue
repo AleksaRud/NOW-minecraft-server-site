@@ -1,9 +1,13 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
     import { products, sortProducts, updateProductRates } from './products';
-    import { categories } from './categories';
     import { onMounted, ref, watch } from 'vue';
-import { reviews } from './review';
+    import { reviews } from './review';
+    import { categories, fetchCategories } from './categories';
+
+    onMounted(() => {
+        fetchCategories();
+    });
     let route = useRoute();
     const selected_category = ref(categories.value.find((item) => item.category_id == route.params.category_id));
     

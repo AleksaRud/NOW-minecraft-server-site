@@ -1,6 +1,10 @@
 <script lang="ts" setup>
-import { categories } from './categories';
+import { onMounted } from 'vue';
+import { categories, fetchCategories } from './categories'; // убедитесь, что путь указан правильно
 
+onMounted(() => {
+    fetchCategories();
+});
 </script>
 
 <template>

@@ -1,28 +1,37 @@
-// server/server.js
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Подключение к MongoDB
-const DB_URI = process.env.DB_URI || 'mongodb://localhost:27017/mydb';
-mongoose.connect(DB_URI, {
+// Подключаемся к MongoDB (замените 'ваша_база' на имя вашей базы данных)
+mongoose.connect('mongodb://localhost:27017/NOW-DB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('Подключение к MongoDB установлено'))
-.catch((error) => console.error('Ошибка подключения к MongoDB:', error));
+  .then(() => console.log('Подключение к MongoDB успешно'))
+  .catch(err => console.error('Ошибка подключения к MongoDB:', err));
 
-// Middleware для парсинга JSON
-app.use(express.json());
-
-// Пример маршрута
-app.get('/api', (req, res) => {
-  res.json({ message: 'Привет от Express!' });
+// Определяем схему и модель для коллекции categories
+const categorySchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  pic: {type: String, required: true},
+  category_id: {type: String, required: true},
 });
 
-app.listen(PORT, () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
+const Category = mongoose.model('Category', categorySchema);
+
+// Создаём эндпоинт для получения категорий
+app.get('/api/categories', async (req, res) => {
+  try {
+    const categories = await Category.find({});
+    res.json(categories);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+// Запускаем сервер на порту 3000
+app.listen(3000, () => {
+  console.log('Сервер запущен на порту 3000');
 });
