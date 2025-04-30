@@ -6,6 +6,45 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 
 type Review = {
+    review_id: string;
+    product_id: string;
+    date: Dayjs;
+    user_id: string;
+    rate: number;
+    text: string;
+    advantages: string;
+    disadvantages: string;
+  };
+  
+  // Реактивный массив для хранения отзывов
+    const reviews = ref<Review[]>([]);
+  
+  // Функция для преобразования отдельного отзыва
+  function parseReview(review: any): Review {
+    return {
+      ...review,
+      // Преобразуем полученную дату (ISO-строку или Date) в объект Dayjs:
+      date: dayjs(review.date),
+    };
+  }
+  
+  // Функция для получения отзывов с сервера и преобразования даты в Dayjs
+  export async function fetchReviews(): Promise<void> {
+    try {
+        if (reviews.value.length > 0) return;
+      const response = await fetch('/api/reviews');
+      if (!response.ok) {
+        throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
+      }
+      const data = await response.json();
+      // Для каждого отзыва преобразуем поле date с помощью parseReview
+      reviews.value = data.map(parseReview);
+    } catch (error) {
+      console.error('Ошибка при получении отзывов:', error);
+    }
+  }
+/*
+type Review = {
     review_id: string,
     product_id: string,
     date: Dayjs,
@@ -68,5 +107,5 @@ const reviews = ref<Review[]>([
         disadvantages: ''
     },
 ])
-
+*/
 export { reviews }

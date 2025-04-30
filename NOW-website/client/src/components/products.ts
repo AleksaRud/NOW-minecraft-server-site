@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { makeParagraphs } from './textFormatter';
 import { reviews } from './review';
-type Product = {
+/*type Product = {
     product_id: string,
     category_id: string,
     pic: string,
@@ -11,8 +11,18 @@ type Product = {
     price: number,
     status: string,
     rate:number,
-  };
-  
+  };*/
+  interface Product {
+    product_id: string;
+    category_id: string;
+    pic: string;
+    name: string;
+    description: string;
+    characteristics: string;
+    price: number;
+    status: string;
+    rate:number;
+  } 
   function sortProducts(products: Product[]): Product[] {
     const statusOrder: Record<string, number> = {
       "В наличии": 0,
@@ -26,6 +36,62 @@ type Product = {
       return prioA - prioB;
     });
   }
+
+
+  
+const pic_path = `${import.meta.env.VITE_BASE_URL}/src/assets/shop/products/`;
+
+const products = ref<Product[]>([]);
+export async function fetchProducts(): Promise<void> {
+  try {
+    if (products.value.length > 0) return;
+    const response = await fetch('/api/products');
+    if (!response.ok) {
+      throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
+    }
+    const data: Product[] = await response.json();
+    products.value = data.map((item) => ({
+      ...item,
+      pic: pic_path + item.pic,
+    }));
+  } catch (error) {
+    console.error('Ошибка при получении категорий:', error);
+  }
+}
+export async function fetchProductsByCategory(categoryId: string): Promise<void> {
+  try {
+    const response = await fetch(`/api/products/${categoryId}`);
+    if (!response.ok) {
+      throw new Error(`Ошибка загрузки товаров: ${response.statusText}`);
+    }
+    
+    const data: Product[] = await response.json();
+    products.value = data.map((item) => ({
+      ...item,
+      pic: pic_path + item.pic,
+    }));
+  } catch (error) {
+    console.error(`Ошибка при получении товаров для категории ${categoryId}:`, error);
+  }
+}
+
+export const product = ref<Product | null>(null);
+
+export async function fetchProductById(product_id: string): Promise<void> {
+  try {
+    const response = await fetch(`/api/products/${product_id}`);
+    if (!response.ok) {
+      throw new Error(`Ошибка при загрузке товара: ${response.statusText}`);
+    }
+    const data: Product = await response.json();
+    product.value = data;
+    product.value.pic = pic_path + data.pic;
+    console.log(product)
+  } catch (error) {
+    console.error(`Ошибка при получении товара с id ${product_id}:`, error);
+  }
+}
+/*
 const products = ref<Product[]>([
     {
         product_id:'1',
@@ -138,9 +204,10 @@ const products = ref<Product[]>([
         rate: 0,
     },
 ])
-
+*/
 for(let i=0; i<products.value.length; i++){
     products.value[i].description = makeParagraphs(products.value[i].description);
+    console.log(products.value[i])
 }
 
 function getStatusColor(status: string){

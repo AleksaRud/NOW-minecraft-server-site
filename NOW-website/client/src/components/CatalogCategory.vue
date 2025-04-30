@@ -1,27 +1,45 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
-    import { products, sortProducts, updateProductRates } from './products';
-    import { onMounted, ref, watch } from 'vue';
-    import { reviews } from './review';
+    import { products, sortProducts, updateProductRates, fetchProducts, fetchProductsByCategory } from './products';
+    import { onMounted, ref, watch, computed } from 'vue';
+    import { reviews, fetchReviews } from './review';
     import { categories, fetchCategories } from './categories';
 
-    onMounted(() => {
+    /*onMounted(() => {
         fetchCategories();
-    });
+        fetchProducts();
+        fetchReviews();
+    });*/
     let route = useRoute();
+    const currentCategoryId = route.params.category_id as string;
+
+
+    onMounted(async () => {
+        await fetchCategories();
+        await fetchProductsByCategory(currentCategoryId);
+    });
+
+    const currentCategory = computed(() =>
+        categories.value.find((cat) => cat.category_id === currentCategoryId)
+    );
+
+    const productsByCategory = computed(() =>
+        products.value.filter((prod) => prod.category_id === currentCategoryId)
+    );
+    /*
     const selected_category = ref(categories.value.find((item) => item.category_id == route.params.category_id));
     
     const category_catalog = ref(products.value.filter((item) => item.category_id == route.params.category_id));
-    sortProducts(category_catalog.value)
-    let product_status = [...new Set(category_catalog.value.map((item) => item.status))];
-    const filter_status = ref(product_status.map((status, is_checked) => {return {status: status, is_checked: false}}));
-    const filtered_catalog = ref(category_catalog.value);
+    sortProducts(category_catalog.value)*/
+    let product_status = [...new Set(productsByCategory.value.map((item) => item.status))];
+    const filter_status = computed(() => product_status.map((status, is_checked) => {return {status: status, is_checked: false}}));
+    const filtered_catalog = computed(() => productsByCategory.value);
 
     function UpdateCatalog(e:Event){
         if(filter_status.value.every((item) => item.is_checked == false)){
-            filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
+            filtered_catalog.value = productsByCategory.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
         }else{
-            filtered_catalog.value = category_catalog.value.filter((item) => filter_status.value.some(status_obj =>
+            filtered_catalog.value = productsByCategory.value.filter((item) => filter_status.value.some(status_obj =>
                 status_obj.status === item.status && status_obj.is_checked === true
             ) && item.price <= price.value[1] && item.price >= price.value[0]);
         }
@@ -39,9 +57,9 @@
     const onAfterChange = (value: number) => {
         //filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
         if(filter_status.value.every((item) => item.is_checked == false)){
-            filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
+            filtered_catalog.value = productsByCategory.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
         }else{
-            filtered_catalog.value = category_catalog.value.filter((item) => filter_status.value.some(status_obj =>
+            filtered_catalog.value = productsByCategory.value.filter((item) => filter_status.value.some(status_obj =>
                 status_obj.status === item.status && status_obj.is_checked === true
             ) && item.price <= price.value[1] && item.price >= price.value[0]);
         }
@@ -63,11 +81,11 @@
     <div class="catalog-page">
         <a-breadcrumb>
             <a-breadcrumb-item><RouterLink to="/catalog">Каталог</RouterLink></a-breadcrumb-item>
-            <a-breadcrumb-item>{{ selected_category?.name }}</a-breadcrumb-item>
+            <a-breadcrumb-item>{{ currentCategory?.name }}</a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="category-name">
-            {{ selected_category?.name }}
+            {{ currentCategory?.name }}
         </div>
         <div class="category-catalog">
             <div class="filters">

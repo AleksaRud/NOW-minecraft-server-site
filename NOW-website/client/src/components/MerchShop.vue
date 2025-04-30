@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { categories, fetchCategories } from './categories'; // убедитесь, что путь указан правильно
-
+import { fetchProducts } from './products';
+import { fetchReviews } from './review'
 onMounted(() => {
     fetchCategories();
+    fetchProducts();
+    fetchReviews();
 });
 </script>
 
