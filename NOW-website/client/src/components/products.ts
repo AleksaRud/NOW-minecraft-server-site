@@ -42,29 +42,13 @@ import { reviews } from './review';
 const pic_path = `${import.meta.env.VITE_BASE_URL}/src/assets/shop/products/`;
 
 const products = ref<Product[]>([]);
-export async function fetchProducts(): Promise<void> {
-  try {
-    if (products.value.length > 0) return;
-    const response = await fetch('/api/products');
-    if (!response.ok) {
-      throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
-    }
-    const data: Product[] = await response.json();
-    products.value = data.map((item) => ({
-      ...item,
-      pic: pic_path + item.pic,
-    }));
-  } catch (error) {
-    console.error('Ошибка при получении категорий:', error);
-  }
-}
 export async function fetchProductsByCategory(categoryId: string): Promise<void> {
   try {
-    const response = await fetch(`/api/products/${categoryId}`);
+    // Формируем URL с query-параметром
+    const response = await fetch(`/api/products?category_id=${encodeURIComponent(categoryId)}`);
     if (!response.ok) {
       throw new Error(`Ошибка загрузки товаров: ${response.statusText}`);
     }
-    
     const data: Product[] = await response.json();
     products.value = data.map((item) => ({
       ...item,
@@ -91,120 +75,7 @@ export async function fetchProductById(product_id: string): Promise<void> {
     console.error(`Ошибка при получении товара с id ${product_id}:`, error);
   }
 }
-/*
-const products = ref<Product[]>([
-    {
-        product_id:'1',
-        category_id:'stickers',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/stickers.jpg`,
-        name: 'Стикеры - NOW 1 сезон',
-        description: '',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 10,
-        status:'Скоро в продаже',
-        rate: 0,
-    },
-    {
-        product_id:'2',
-        category_id:'postcards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/panda.jpg`,
-        name: 'Открытка - Pandalin “Лето”',
-        description: 'Открытка с качественной печатью станет отличным дополнением к любому подарку или самостоятельным элементом декора.\nИзготовлена из плотной и качественной бумаги с яркими и насыщенными цветами. Задняя сторона открытки оставлена пустой для вашего личного послания. Учтите, что из-за особенностей цветопередачи, оттенки на отпечатке могут незначительно отличаться от изображения на экране.',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 10,
-        status:'Нет в наличии',
-        rate: 0,
-    },
-    {        
-        product_id:'3',
-        category_id:'postcards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/kind_kail.jpg`,
-        name: 'Открытка - KailDC ”Добрый модер”',
-        description: 'Открытка с качественной печатью станет отличным дополнением к любому подарку или самостоятельным элементом декора.\nИзготовлена из плотной и качественной бумаги с яркими и насыщенными цветами. Задняя сторона открытки оставлена пустой для вашего личного послания. Учтите, что из-за особенностей цветопередачи, оттенки на отпечатке могут незначительно отличаться от изображения на экране.',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 10,
-        status:'В наличии',
-        rate: 0,
-    },
-    {
-        product_id:'4',
-        category_id:'postcards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/just_rana.jpg`,
-        name: 'Открытка - Raniya ”Просто Раниш”',
-        description: 'Открытка с качественной печатью станет отличным дополнением к любому подарку или самостоятельным элементом декора.\nИзготовлена из плотной и качественной бумаги с яркими и насыщенными цветами. Задняя сторона открытки оставлена пустой для вашего личного послания. Учтите, что из-за особенностей цветопередачи, оттенки на отпечатке могут незначительно отличаться от изображения на экране.',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 10,
-        status:'Скоро в продаже',
-        rate: 0,
-    },
-    {
-        product_id:'5',
-        category_id:'cards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
-        name: 'Набор тематических карточек (4 шт.)',
-        description: '',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 5,
-        status:'Скоро в продаже',
-        rate: 0,
-    },
-    {
-        product_id:'6',
-        category_id:'cards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
-        name: 'Набор тематических карточек (6 шт.)',
-        description: '',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 10,
-        status:'Скоро в продаже',
-        rate: 0,
-    },
-    {
-        product_id:'7',
-        category_id:'cards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
-        name: 'Набор тематических карточек (8 шт.)',
-        description: '',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 15,
-        status:'Скоро в продаже',
-        rate: 0,
-    },
-    {
-        product_id:'8',
-        category_id:'cards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
-        name: 'Набор тематических карточек (12 шт.)',
-        description: '',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 20,
-        status:'Скоро в продаже',
-        rate: 0,
-    },
-    {
-        product_id:'9',
-        category_id:'cards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
-        name: 'Набор тематических карточек (12 шт.)',
-        description: '',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 20,
-        status:'Скоро в продаже',
-        rate: 0,
-    },
-    {
-        product_id:'10',
-        category_id:'cards',
-        pic: `${import.meta.env.VITE_BASE_URL}/src/assets/cards.png`,
-        name: 'Набор тематических карточек (12 шт.)',
-        description: '',
-        characteristics: 'Размеры: А5, материал: мелованный картон 300г',
-        price: 20,
-        status:'Скоро в продажеa',
-        rate: 0,
-    },
-])
-*/
+
 for(let i=0; i<products.value.length; i++){
     products.value[i].description = makeParagraphs(products.value[i].description);
     console.log(products.value[i])

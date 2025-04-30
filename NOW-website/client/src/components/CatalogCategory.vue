@@ -1,136 +1,191 @@
 <script setup lang="ts">
-    import { useRoute } from 'vue-router';
-    import { products, sortProducts, updateProductRates, fetchProducts, fetchProductsByCategory } from './products';
-    import { onMounted, ref, watch, computed } from 'vue';
-    import { reviews, fetchReviews } from './review';
-    import { categories, fetchCategories } from './categories';
+import { onMounted, ref, watch, computed } from 'vue';
+import { useRoute } from 'vue-router';
+// Импортируем нужные функции и реактивные переменные из модулей
+import { products, fetchProductsByCategory, sortProducts, updateProductRates } from './products';
+import { categories, fetchCategories } from './categories';
+import { reviews } from './review';
 
-    /*onMounted(() => {
-        fetchCategories();
-        fetchProducts();
-        fetchReviews();
-    });*/
-    let route = useRoute();
-    const currentCategoryId = route.params.category_id as string;
+// Получаем объект маршрута из vue-router
+const route = useRoute();
 
+// Создаем реактивное хранилище для идентификатора текущей категории
+const currentCategoryId = ref(route.params.category_id as string);
 
-    onMounted(async () => {
-        await fetchCategories();
-        await fetchProductsByCategory(currentCategoryId);
-    });
+// При монтировании компонента загружаем категории и товары по текущей категории
+onMounted(async () => {
+  await fetchCategories();
+  await fetchProductsByCategory(currentCategoryId.value);
+  updateProductRates();
+});
 
-    const currentCategory = computed(() =>
-        categories.value.find((cat) => cat.category_id === currentCategoryId)
-    );
-
-    const productsByCategory = computed(() =>
-        products.value.filter((prod) => prod.category_id === currentCategoryId)
-    );
-    /*
-    const selected_category = ref(categories.value.find((item) => item.category_id == route.params.category_id));
-    
-    const category_catalog = ref(products.value.filter((item) => item.category_id == route.params.category_id));
-    sortProducts(category_catalog.value)*/
-    let product_status = [...new Set(productsByCategory.value.map((item) => item.status))];
-    const filter_status = computed(() => product_status.map((status, is_checked) => {return {status: status, is_checked: false}}));
-    const filtered_catalog = computed(() => productsByCategory.value);
-
-    function UpdateCatalog(e:Event){
-        if(filter_status.value.every((item) => item.is_checked == false)){
-            filtered_catalog.value = productsByCategory.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
-        }else{
-            filtered_catalog.value = productsByCategory.value.filter((item) => filter_status.value.some(status_obj =>
-                status_obj.status === item.status && status_obj.is_checked === true
-            ) && item.price <= price.value[1] && item.price >= price.value[0]);
-        }
+// Если параметр меняется (например, при навигации), обновляем текущий идентификатор и перезагружаем товары
+watch(
+  () => route.params.category_id,
+  async (newId) => {
+    if (newId) {
+      currentCategoryId.value = newId as string;
+      await fetchProductsByCategory(currentCategoryId.value);
     }
+  },
+  { immediate: true }
+);
 
-    const formatter = (value: number) => {
-        return `${value} BYN`;
-    };
-    const price = ref<[number, number]>([0, 100]);
+// Вычисляемое свойство для выбранной категории (для хлебных крошек и отображения названия)
+const selected_category = computed(() =>
+  categories.value.find(item => item.category_id === currentCategoryId.value)
+);
 
-    const onChange = (value: number) => {
+// Вычисляемое свойство для всех товаров данной категории
+const category_catalog = computed(() =>
+  products.value.filter(item => item.category_id === currentCategoryId.value)
+);
 
-    };
+// После загрузки товаров применяем сортировку
+watch(category_catalog, (newCatalog) => {
+  sortProducts(newCatalog);
+}, { immediate: true });
 
-    const onAfterChange = (value: number) => {
-        //filtered_catalog.value = category_catalog.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
-        if(filter_status.value.every((item) => item.is_checked == false)){
-            filtered_catalog.value = productsByCategory.value.filter((item) => item.price <= price.value[1] && item.price >= price.value[0]);
-        }else{
-            filtered_catalog.value = productsByCategory.value.filter((item) => filter_status.value.some(status_obj =>
-                status_obj.status === item.status && status_obj.is_checked === true
-            ) && item.price <= price.value[1] && item.price >= price.value[0]);
-        }
-    };
-    onMounted(() => {
-        updateProductRates();
-    });
+// Вычисляем список уникальных статусов товаров для формирования фильтра
+const product_status = computed(() => {
+  return [...new Set(category_catalog.value.map(item => item.status))];
+});
 
-    // Если список отзывов меняется динамически, можно следить за изменениями
-    watch(
-        () => reviews.value,
-        () => {
-            updateProductRates();
-        },
-        { deep: true }
+// Храним состояние фильтра по статусам в ref, чтобы потом менять (если понадобится пользовательский выбор)
+const filter_status = ref(
+  product_status.value.map(status => ({ status, is_checked: false }))
+);
+// Если список статусов меняется после загрузки данных, обновляем filter_status
+watch(product_status, (newStatuses) => {
+  filter_status.value = newStatuses.map(status => ({ status, is_checked: false }));
+}, { immediate: true });
+
+// Сделаем отфильтрованный список товаров – его изменения будут происходить на основе category_catalog, выбранного диапазона цен и статусов.
+// Здесь мы используем ref, который будем обновлять через функцию UpdateCatalog.
+const filtered_catalog = ref(category_catalog.value);
+// Если исходный список товаров меняется, сбрасываем фильтрацию:
+watch(category_catalog, (newCatalog) => {
+  filtered_catalog.value = newCatalog;
+}, { immediate: true });
+
+// Функция для обновления отфильтрованного каталога, применяя фильтрацию по цене и выбранным статусам
+function UpdateCatalog(e: Event) {
+  if (filter_status.value.every(item => !item.is_checked)) {
+    filtered_catalog.value = category_catalog.value.filter(item =>
+      item.price >= price.value[0] && item.price <= price.value[1]
     );
+  } else {
+    filtered_catalog.value = category_catalog.value.filter(item =>
+      filter_status.value.some(status_obj => status_obj.status === item.status && status_obj.is_checked) &&
+      item.price >= price.value[0] && item.price <= price.value[1]
+    );
+  }
+}
+
+// Диапазон цен и функция форматирования для элемента a-slider и a-input-number
+const price = ref<[number, number]>([0, 100]);
+const formatter = (value: number) => `${value} BYN`;
+
+// Если требуется, можно добавить обработку событий слайдера
+const onChange = (value: number) => {
+  // Можно реализовать динамическую фильтрацию во время перемещения слайдера
+};
+const onAfterChange = (value: number) => {
+  UpdateCatalog(new Event('change'));
+};
+
+// Обновление рейтингов товаров при изменении отзывов (если требуется)
+onMounted(() => {
+  updateProductRates();
+});
+watch(
+  () => reviews.value,
+  () => {
+    updateProductRates();
+  },
+  { deep: true }
+);
 </script>
+
 <template>
-    <div class="catalog-page">
-        <a-breadcrumb>
-            <a-breadcrumb-item><RouterLink to="/catalog">Каталог</RouterLink></a-breadcrumb-item>
-            <a-breadcrumb-item>{{ currentCategory?.name }}</a-breadcrumb-item>
-        </a-breadcrumb>
+  <div class="catalog-page">
+    <a-breadcrumb>
+      <a-breadcrumb-item>
+        <RouterLink to="/catalog">Каталог</RouterLink>
+      </a-breadcrumb-item>
+      <a-breadcrumb-item>{{ selected_category?.name || 'Загрузка...' }}</a-breadcrumb-item>
+    </a-breadcrumb>
 
-        <div class="category-name">
-            {{ currentCategory?.name }}
-        </div>
-        <div class="category-catalog">
-            <div class="filters">
-                <div class="hint">Статус</div>
-                <div class="checkboxes">
-                    <a-checkbox v-model:checked="status.is_checked" v-for="status in filter_status" @change = "UpdateCatalog">
-                        {{ status.status }}
-                    </a-checkbox>
-                </div>
-                <div class="hint">Цена</div>
-                <a-slider v-model:value="price" range :step="1" :tip-formatter="formatter" @change="onChange" @afterChange="onAfterChange" class="price-slider"/>
-                <div class="price-inputs">
-                    <a-input-number :controls="false" :formatter="formatter" v-model:value="price[0]" :min="50" :max="100" class="price-input"/>
-                    <a-input-number :controls="false" :formatter="formatter" v-model:value="price[1]" :min="0" :max="50" class="price-input"/>
-                </div>
-
-            </div>
-            <div class="catalog">    
-                <div v-for="product in filtered_catalog">
-                    <RouterLink :to="{
-                        name: 'Product',
-                        params: {
-                            category_id: product.category_id,
-                            product_id: product.product_id
-                        }
-                    }" class="product-card" >
-                        <div class="pic" v-bind:style="{ background: 'url(' + product.pic + '), #D5EAFFDE', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
-                        <div class="group">
-                            <div class="name">
-                                {{ product.name }}
-                            </div>
-
-                            <div class="rate">
-                                <div>{{ product.rate }}</div>
-                                <div class="star"></div>
-                            </div>
-                        </div>
-                        <div class="status"> {{ product.status }}</div>
-                        <div class="price"> {{ product.price }}</div> 
-                    </RouterLink>
-                </div>
-            </div>
-        </div>
+    <div class="category-name">
+      {{ selected_category?.name || 'Загрузка...' }}
     </div>
+    <div class="category-catalog">
+      <div class="filters">
+        <div class="hint">Статус</div>
+        <div class="checkboxes">
+          <a-checkbox 
+            v-for="status in filter_status" 
+            :key="status.status" 
+            v-model:checked="status.is_checked" 
+            @change="UpdateCatalog">
+            {{ status.status }}
+          </a-checkbox>
+        </div>
+        <div class="hint">Цена</div>
+        <a-slider 
+          v-model:value="price" 
+          range 
+          :step="1" 
+          :tip-formatter="formatter" 
+          @change="onChange" 
+          @afterChange="onAfterChange" 
+          class="price-slider" />
+        <div class="price-inputs">
+          <a-input-number 
+            :controls="false" 
+            :formatter="formatter" 
+            v-model:value="price[0]" 
+            :min="0" 
+            :max="price[1]" 
+            class="price-input" />
+          <a-input-number 
+            :controls="false" 
+            :formatter="formatter" 
+            v-model:value="price[1]" 
+            :min="price[0]" 
+            class="price-input" />
+        </div>
+      </div>
+      <div class="catalog">
+        <div v-for="product in filtered_catalog" :key="product._id">
+          <RouterLink :to="{
+            name: 'Product',
+            params: {
+              category_id: product.category_id,
+              product_id: product.product_id
+            }
+          }" class="product-card">
+            <div class="pic" :style="{
+                background: 'url(' + product.pic + ') no-repeat center/contain, #D5EAFFDE'
+              }"></div>
+            <div class="group">
+              <div class="name">
+                {{ product.name }}
+              </div>
+              <div class="rate">
+                <div>{{ product.rate }}</div>
+                <div class="star"></div>
+              </div>
+            </div>
+            <div class="status">{{ product.status }}</div>
+            <div class="price">{{ product.price }}</div>
+          </RouterLink>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+
 <style scoped>
  .category-catalog a{
     box-sizing: border-box;

@@ -13,7 +13,6 @@ export const categories = ref<Category[]>([]);
 
 export async function fetchCategories(): Promise<void> {
   try {
-    if (categories.value.length > 0) return;
     const response = await fetch('/api/categories');
     if (!response.ok) {
       throw new Error(`Ошибка загрузки данных: ${response.statusText}`);

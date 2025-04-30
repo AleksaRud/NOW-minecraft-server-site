@@ -73,28 +73,37 @@ app.get('/api/products/:product_id', async (req, res) => {
       // Если товар с таким ID не найден, возвращаем ошибку 404
       return res.status(404).json({ error: 'Product not found' });
     }
-    // Если товар найден, отправляем его в ответе
-    res.json(product);
+    const aggregationResult = await Review.aggregate([
+      { $match: { product_id: productId } },         // Отбираем отзывы для этого товара
+      { $group: { _id: "$product_id", avgRating: { $avg: "$rate" } } }
+    ]);
+    
+    const avgRating = aggregationResult.length > 0 ? aggregationResult[0].avgRating : 0;
+    
+    // 3. Формируем ответ: объект товара + вычисленный средний рейтинг
+    const productWithRating = { ...product.toObject(), avgRating };
+    
+    res.json(productWithRating);
   } catch (error) {
     console.error(`Ошибка при получении товара с id ${productId}:`, error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.get('/api/products/:category_id', async (req, res) => {
-  const categoryId = req.params.category_id;
+app.get('/api/products', async (req, res) => {
+  const { category_id } = req.query;  
   try {
-    // Ищем все товары с полем category_id, равным переданному значению.
-    const products = await Product.find({ category_id: categoryId });
-    if (!products || products.length === 0) {
+    const productsList = await Product.find({ category_id: category_id });
+    if (!productsList || productsList.length === 0) {
       return res.status(404).json({ error: 'Products not found' });
     }
-    res.json(products);
+    res.json(productsList);
   } catch (error) {
-    console.error(`Ошибка при получении товаров для категории ${categoryId}:`, error);
+    console.error(`Ошибка при получении товаров для категории ${category_id}:`, error);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Определяем схему и модель для коллекции categories
 const reviewSchema = new mongoose.Schema({

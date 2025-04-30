@@ -16,12 +16,35 @@
     }
     onMounted(loadProduct);
     watch(() => route.params.id, loadProduct);
-    /*onMounted(() => {
+    const currentCategoryId = ref(route.params.category_id as string);
+    onMounted(async () => {
+        await fetchCategories();
+    });
+    const selected_category = computed(() =>
+        categories.value.find(item => item.category_id === currentCategoryId.value)
+    );
+
+
+    onMounted(async () => {
         await fetchReviews();
-    });*/
-    /*const product = ref(products.value.find((item) => item.product_id == route.params.product_id && item.category_id == route.params.category_id))
-    */
-    const selected_category = ref(categories.value.find((item) => item.category_id == route.params.category_id));
+    });
+
+
+
+    // Очень важно: формируем список отзывов для текущего товара как computed-свойство,
+// чтобы обновление глобального массива reviews автоматически пересчитывалось.
+const product_reviews = computed(() => {
+  return [...reviews.value.filter((rev) => rev.product_id === route.params.product_id)]
+         .sort((a, b) => b.date.diff(a.date));
+});
+
+const computedAverageRating = computed(() => {
+  if (product_reviews.value.length === 0) return 0;
+  const sum = product_reviews.value.reduce((acc, review) => acc + review.rate, 0);
+  // Возвращаем число, округленное до одного знака:
+  return Math.round((sum / product_reviews.value.length) * 10) / 10;
+});
+
 
     const value = ref<number>(0);
     function updateQuantity(flag: string){
@@ -38,17 +61,22 @@
                 break;
             }
     }
-    const product_reviews = ref(reviews.value.filter((item) => item.product_id == route.params.product_id));
-    product_reviews.value.sort((a, b) => b.date.diff(a.date));
+    /*const product_reviews = ref(reviews.value.filter((item) => item.product_id == route.params.product_id));
+    product_reviews.value.sort((a, b) => b.date.diff(a.date));*/
 
 
-    const picStyle = computed(() => ({
+    const picStyle = ref({
         background: product.value ? `url(${product.value.pic}) #a5b8e3` : '',
         backgroundPosition: 'calc(50% + 0px) calc(50% + 0px)',
         backgroundSize: '100%',
         backgroundRepeat: 'no-repeat'
-    }));
-    console.log(picStyle)
+    });
+    watch(product, (newProduct) => {
+        if (newProduct) {
+            picStyle.value.background = `url(${newProduct.pic}) #a5b8e3`;
+        }
+    });
+
     const picElement = ref<HTMLElement | null>(null);
 
     const mouseenterHandler = (event: Event) => {
@@ -85,7 +113,7 @@
         picStyle.value.backgroundSize = '100%';
         picStyle.value.backgroundPosition = 'calc(50% + 0px) calc(50% + 0px)';
     };
-
+    /*
     onMounted(() => {
         if (!picElement.value) {
             return;
@@ -102,7 +130,7 @@
         picElement.value.removeEventListener('mousemove', mousemoveHandler);
         picElement.value.removeEventListener('mouseleave', mouseleaveHandler);
     });
-
+*/
     const stars = [5, 4, 3, 2, 1];
 
     const distribution = computed<Record<number, number>>(() => {
@@ -122,7 +150,7 @@
         if (totalReviews.value === 0) return 0;
         return Math.round((100 * (distribution.value[star] || 0)) / totalReviews.value);
     }
-
+    /*
     onMounted(() => {
         updateProductRates();
     });
@@ -133,7 +161,7 @@
             updateProductRates();
         },
         { deep: true }
-    );
+    );*/
 </script>
 <template>
     <div class="product-page">
@@ -143,11 +171,14 @@
             <a-breadcrumb-item>{{ product?.name }}</a-breadcrumb-item>
         </a-breadcrumb>
         <div v-if="product" class="product">
-            <div class="pic" id="pic" ref="picElement" :style="picStyle" ></div>
+            <div class="pic" id="pic" ref="picElement" :style="picStyle"
+           @mouseenter="mouseenterHandler"
+           @mousemove="mousemoveHandler"
+           @mouseleave="mouseleaveHandler" ></div>
             <div class="product-info">
                 <div>
                     <div class="name">{{ product.name }}</div>
-                    <a-rate :value="product.rate" disabled allow-half class="rate"/>
+                    <a-rate :value="computedAverageRating" disabled allow-half class="rate"/>
                 </div>
                 <div v-html="product.description" class="text"></div>
                 <div class="characteristics">{{ product.characteristics }}</div>
@@ -240,7 +271,7 @@
         width: 640px;
         height: 640px;
         border-radius: 4px;
-        transition: background-size 0.3s, background-position 0.3s;
+        transition: background-size 0.3s ease-out, background-position 0.5s ease-out;
         overflow: hidden;
     }
     .product-info{
