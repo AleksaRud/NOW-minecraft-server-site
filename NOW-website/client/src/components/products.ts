@@ -21,7 +21,7 @@ import { reviews } from './review';
     characteristics: string;
     price: number;
     status: string;
-    rate:number;
+    avgRating:number;
   } 
   function sortProducts(products: Product[]): Product[] {
     const statusOrder: Record<string, number> = {
@@ -50,10 +50,12 @@ export async function fetchProductsByCategory(categoryId: string): Promise<void>
       throw new Error(`Ошибка загрузки товаров: ${response.statusText}`);
     }
     const data: Product[] = await response.json();
-    products.value = data.map((item) => ({
+    products.value = data;
+    console.log(data)
+    /*products.value = data.map((item) => ({
       ...item,
       pic: pic_path + item.pic,
-    }));
+    }));*/
   } catch (error) {
     console.error(`Ошибка при получении товаров для категории ${categoryId}:`, error);
   }
@@ -69,8 +71,7 @@ export async function fetchProductById(product_id: string): Promise<void> {
     }
     const data: Product = await response.json();
     product.value = data;
-    product.value.pic = pic_path + data.pic;
-    console.log(product)
+    //product.value.pic = pic_path + data.pic;
   } catch (error) {
     console.error(`Ошибка при получении товара с id ${product_id}:`, error);
   }
@@ -93,7 +94,7 @@ function getStatusColor(status: string){
             return { color: '#e6eef5', background_color: '#c7d4e040'};
     }
 }
-function updateProductRates() {
+/*function updateProductRates() {
     products.value.forEach((product) => {
       const productReviews = reviews.value.filter(
         (review) => review.product_id === product.product_id
@@ -111,5 +112,5 @@ function updateProductRates() {
       }
     });
   }
-  
-export {products, getStatusColor, sortProducts, updateProductRates}
+  */
+export {products, getStatusColor, sortProducts, }

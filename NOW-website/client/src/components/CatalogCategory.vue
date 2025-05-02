@@ -2,7 +2,7 @@
 import { onMounted, ref, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
 // Импортируем нужные функции и реактивные переменные из модулей
-import { products, fetchProductsByCategory, sortProducts, updateProductRates } from './products';
+import { products, fetchProductsByCategory, sortProducts } from './products';
 import { categories, fetchCategories } from './categories';
 import { reviews } from './review';
 
@@ -16,7 +16,7 @@ const currentCategoryId = ref(route.params.category_id as string);
 onMounted(async () => {
   await fetchCategories();
   await fetchProductsByCategory(currentCategoryId.value);
-  updateProductRates();
+  //updateProductRates();
 });
 
 // Если параметр меняется (например, при навигации), обновляем текущий идентификатор и перезагружаем товары
@@ -30,7 +30,7 @@ watch(
   },
   { immediate: true }
 );
-
+console.log(products)
 // Вычисляемое свойство для выбранной категории (для хлебных крошек и отображения названия)
 const selected_category = computed(() =>
   categories.value.find(item => item.category_id === currentCategoryId.value)
@@ -95,7 +95,7 @@ const onAfterChange = (value: number) => {
 };
 
 // Обновление рейтингов товаров при изменении отзывов (если требуется)
-onMounted(() => {
+/*onMounted(() => {
   updateProductRates();
 });
 watch(
@@ -104,7 +104,7 @@ watch(
     updateProductRates();
   },
   { deep: true }
-);
+);*/
 </script>
 
 <template>
@@ -157,7 +157,7 @@ watch(
         </div>
       </div>
       <div class="catalog">
-        <div v-for="product in filtered_catalog" :key="product._id">
+        <div v-for="product in filtered_catalog">
           <RouterLink :to="{
             name: 'Product',
             params: {
@@ -173,7 +173,7 @@ watch(
                 {{ product.name }}
               </div>
               <div class="rate">
-                <div>{{ product.rate }}</div>
+                <div>{{ product.avgRating }}</div>
                 <div class="star"></div>
               </div>
             </div>

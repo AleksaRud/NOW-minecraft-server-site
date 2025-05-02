@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
-    import { products, getStatusColor, updateProductRates, fetchProducts, product, fetchProductById } from './products';
+    import { products, getStatusColor, product, fetchProductById } from './products';
     
     import { categories, fetchCategories } from './categories';
     import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
@@ -178,7 +178,7 @@ const computedAverageRating = computed(() => {
             <div class="product-info">
                 <div>
                     <div class="name">{{ product.name }}</div>
-                    <a-rate :value="computedAverageRating" disabled allow-half class="rate"/>
+                    <a-rate :value="product.avgRating" disabled allow-half class="rate"/>
                 </div>
                 <div v-html="product.description" class="text"></div>
                 <div class="characteristics">{{ product.characteristics }}</div>
