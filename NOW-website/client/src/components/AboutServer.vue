@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { goToLink } from './links';
-import { seasons } from './seasons';
-
+import { fetchSeasons, seasons } from './seasons';
+onMounted(() => {
+    fetchSeasons();
+});
 const activeKey = ref(0);
 const pageWidth = document.documentElement.scrollWidth;
 const position  = (pageWidth >= 425) ? 'center' : '60%';

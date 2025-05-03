@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { useRoute } from 'vue-router';
-    import { products, getStatusColor, product, fetchProductById } from './products';
+    import { getStatusColor, product, fetchProductById } from './products';
     
     import { categories, fetchCategories } from './categories';
-    import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+    import { ref, onMounted, computed, watch } from 'vue';
     import { reviews, fetchReviews } from './review';
     import { users } from './users';
 
@@ -24,27 +24,14 @@
         categories.value.find(item => item.category_id === currentCategoryId.value)
     );
 
-
     onMounted(async () => {
         await fetchReviews();
     });
 
-
-
-    // Очень важно: формируем список отзывов для текущего товара как computed-свойство,
-// чтобы обновление глобального массива reviews автоматически пересчитывалось.
-const product_reviews = computed(() => {
-  return [...reviews.value.filter((rev) => rev.product_id === route.params.product_id)]
-         .sort((a, b) => b.date.diff(a.date));
-});
-
-const computedAverageRating = computed(() => {
-  if (product_reviews.value.length === 0) return 0;
-  const sum = product_reviews.value.reduce((acc, review) => acc + review.rate, 0);
-  // Возвращаем число, округленное до одного знака:
-  return Math.round((sum / product_reviews.value.length) * 10) / 10;
-});
-
+    const product_reviews = computed(() => {
+    return [...reviews.value.filter((rev) => rev.product_id === route.params.product_id)]
+            .sort((a, b) => b.date.diff(a.date));
+    });
 
     const value = ref<number>(0);
     function updateQuantity(flag: string){
@@ -61,9 +48,6 @@ const computedAverageRating = computed(() => {
                 break;
             }
     }
-    /*const product_reviews = ref(reviews.value.filter((item) => item.product_id == route.params.product_id));
-    product_reviews.value.sort((a, b) => b.date.diff(a.date));*/
-
 
     const picStyle = ref({
         background: product.value ? `url(${product.value.pic}) #a5b8e3` : '',
@@ -113,24 +97,8 @@ const computedAverageRating = computed(() => {
         picStyle.value.backgroundSize = '100%';
         picStyle.value.backgroundPosition = 'calc(50% + 0px) calc(50% + 0px)';
     };
-    /*
-    onMounted(() => {
-        if (!picElement.value) {
-            return;
-        }
-        
-        picElement.value.addEventListener('mouseenter', mouseenterHandler);
-        picElement.value.addEventListener('mousemove', mousemoveHandler);
-        picElement.value.addEventListener('mouseleave', mouseleaveHandler);
-    });
 
-    onBeforeUnmount(() => {
-        if (!picElement.value) return;
-        picElement.value.removeEventListener('mouseenter', mouseenterHandler);
-        picElement.value.removeEventListener('mousemove', mousemoveHandler);
-        picElement.value.removeEventListener('mouseleave', mouseleaveHandler);
-    });
-*/
+
     const stars = [5, 4, 3, 2, 1];
 
     const distribution = computed<Record<number, number>>(() => {
@@ -150,18 +118,6 @@ const computedAverageRating = computed(() => {
         if (totalReviews.value === 0) return 0;
         return Math.round((100 * (distribution.value[star] || 0)) / totalReviews.value);
     }
-    /*
-    onMounted(() => {
-        updateProductRates();
-    });
-
-    watch(
-        () => reviews.value,
-        () => {
-            updateProductRates();
-        },
-        { deep: true }
-    );*/
 </script>
 <template>
     <div class="product-page">

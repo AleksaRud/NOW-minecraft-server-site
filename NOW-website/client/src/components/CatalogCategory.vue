@@ -1,25 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
-// Импортируем нужные функции и реактивные переменные из модулей
 import { products, fetchProductsByCategory, sortProducts } from './products';
 import { categories, fetchCategories } from './categories';
-import { reviews } from './review';
 
-// Получаем объект маршрута из vue-router
 const route = useRoute();
 
-// Создаем реактивное хранилище для идентификатора текущей категории
 const currentCategoryId = ref(route.params.category_id as string);
 
-// При монтировании компонента загружаем категории и товары по текущей категории
 onMounted(async () => {
   await fetchCategories();
   await fetchProductsByCategory(currentCategoryId.value);
-  //updateProductRates();
 });
 
-// Если параметр меняется (например, при навигации), обновляем текущий идентификатор и перезагружаем товары
 watch(
   () => route.params.category_id,
   async (newId) => {
@@ -30,45 +23,35 @@ watch(
   },
   { immediate: true }
 );
-console.log(products)
-// Вычисляемое свойство для выбранной категории (для хлебных крошек и отображения названия)
+
 const selected_category = computed(() =>
   categories.value.find(item => item.category_id === currentCategoryId.value)
 );
 
-// Вычисляемое свойство для всех товаров данной категории
 const category_catalog = computed(() =>
   products.value.filter(item => item.category_id === currentCategoryId.value)
 );
 
-// После загрузки товаров применяем сортировку
 watch(category_catalog, (newCatalog) => {
   sortProducts(newCatalog);
 }, { immediate: true });
 
-// Вычисляем список уникальных статусов товаров для формирования фильтра
 const product_status = computed(() => {
   return [...new Set(category_catalog.value.map(item => item.status))];
 });
 
-// Храним состояние фильтра по статусам в ref, чтобы потом менять (если понадобится пользовательский выбор)
 const filter_status = ref(
   product_status.value.map(status => ({ status, is_checked: false }))
 );
-// Если список статусов меняется после загрузки данных, обновляем filter_status
 watch(product_status, (newStatuses) => {
   filter_status.value = newStatuses.map(status => ({ status, is_checked: false }));
 }, { immediate: true });
 
-// Сделаем отфильтрованный список товаров – его изменения будут происходить на основе category_catalog, выбранного диапазона цен и статусов.
-// Здесь мы используем ref, который будем обновлять через функцию UpdateCatalog.
 const filtered_catalog = ref(category_catalog.value);
-// Если исходный список товаров меняется, сбрасываем фильтрацию:
 watch(category_catalog, (newCatalog) => {
   filtered_catalog.value = newCatalog;
 }, { immediate: true });
 
-// Функция для обновления отфильтрованного каталога, применяя фильтрацию по цене и выбранным статусам
 function UpdateCatalog(e: Event) {
   if (filter_status.value.every(item => !item.is_checked)) {
     filtered_catalog.value = category_catalog.value.filter(item =>
@@ -82,29 +65,15 @@ function UpdateCatalog(e: Event) {
   }
 }
 
-// Диапазон цен и функция форматирования для элемента a-slider и a-input-number
 const price = ref<[number, number]>([0, 100]);
 const formatter = (value: number) => `${value} BYN`;
 
-// Если требуется, можно добавить обработку событий слайдера
 const onChange = (value: number) => {
-  // Можно реализовать динамическую фильтрацию во время перемещения слайдера
 };
 const onAfterChange = (value: number) => {
   UpdateCatalog(new Event('change'));
 };
 
-// Обновление рейтингов товаров при изменении отзывов (если требуется)
-/*onMounted(() => {
-  updateProductRates();
-});
-watch(
-  () => reviews.value,
-  () => {
-    updateProductRates();
-  },
-  { deep: true }
-);*/
 </script>
 
 <template>

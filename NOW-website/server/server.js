@@ -9,8 +9,9 @@ app.use('/shop/products', express.static(path.join(__dirname, 'uploads', 'shop',
 app.use('/projects', express.static(path.join(__dirname, 'uploads', 'projects')));
 app.use('/player_cards/season1', express.static(path.join(__dirname, 'uploads', 'player_cards', 'season1')));
 app.use('/player_cards/middle_season1', express.static(path.join(__dirname, 'uploads', 'player_cards', 'middle_season1')));
-app.use('/seasons/season1', express.static(path.join(__dirname, 'uploads', 'seasons', 'season1')));
-app.use('/seasons/middle_season1', express.static(path.join(__dirname, 'uploads', 'seasons', 'middle_season1')));
+app.use('/seasons', express.static(path.join(__dirname, 'uploads', 'seasons')));
+app.use('/news', express.static(path.join(__dirname, 'uploads', 'news')));
+//app.use('/seasons/middle_season1', express.static(path.join(__dirname, 'uploads', 'seasons', 'middle_season1')));
 // Подключаемся к MongoDB (замените 'ваша_база' на имя вашей базы данных)
 mongoose.connect('mongodb://localhost:27017/NOW-DB', {
   useNewUrlParser: true,
@@ -18,6 +19,53 @@ mongoose.connect('mongodb://localhost:27017/NOW-DB', {
 })
   .then(() => console.log('Подключение к MongoDB успешно'))
   .catch(err => console.error('Ошибка подключения к MongoDB:', err));
+
+
+
+// Определяем схему и модель для коллекции categories
+const seasonSchema = new mongoose.Schema({
+  season_id: { type: String, required: true },
+  name: { type: String, required: true },
+  pic: { type: String, required: true },
+  period: { type: String, required: true },
+  minecraft_version: { type: String, required: true },
+  description: { type: String, required: true },
+  hint: { type: String, required: true },
+  world_save: { type: String, required: true },
+});
+
+const Season = mongoose.model('Season', seasonSchema);
+
+// Создаём эндпоинт для получения категорий
+app.get('/api/seasons', async (req, res) => {
+  try {
+    const baseUrl = "http://localhost:3000";
+    const seasonsList = await Season.find({}).lean();
+
+    if (!seasonsList || seasonsList.length === 0) {
+      return res.status(404).json({ error: 'Seasons not found' });
+    }
+
+    // Добавляем изображения к категориям
+    const updatedSeasons = seasonsList.map(season => {
+      if (!/^https?:\/\//.test(season.pic)) {
+        season.pic = `${baseUrl}/seasons/${season.pic}`;
+      }
+      return season;
+    });
+
+    res.json(updatedSeasons);
+  } catch (err) {
+    console.error('Ошибка при получении категорий:', err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+
+
+
+
+
 
 // Определяем схему и модель для коллекции categories
 const categorySchema = new mongoose.Schema({
@@ -31,13 +79,28 @@ const Category = mongoose.model('Category', categorySchema);
 // Создаём эндпоинт для получения категорий
 app.get('/api/categories', async (req, res) => {
   try {
-    const categories = await Category.find({});
-    res.json(categories);
+    const baseUrl = "http://localhost:3000";
+    const categoriesList = await Category.find({}).lean();
+
+    if (!categoriesList || categoriesList.length === 0) {
+      return res.status(404).json({ error: 'Categories not found' });
+    }
+
+    // Добавляем изображения к категориям
+    const updatedCategories = categoriesList.map(category => {
+      if (!/^https?:\/\//.test(category.pic)) {
+        category.pic = `${baseUrl}/shop/categories/${category.pic}`;
+      }
+      return category;
+    });
+
+    res.json(updatedCategories);
   } catch (err) {
-    console.error(err);
+    console.error('Ошибка при получении категорий:', err);
     res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
+
 
 // Определяем схему и модель для коллекции categories
 const productSchema = new mongoose.Schema({

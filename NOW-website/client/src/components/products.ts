@@ -37,25 +37,15 @@ import { reviews } from './review';
     });
   }
 
-
-  
-const pic_path = `${import.meta.env.VITE_BASE_URL}/src/assets/shop/products/`;
-
 const products = ref<Product[]>([]);
 export async function fetchProductsByCategory(categoryId: string): Promise<void> {
   try {
-    // Формируем URL с query-параметром
     const response = await fetch(`/api/products?category_id=${encodeURIComponent(categoryId)}`);
     if (!response.ok) {
       throw new Error(`Ошибка загрузки товаров: ${response.statusText}`);
     }
     const data: Product[] = await response.json();
     products.value = data;
-    console.log(data)
-    /*products.value = data.map((item) => ({
-      ...item,
-      pic: pic_path + item.pic,
-    }));*/
   } catch (error) {
     console.error(`Ошибка при получении товаров для категории ${categoryId}:`, error);
   }
@@ -71,7 +61,7 @@ export async function fetchProductById(product_id: string): Promise<void> {
     }
     const data: Product = await response.json();
     product.value = data;
-    //product.value.pic = pic_path + data.pic;
+    product.value.description = makeParagraphs(product.value.description);
   } catch (error) {
     console.error(`Ошибка при получении товара с id ${product_id}:`, error);
   }
@@ -81,7 +71,6 @@ for(let i=0; i<products.value.length; i++){
     products.value[i].description = makeParagraphs(products.value[i].description);
     console.log(products.value[i])
 }
-
 function getStatusColor(status: string){
     switch(true){
         case status.includes('В наличии'):
@@ -94,23 +83,4 @@ function getStatusColor(status: string){
             return { color: '#e6eef5', background_color: '#c7d4e040'};
     }
 }
-/*function updateProductRates() {
-    products.value.forEach((product) => {
-      const productReviews = reviews.value.filter(
-        (review) => review.product_id === product.product_id
-      );
-  
-      if (productReviews.length > 0) {
-        const total = productReviews.reduce(
-          (sum, review) => sum + review.rate,
-          0
-        );
-        product.rate = total / productReviews.length;
-        product.rate = Math.round(product.rate * 10) / 10;
-      } else {
-        product.rate = 0;
-      }
-    });
-  }
-  */
 export {products, getStatusColor, sortProducts, }
