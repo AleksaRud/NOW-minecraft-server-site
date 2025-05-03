@@ -19,53 +19,63 @@ const handleOk = () => {
 </script>
 
 <template>
-    <div class="news-block">
-        <div class="title">Последние новости</div>
-        <div class="news">
-            
-            <div v-for="card in news_cards" class="news-card" v-bind:style="{ background: 'linear-gradient(#3f3d3d00 18%,#070707ce 90%), url(' + card.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }">
-                <div class="title-date">
-                    <div class="news-title">{{ card.title }}</div>
-                    <div class="date">{{ card.date.format('DD.MM.YYYY') }}</div>
-                </div>
-                <div class="description">{{ card.discription }}</div>
-                <a-button type="link" @click="showModal(card)" class="link-btn">Подробнее</a-button>
-                <a-modal class="modal" style="top: 20px" v-model:open="open" :title="selectedCard?.title" width="800px" @ok="handleOk" :closable="true">
-                    <div class="pic" v-bind:style="{ background: 'linear-gradient(#3f3d3d00 18%,#070707ce 90%), url(' + selectedCard?.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
+    <div class="all-news">
+        <a-breadcrumb>
+            <a-breadcrumb-item><RouterLink to="/">Главная</RouterLink></a-breadcrumb-item>
+            <a-breadcrumb-item>Новости</a-breadcrumb-item>
+        </a-breadcrumb>
+        <div class="news-block">
+            <div class="news">
+                
+                <div v-for="card in news_cards" class="news-card" v-bind:style="{ background: 'linear-gradient(#3f3d3d00 18%,#070707ce 90%), url(' + card.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }">
                     <div class="title-date">
-                        <div class="news-title-modal">{{ selectedCard?.title }}</div>
-                        <div class="date">{{ selectedCard?.date.format("DD.MM.YYYY") }}</div>
+                        <div class="news-title">{{ card.title }}</div>
+                        <div class="date">{{ card.date.format('DD.MM.YYYY') }}</div>
                     </div>
-                    <div class="description">{{ selectedCard?.discription }}</div>
-                    <a-button type="link" v-if="selectedCard" @click = goToLink(selectedCard.btn_link)>{{ selectedCard.btn_tytle }}</a-button>
-                </a-modal>
-            </div>
+                    <div class="description">{{ card.discription }}</div>
+                    <a-button type="link" @click="showModal(card)" class="link-btn">Подробнее</a-button>
+                    <a-modal class="modal" style="top: 20px" v-model:open="open" :title="selectedCard?.title" width="800px" @ok="handleOk" :closable="true">
+                        <div class="pic" v-bind:style="{ background: 'url(' + selectedCard?.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
+                        <div class="title-date">
+                            <div class="news-title-modal">{{ selectedCard?.title }}</div>
+                            <div class="date">{{ selectedCard?.date.format("DD.MM.YYYY") }}</div>
+                        </div>
+                        <div class="description">{{ selectedCard?.discription }}</div>
+                        <a-button class="link-btn" type="link" v-if="selectedCard" @click = goToLink(selectedCard.btn_link)>{{ selectedCard.btn_tytle }}</a-button>
+                    </a-modal>
+                </div>
 
+            </div>
         </div>
     </div>
 </template>
 <style scoped>
-
+.all-news{
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px 100px 100px 100px;
+}
 .news-block{
-        width: 100%;
+    
+    width: 100%; 
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 20px;
-        padding: 80px 0;
     }
-    .news-block .title{
-        font-size: 40px;
-    }
-    .news{
-        width: 80%;        
+    .news{   
+        
+        width: 95%;     
         display: flex;
         flex-direction: row;
-        gap: 64px;
-        
+        align-items: center;
+        justify-content: space-between;
+        gap: 80px;
         flex-wrap: wrap;
-        
     }
     
     .news-card{
@@ -123,6 +133,7 @@ const handleOk = () => {
     .modal .pic{
         width: 100%;
         height: 360px;
+        border-radius: 4px;
     }
     .news-title-modal{
         font-size: 26px;
