@@ -9,6 +9,7 @@ const theme = {
     "colorBorder": "#1f3c5b",
     "colorBgContainer": "transparent",
     "colorText": "rgba(255, 255, 255, 0.85)",
+    "colorTextDescription": "rgba(255, 255, 255, 0.5)",
     "fontSize": 18,
     "colorBgTextHover": "#1f3c5b66",
   },
@@ -39,6 +40,9 @@ const theme = {
       "colorPrimaryHover": "#7bb3dc"
     },
     
+    Modal: {
+      "colorBgElevated": "#121619"
+    }
   },
 
 }

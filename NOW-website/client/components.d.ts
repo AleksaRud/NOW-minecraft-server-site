@@ -19,6 +19,8 @@ declare module 'vue' {
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputNumber: typeof import('ant-design-vue/es')['InputNumber']
     AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
+    AllNews: typeof import('./src/components/AllNews.vue')['default']
+    AModal: typeof import('ant-design-vue/es')['Modal']
     AProgress: typeof import('ant-design-vue/es')['Progress']
     ARate: typeof import('ant-design-vue/es')['Rate']
     ASlider: typeof import('ant-design-vue/es')['Slider']

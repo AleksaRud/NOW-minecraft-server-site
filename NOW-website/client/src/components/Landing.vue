@@ -54,7 +54,12 @@ import { goToLink, tg_link, discord_link } from './links';
                         <a-button type="link" v-if="card.btn_link" @click = goToLink(card.btn_link)>{{ card.btn_tytle }}</a-button>
                     </div>  
                 </div>
-
+                <RouterLink to="/news">
+                    <a-button type="text" class="btn">
+                        <div>Посмотреть все</div>
+                        <div class="icon"></div>
+                    </a-button>
+                </RouterLink>
             </div>
         </div>
         <div class="players-projects">

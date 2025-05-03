@@ -8,10 +8,12 @@ import PageNotFound from './components/PageNotFound.vue'
 import CatalogCategory from './components/CatalogCategory.vue'
 import Product from './components/Product.vue'
 import { createWebHistory, createRouter} from 'vue-router'
+import AllNews from './components/AllNews.vue'
 
 const router = createRouter({
   routes: [
     {path:'/', component: Landing},
+    {path:'/news', component: AllNews},
     {path:'/aboutserver', component: AboutServer},
     {path:'/players', component: Players},
     {path:'/projects', component: Projects},
