@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { projects } from './projects'
+import { onMounted, ref } from 'vue';
+import { fetchProjects, Project, projects } from './projects'
 const pageWidth = document.documentElement.scrollWidth;
-
-const buildingInfo = ref({
+onMounted(async () => {
+        await fetchProjects();
+    });
+const buildingInfo = ref<Project>({
     pic: '',
     title: '',
     description: '',
+    height: 0
 })
 function openModal(pic : string, title : string, description : string){
     buildingInfo.value.pic = pic;

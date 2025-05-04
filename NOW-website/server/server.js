@@ -161,6 +161,43 @@ app.get('/api/players/:player_id', async (req, res) => {
   }
 });
 
+const projectSchema = new mongoose.Schema({
+  pic: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, default: '' },
+  height: { type: Number, required: true },
+});
+
+const Project = mongoose.model('Project', projectSchema);
+
+// Создаём эндпоинт для получения категорий
+app.get('/api/projects', async (req, res) => {
+  try {
+    const baseUrl = "http://localhost:3000";
+    const projects = await Project.find({});
+    // Добавляем изображения к категориям
+    const updatedProjects = projects.map(item => {
+      if (!/^https?:\/\//.test(item.pic)) {
+        item.pic = `${baseUrl}/projects/${item.pic}`;
+      }
+      return item;
+    });
+    res.json(updatedProjects);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
 
 // Определяем схему и модель для коллекции categories
 const categorySchema = new mongoose.Schema({

@@ -1,6 +1,28 @@
 import { ref } from 'vue'
 
-const projects = ref([
+interface Project {
+    pic: string,
+    title: string,
+    description: string,
+    height: number,
+}
+
+const projects = ref<Project[]>([]);
+
+export async function fetchProjects(): Promise<void> {
+    try {
+        const response = await fetch('/api/projects');
+        if (!response.ok) {
+        throw new Error(`Ошибка загрузки новостей: ${response.statusText}`);
+        }
+        const data = await response.json();
+        // Преобразуем дату в объект Dayjs (если даты из API приходят как ISO-строки)
+        projects.value = data;
+    } catch (error) {
+        console.error('Ошибка при получении новостей:', error);
+    }
+}
+/*const projects = ref([
     {
         pic: `${import.meta.env.VITE_BASE_URL}/src/assets/projects/spawn.png`,
         title: 'Спавн',
@@ -43,6 +65,7 @@ const projects = ref([
         description: '',
         height: 320,
     },
-])
+])*/
 
 export {projects}
+export type {Project}
