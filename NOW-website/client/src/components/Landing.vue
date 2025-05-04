@@ -1,7 +1,11 @@
 <script lang="ts" setup>
-import { Card, news_cards } from './news';
+import { Card, fetchNews, news_cards } from './news';
 import { goToLink, tg_link, discord_link } from './links';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+
+onMounted(async () => {
+    await fetchNews();
+});
 const open = ref<boolean>(false);
 
 const selectedCard = ref<Card | null>(null);

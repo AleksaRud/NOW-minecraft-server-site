@@ -63,6 +63,38 @@ app.get('/api/seasons', async (req, res) => {
 
 
 
+const newsSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  date: { type: String, required: true },
+  discription: { type: String, required: true },
+  pic: { type: String, required: true },
+  btn_link: { type: String, default: '' },
+  btn_tytle: { type: String, default: '' }
+});
+
+const News = mongoose.model('News', newsSchema);
+
+// Создаём эндпоинт для получения категорий
+app.get('/api/news', async (req, res) => {
+  try {
+    
+    const baseUrl = "http://localhost:3000";
+    const news = await News.find({});
+    // Добавляем изображения к категориям
+    const updatedNews = news.map(item => {
+      if (!/^https?:\/\//.test(item.pic)) {
+        item.pic = `${baseUrl}/news/${item.pic}`;
+      }
+      return item;
+    });
+    res.json(updatedNews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+
 
 
 
