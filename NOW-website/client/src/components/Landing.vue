@@ -658,6 +658,33 @@ const handleOk = () => {
         .news-block .title{
             font-size: 24px;
         }
+        .title-btn{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+        .title-btn .btn{
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+            font-size: 18px;
+            padding: 4px 8px;
+            height: fit-content;
+        }
+        .title-btn .btn:hover{
+            gap: 4px;
+        }
+        .title-btn .icon{
+            width: 20px;
+            height: 20px;
+            background-image: url('../assets/arrow_rigth.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
         .news{
             width: 360px;        
             display: flex;
@@ -676,7 +703,6 @@ const handleOk = () => {
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            align-items: flex-start;
             padding: 16px;
             gap: 8px;
             font-size: 12px;

@@ -60,6 +60,7 @@ const theme_mobile = {
     "colorText": "rgba(255, 255, 255, 0.85)",
     "fontSize": 16,
     "colorBgTextHover": "#1f3c5b66",
+    "colorTextDescription": "rgba(255, 255, 255, 0.5)",
   },
   components: {
     Tabs: {
@@ -72,7 +73,26 @@ const theme_mobile = {
       "fontSize": 20,
       "colorBgTextHover": "#1f3c5b66",
       "lineWidth": 2,
+    },
+    Breadcrumb: {
+      "colorTextDescription": "rgba(255, 255, 255, 0.5)",
+      "colorText": "rgba(255, 255, 255)",
+    },
+    Input: {
+      "colorTextDisabled": "rgba(255,255,255)"
+    },
+    Button: {
+      "controlOutlineWidth": 0,
+      "colorTextLightSolid": "#FFFFFF",
+      "colorPrimary": "#3d84bd",
+      "colorPrimaryActive": "#3d84bd",
+      "colorPrimaryHover": "#7bb3dc"
+    },
+    
+    Modal: {
+      "colorBgElevated": "#121619"
     }
+
   }
 }
 export { theme, theme_mobile }

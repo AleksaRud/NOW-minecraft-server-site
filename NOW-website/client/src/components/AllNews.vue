@@ -53,17 +53,16 @@ const handleOk = () => {
     </div>
 </template>
 <style scoped>
-.all-news{
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    padding: 20px 100px 100px 100px;
-}
-.news-block{
-    
-    width: 100%; 
+    .all-news{
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        padding: 20px 100px 100px 100px;
+    }
+    .news-block{
+        width: 100%; 
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -143,5 +142,42 @@ const handleOk = () => {
         overflow: hidden; 
         text-overflow:unset;
     }
-
+    @media(max-width: 425px) {
+        .all-news{
+            padding: 40px 20px 40px 20px;
+        }
+        .news-block{
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        .news-block .title{
+            font-size: 24px;
+        }
+        .news{
+            width: 360px;        
+            display: flex;
+            flex-direction: row;
+            gap: 16px;
+            
+        }
+        
+        .news-card{
+            min-width: 300px;
+            width: 300px;
+            height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+            gap: 8px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+        .date, .news-title{
+            font-size: 20px;
+        }
+    }
 </style>

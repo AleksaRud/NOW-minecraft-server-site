@@ -13,7 +13,7 @@ const pageWidth = document.documentElement.scrollWidth;
 <template>
     <div class="tabs">
         <a-tabs v-model:activeKey="activeKey" centered>
-            <a-tab-pane v-for="(season, id) in seasons" :key="id" :tab="(players.length >= 2) ? season.name : ''" class="tab"  v-if="pageWidth > 425">
+            <a-tab-pane v-for="(season, id) in seasons" :key="id" :tab="(players.length >= 2) ? season.name : ''" class="tab">
                 <div v-for="player in players.filter(player => player.season_id.includes(season.season_id))">
                     <RouterLink :to="{
                         name: 'Player',
@@ -21,17 +21,9 @@ const pageWidth = document.documentElement.scrollWidth;
                             player_id: player.player_id
                         }
                     }" class="player">
-                        <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
+                        <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: pageWidth>425 ? 'center' : 'top', backgroundSize: 'cover' }"></div>
                         <div class="nickname">{{ player.nickname }}</div>
                     </RouterLink>
-                </div>
-            </a-tab-pane>
-            <a-tab-pane v-for="(season, id) in seasons" :key="id" :tab="(players.length >= 2) ? season.name : ''" class="tab"  v-if="pageWidth <= 425">
-                <div v-for="(player, ind) in players" class="player">
-                    <div class="card-and-name" v-bind:style="(ind % 2) ? {flexDirection:'row-reverse'} : {flexDirection:'row'}">
-                        <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: 'top', backgroundSize: 'cover' }"></div>
-                        <div class="nickname">{{ player.nickname }}</div>
-                    </div>
                 </div>
             </a-tab-pane>
         </a-tabs>
@@ -83,12 +75,8 @@ const pageWidth = document.documentElement.scrollWidth;
         .player{
             flex-direction: column;
             justify-content: flex-start;
-            gap: 20px;
-        }
-        .card-and-name{
-            display: flex;
-            flex-direction: row;
-            gap: 48px;
+            gap: 8px;
+            filter: grayscale(0%);
         }
         .card{
             min-width: 120px;
@@ -102,7 +90,6 @@ const pageWidth = document.documentElement.scrollWidth;
         }
         .nickname{
             font-size: 20px;
-            padding-top: 20px;
         }
         .btn{
             box-sizing: border-box;

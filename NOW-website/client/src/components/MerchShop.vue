@@ -9,7 +9,7 @@ onMounted(() => {
 <template>
 
     <div class="shop">
-
+        
         <div class="categories">
             
                 <div v-for="category in categories">
@@ -85,12 +85,14 @@ onMounted(() => {
         text-align: center;
     }
     @media(max-width: 425px) {
-        .catalog{
+        .shop{
+            padding: 20px 0 40px 0;
+        }
+        .categories{
             width: 90%;
-            padding: 40px 0;
             gap: 16px;
         }
-        .product-card{
+        .category{
             padding: 16px;
             gap: 16px;
             border-radius: 8px;

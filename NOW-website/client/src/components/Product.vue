@@ -373,14 +373,53 @@
         color: #FFFFFF;
     }
     @media(max-width: 425px) {
-
-        .pic{
-            width: 140px;
-            height: 140px;
+        .product-page{
+            padding: 40px 20px 40px 20px;
+            margin: 0;
+			gap: 36px;
         }
-        .name, .price{
-            font-size: 14px;
-            width: 140px;
+        .product-page .product{
+            flex-direction: column;
+        }
+        .product .pic{
+            width: 372px;
+            height: 372px;
+        }
+        .product-info{
+            width: 372px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        .name{
+            font-size: 20px;
+        }
+        .reviews-block{
+            padding: 16px 20px;
+        }
+        .rate{
+            font-size: 16px;
+        }
+        .review-statistics{
+            width: 100%;
+        }
+        .review-statistics .rate{
+            width: 120px;
+        }
+        .progress-bar{
+            width: 50%;
+        }
+        .review{
+            width: 100%;
+            padding: 12px;
+        }
+        .review .row-group{
+            height: fit-content;
+        }
+        .date-rate{
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0;
         }
     }
 

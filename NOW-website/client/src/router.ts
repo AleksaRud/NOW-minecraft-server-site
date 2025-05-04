@@ -32,11 +32,10 @@ const router = createRouter({
   },
 })
 
-// Обработка переходов по адресу, введенному вручную
 router.beforeEach((to, _from, next) => {
   const { matched } = to;
   if (matched.length === 0) {
-    next('/');  // Перенаправить на главную страницу, если маршрут не найден
+    next('/');
   } else {
     next();
   }

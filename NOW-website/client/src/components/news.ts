@@ -23,7 +23,6 @@ export async function fetchNews(): Promise<void> {
         throw new Error(`Ошибка загрузки новостей: ${response.statusText}`);
         }
         const data = await response.json();
-        // Преобразуем дату в объект Dayjs (если даты из API приходят как ISO-строки)
         news_cards.value = data.map((card: any) => ({
             ...card,
             date: dayjs(card.date)

@@ -17,17 +17,27 @@ const pageWidth = document.documentElement.scrollWidth;
             <a-breadcrumb-item><RouterLink to="/players">Игроки</RouterLink></a-breadcrumb-item>
             <a-breadcrumb-item>{{ player?.nickname }}</a-breadcrumb-item>
         </a-breadcrumb>
-        <div class="player">
-            <div class="card" v-bind:style="{ background: 'url(' + player?.card + '), #1f3c5b', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
+        <div class="player" v-if="pageWidth > 425">
+            <div class="card" v-bind:style="{ background: 'url(' + player?.card + '), #1f3c5b', backgroundPosition: pageWidth>425 ? 'center' : 'top', backgroundSize: 'cover' }"></div>
             <div class="about">
                 <div class="nickname">{{ player?.nickname }}</div>
                 <div class="info" v-html="player?.info"></div>
                 <div v-if="player?.links" class="links">
                     <a-button v-for="link in player?.links" class="btn" @click = goToLink(link)>{{ getSource(link) }}</a-button>
                 </div>
-                
             </div>
-            
+        </div>
+        <div class="player" v-if="pageWidth <= 425">
+            <div class="card-and-name">
+                <div class="card" v-bind:style="{ background: 'url(' + player?.card + '), #1f3c5b', backgroundPosition: 'top', backgroundSize: 'cover' }"></div>
+                <div class="nickname">{{ player?.nickname }}</div>
+            </div>
+            <div class="about">
+                <div class="info" v-html="player?.info"></div>
+                <div v-if="player?.links" class="links">
+                    <a-button v-for="link in player.links" class="btn" @click = goToLink(link)>{{ getSource(link) }}</a-button>
+                </div>
+            </div>
         </div>
         <div class="nickname">Все карточки</div>
         <div class="pics">
@@ -96,12 +106,9 @@ const pageWidth = document.documentElement.scrollWidth;
         border-radius: 4px;
     }
     @media(max-width: 425px) {
-        .tabs{
+        .player-page{
             padding: 20px 0 40px 0;
             width: 80%;
-        }
-        .tab{
-            font-size: 16px;
         }
         .player{
             flex-direction: column;
@@ -116,6 +123,7 @@ const pageWidth = document.documentElement.scrollWidth;
         .card{
             min-width: 120px;
             min-height: 120px;
+            width: 120px;
             height: 120px;
             border-radius: 20px;
         }
@@ -131,6 +139,19 @@ const pageWidth = document.documentElement.scrollWidth;
             box-sizing: border-box;
             height: 36px;
             width: 100%;
+        }
+        .pics{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .pic{
+            min-width: 144px;
+            min-height: 210px;
+            border-radius: 4px;
         }
     }
 </style>
