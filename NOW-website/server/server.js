@@ -3,6 +3,9 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/shop/categories', express.static(path.join(__dirname, 'uploads', 'shop', 'categories')));
 app.use('/shop/products', express.static(path.join(__dirname, 'uploads', 'shop', 'products')));
 app.use('/projects', express.static(path.join(__dirname, 'uploads', 'projects')));
@@ -18,6 +21,144 @@ mongoose.connect('mongodb://localhost:27017/NOW-DB', {
   .then(() => console.log('Подключение к MongoDB успешно'))
   .catch(err => console.error('Ошибка подключения к MongoDB:', err));
 
+
+const newsSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  date: { type: String, required: true },
+  discription: { type: String, required: true },
+  pic: { type: String, required: true },
+  btn_link: { type: String, default: '' },
+  btn_tytle: { type: String, default: '' }
+});
+
+const News = mongoose.model('News', newsSchema);
+
+app.get('/api/news', async (req, res) => {
+  try {
+    
+    const baseUrl = "http://localhost:3000";
+    const news = await News.find({});
+    const updatedNews = news.map(item => {
+      if (!/^https?:\/\//.test(item.pic)) {
+        item.pic = `${baseUrl}/news/${item.pic}`;
+      }
+      return item;
+    });
+    res.json(updatedNews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+const fileUpload = require('express-fileupload');
+const fs = require('fs');
+
+
+// middleware для обработки файлов, загруженных формой
+app.use(fileUpload());
+
+// Раздаем статику для доступа к файлам
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Эндпоинт загрузки файла
+app.post('/api/upload', (req, res) => {
+  if (!req.files || !req.files.file) {
+    return res.status(400).json({ error: 'Файл не предоставлен' });
+  }
+
+  const uploadedFile = req.files.file;
+  const uploadDir = path.join(__dirname, 'uploads', 'news');
+
+  // Создаем папку, если ее нет
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+
+  // Для уникальности можно добавить суффикс к имени файла:
+  const uniqueName = `file-${Date.now()}-${uploadedFile.name}`;
+  const uploadPath = path.join(uploadDir, uniqueName);
+
+  // Перемещаем файл в указанную директорию
+  uploadedFile.mv(uploadPath, (err) => {
+    if (err) {
+      console.error('Ошибка при перемещении файла:', err);
+      return res.status(500).json({ error: 'Ошибка при загрузке файла' });
+    }
+    res.json({ filename: uniqueName });
+  });
+});
+
+/* =========== */
+/* Эндпоинты */
+/* =========== */
+
+/* POST /api/upload — загрузка файла (например, картинки) */
+
+
+
+/* GET /api/news — получение всех новостей */
+
+
+/* POST /api/news — создание новой новости */
+app.post('/api/news', async (req, res) => {
+  try {
+    const { title, date, discription, pic, btn_link, btn_tytle } = req.body;
+    const newNews = new News({ title, date, discription, pic, btn_link, btn_tytle });
+    await newNews.save();
+    res.status(201).json(newNews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка при создании новости' });
+  }
+});
+
+/* PUT /api/news/:id — обновление существующей новости по id */
+app.put('/api/news/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, date, discription, pic, btn_link, btn_tytle } = req.body;
+    const updatedNews = await News.findByIdAndUpdate(
+      id,
+      { title, date, discription, pic, btn_link, btn_tytle },
+      { new: true } // вернуть обновлённый документ
+    );
+    if (!updatedNews) {
+      return res.status(404).json({ error: 'Новость не найдена' });
+    }
+    res.json(updatedNews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка обновления новости' });
+  }
+});
+
+/* DELETE /api/news/:id — удаление новости по id */
+app.delete('/api/news/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedNews = await News.findByIdAndDelete(id);
+    if (!deletedNews) {
+      return res.status(404).json({ error: 'Новость не найдена' });
+    }
+    res.json({ message: 'Новость успешно удалена' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка при удалении новости' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+  
 
 const seasonSchema = new mongoose.Schema({
   season_id: { type: String, required: true },
@@ -57,34 +198,6 @@ app.get('/api/seasons', async (req, res) => {
 
 
 
-const newsSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  date: { type: String, required: true },
-  discription: { type: String, required: true },
-  pic: { type: String, required: true },
-  btn_link: { type: String, default: '' },
-  btn_tytle: { type: String, default: '' }
-});
-
-const News = mongoose.model('News', newsSchema);
-
-app.get('/api/news', async (req, res) => {
-  try {
-    
-    const baseUrl = "http://localhost:3000";
-    const news = await News.find({});
-    const updatedNews = news.map(item => {
-      if (!/^https?:\/\//.test(item.pic)) {
-        item.pic = `${baseUrl}/news/${item.pic}`;
-      }
-      return item;
-    });
-    res.json(updatedNews);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Ошибка сервера' });
-  }
-});
 
 
 const playerSchema = new mongoose.Schema({

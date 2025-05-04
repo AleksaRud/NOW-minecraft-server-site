@@ -1,8 +1,9 @@
 {
     "scripts": {
-        "client": "cd client && npm run dev",
-        "server": "cd server && npm run dev",
-        "dev": "concurrently \"npm run server\" \"npm run client\""
+        "dev:client": "cd client && npm run dev",
+        "dev:server": "cd server && npm run dev",
+        "dev:admin": "cd admin/NOW-admin && npm run dev",
+        "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" \"npm run dev:admin\""
     },
     "devDependencies": {
         "concurrently": "^7.6.0"

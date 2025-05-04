@@ -1,0 +1,43 @@
+body{
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial';
+  background-color: #121619;
+  box-sizing: border-box;
+  color: aliceblue;
+  overflow-x: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+}
+/* Track */
+/*
+::-webkit-scrollbar-track {
+  background: #1f3c5b;
+}*/
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #5a8fba;
+  border-radius: 4px;
+
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a3d9e0;
+}
+
+div[id="app"]{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+a, a:hover, a:active{
+  text-decoration: none;
+  color: aliceblue;
+}
