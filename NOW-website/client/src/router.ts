@@ -1,6 +1,7 @@
 import Landing from './components/Landing.vue'
 import AboutServer from './components/AboutServer.vue'
 import Players from './components/Players.vue'
+import Player from './components/Player.vue'
 import Projects from './components/Projects.vue'
 import MerchShop from './components/MerchShop.vue'
 import Account from './components/Account.vue'
@@ -16,6 +17,7 @@ const router = createRouter({
     {path:'/news', component: AllNews},
     {path:'/aboutserver', component: AboutServer},
     {path:'/players', component: Players},
+    {path:'/players/:player_id', name: 'Player', component: Player},
     {path:'/projects', component: Projects},
     {path:'/catalog', component: MerchShop},
     {path:'/catalog/:category_id', component: CatalogCategory},

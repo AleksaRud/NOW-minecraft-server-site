@@ -7,8 +7,9 @@ const app = express();
 app.use('/shop/categories', express.static(path.join(__dirname, 'uploads', 'shop', 'categories')));
 app.use('/shop/products', express.static(path.join(__dirname, 'uploads', 'shop', 'products')));
 app.use('/projects', express.static(path.join(__dirname, 'uploads', 'projects')));
-app.use('/player_cards/season1', express.static(path.join(__dirname, 'uploads', 'player_cards', 'season1')));
-app.use('/player_cards/middle_season1', express.static(path.join(__dirname, 'uploads', 'player_cards', 'middle_season1')));
+app.use('/players_cards', express.static(path.join(__dirname, 'uploads', 'players_cards')));
+app.use('/players_cards/season1', express.static(path.join(__dirname, 'uploads', 'players_cards', 'season1')));
+app.use('/players_cards/middle_season1', express.static(path.join(__dirname, 'uploads', 'players_cards', 'middle_season1')));
 app.use('/seasons', express.static(path.join(__dirname, 'uploads', 'seasons')));
 app.use('/news', express.static(path.join(__dirname, 'uploads', 'news')));
 //app.use('/seasons/middle_season1', express.static(path.join(__dirname, 'uploads', 'seasons', 'middle_season1')));
@@ -95,8 +96,70 @@ app.get('/api/news', async (req, res) => {
 });
 
 
+const playerSchema = new mongoose.Schema({
+  player_id: { type: String, required: true },
+  nickname: { type: String, required: true },
+  season_id: { type: Array, required: true },
+  card: { type: String, required: true },
+  all_pics: { type: Array, required: true },
+  info: { type: String, required: true },
+  links: { type: Array, default: [] },
+});
 
+const Player = mongoose.model('Player', playerSchema);
 
+// Создаём эндпоинт для получения категорий
+app.get('/api/players', async (req, res) => {
+  try {
+    
+    const baseUrl = "http://localhost:3000";
+    const players = await Player.find({});
+    const updatedPlayers = players.map(player => {
+      if (!/^https?:\/\//.test(player.card)) {
+        player.card = `${baseUrl}/players_cards/${player.card}`;
+        player.all_pics = player.all_pics.map(pic => {
+          if (!/^https?:\/\//.test(pic)) {
+            return `${baseUrl}/players_cards/${pic}`;
+          }
+          return pic;
+        })
+      }
+      return player;
+    });
+    res.json(updatedPlayers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+app.get('/api/players/:player_id', async (req, res) => {
+  const playerId = req.params.player_id;
+  try {
+    let player;
+    if (mongoose.Types.ObjectId.isValid(playerId)) {
+      player = await Player.findById(playerId);
+    } 
+    if (!player) {
+      player = await Player.findOne({ player_id: playerId });
+    }
+    if (!player) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    const baseUrl = "http://localhost:3000";
+
+    player.card = `${baseUrl}/players_cards/${player.card}`;
+    player.all_pics = player.all_pics.map(pic => {
+      if (!/^https?:\/\//.test(pic)) {
+        return `${baseUrl}/players_cards/${pic}`;
+      }
+      return pic;
+    })
+    res.json(player);
+  } catch (error) {
+    console.error(`Ошибка при получении товара с id ${playerId}:`, error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 // Определяем схему и модель для коллекции categories

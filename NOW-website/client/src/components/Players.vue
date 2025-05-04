@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { goToLink, getSource } from './links';
-import { players } from './players';
-
+import { onMounted, ref } from 'vue';
+import { fetchPlayers, players } from './players';
+import { fetchSeasons, seasons } from './seasons';
+onMounted(() => {
+    fetchSeasons();
+    fetchPlayers()
+});
 const activeKey = ref(0);
 const pageWidth = document.documentElement.scrollWidth;
 </script>
@@ -10,30 +13,24 @@ const pageWidth = document.documentElement.scrollWidth;
 <template>
     <div class="tabs">
         <a-tabs v-model:activeKey="activeKey" centered>
-            <a-tab-pane v-for="(season_group, id) in players" :key="id" :tab="(players.length >= 2) ? season_group.season : ''" class="tab"  v-if="pageWidth > 425">
-                <div v-for="(player, ind) in season_group.players_list" class="player" v-bind:style="(ind % 2) ? {flexDirection:'row-reverse'} : {flexDirection:'row'}">
-                    <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
-                    <div class="about">
+            <a-tab-pane v-for="(season, id) in seasons" :key="id" :tab="(players.length >= 2) ? season.name : ''" class="tab"  v-if="pageWidth > 425">
+                <div v-for="player in players.filter(player => player.season_id.includes(season.season_id))">
+                    <RouterLink :to="{
+                        name: 'Player',
+                        params: {
+                            player_id: player.player_id
+                        }
+                    }" class="player">
+                        <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
                         <div class="nickname">{{ player.nickname }}</div>
-                        <div class="info" v-html="player.info"></div>
-                        <div v-if="player.links" class="links">
-                            <a-button v-for="link in player.links" class="btn" @click = goToLink(link)>{{ getSource(link) }}</a-button>
-                        </div>
-                    </div>
+                    </RouterLink>
                 </div>
             </a-tab-pane>
-            <a-tab-pane v-for="(season_group, id) in players" :key="id" :tab="(players.length >= 2) ? season_group.season : ''" class="tab"  v-if="pageWidth <= 425">
-                <div v-for="(player, ind) in season_group.players_list" class="player">
+            <a-tab-pane v-for="(season, id) in seasons" :key="id" :tab="(players.length >= 2) ? season.name : ''" class="tab"  v-if="pageWidth <= 425">
+                <div v-for="(player, ind) in players" class="player">
                     <div class="card-and-name" v-bind:style="(ind % 2) ? {flexDirection:'row-reverse'} : {flexDirection:'row'}">
                         <div class="card" v-bind:style="{ background: 'url(' + player.card + '), #1f3c5b', backgroundPosition: 'top', backgroundSize: 'cover' }"></div>
                         <div class="nickname">{{ player.nickname }}</div>
-                    </div>
-                    
-                    <div class="about">
-                        <div class="info" v-html="player.info"></div>
-                        <div v-if="player.links" class="links">
-                            <a-button v-for="link in player.links" class="btn" @click = goToLink(link)>{{ getSource(link) }}</a-button>
-                        </div>
                     </div>
                 </div>
             </a-tab-pane>
@@ -48,45 +45,32 @@ const pageWidth = document.documentElement.scrollWidth;
     }
     .tab{
         display: flex;
-        flex-direction: column;
-        gap: 100px;
-        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 40px;
+        align-items: center;
+        justify-content: center;
         font-size: 18px;
     }
     .player{
-        width: 100%;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        filter: grayscale(100%);
+        transition: all 0.2s ease-in;
+    }
+    .player:hover, .player:focus{
+        filter: grayscale(0%);
+        transform:translateY(-20px);
     }
     .card{
-        min-width: 384px;
-        min-height: 540px;
-        border-radius: 36px;
-    }
-    .about{
-        width: 55%;
-        display: flex;
-        flex-direction: column;
-        gap: 36px;
+        min-width: 192px;
+        min-height: 270px;
+        border-radius: 18px;
     }
     .nickname{
-        font-size: 32px;
-    }
-    .about .info{
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    .links{
-        display: flex;
-        flex-direction: row;
-        gap: 20px;
-    }
-    .btn{
-        box-sizing: border-box;
-        height: 48px;
-        width: 144px;
+        font-size: 24px;
     }
     @media(max-width: 425px) {
         .tabs{
