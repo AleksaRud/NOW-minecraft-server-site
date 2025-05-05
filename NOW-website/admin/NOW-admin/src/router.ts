@@ -1,10 +1,9 @@
 import { createWebHistory, createRouter} from 'vue-router'
 import PageNotFound from './components/PageNotFound.vue'
-import MainPage from './components/MainPage.vue'
 import News from './components/News.vue'
 const router = createRouter({
   routes: [
-    {path:'/', component: MainPage},
+    {path:'/', component: News},
     {path: '/news', component: News},
     {path: '/:pathMatch(.*)*', component: PageNotFound},
   ],

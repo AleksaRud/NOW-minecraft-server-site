@@ -62,6 +62,28 @@ app.use(fileUpload());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Эндпоинт загрузки файла
+function transliterate(text) {
+  const rus = {
+    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g',
+    'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+    'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k',
+    'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+    'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
+    'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+    'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '',
+    'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+    'я': 'ya'
+  };
+
+  return text
+    .toLowerCase()
+    .split('')
+    .map(char => rus[char] !== undefined ? rus[char] : char)
+    .join('')
+    .replace(/\s+/g, '_');
+}
+
+// Эндпоинт загрузки файла
 app.post('/api/upload', (req, res) => {
   if (!req.files || !req.files.file) {
     return res.status(400).json({ error: 'Файл не предоставлен' });
@@ -75,11 +97,13 @@ app.post('/api/upload', (req, res) => {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
-  // Для уникальности можно добавить суффикс к имени файла:
-  const uniqueName = `file-${Date.now()}-${uploadedFile.name}`;
+  // Преобразуем оригинальное имя файла (например, заменяет русские символы на латинские)
+  const safeFileName = transliterate(uploadedFile.name);
+  // Добавляем уникальность, используя timestamp
+  const uniqueName = `file-${Date.now()}-${safeFileName}`;
   const uploadPath = path.join(uploadDir, uniqueName);
 
-  // Перемещаем файл в указанную директорию
+  // Перемещаем файл в целевую папку
   uploadedFile.mv(uploadPath, (err) => {
     if (err) {
       console.error('Ошибка при перемещении файла:', err);

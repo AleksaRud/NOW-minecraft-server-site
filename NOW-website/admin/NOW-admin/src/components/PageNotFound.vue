@@ -8,11 +8,6 @@
             <div class="title">Упс, кажется страницу украли, или её не существовало :(</div>
             <div class="hint">Вернитесь на главную или напишите в поддержу</div>
         </div>
-        <div class="buttons">
-            <RouterLink to="/">
-                <a-button class="btn">Главная</a-button>
-            </RouterLink>
-        </div>
     </div>
     
 </template>

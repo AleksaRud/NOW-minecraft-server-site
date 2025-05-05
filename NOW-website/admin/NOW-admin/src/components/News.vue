@@ -1,248 +1,286 @@
+<script setup lang="ts">
+import { ref, reactive, onMounted, type Ref } from 'vue';
+import { news_cards, fetchNews, type Card } from './news';
+
+const isEditing = ref(false);
+const editingId = ref<string | null>(null);
+
+const form = reactive({
+  title: '',
+  dateInput: '',
+  discription: '',
+  btn_link: '',
+  btn_tytle: '',
+  pic: ''
+});
+
+const selectedFile = ref<File | null>(null);
+const previewImage = ref('');
+
+onMounted(() => {
+  fetchNews();
+});
+
+const isModalVisible = ref(false);
+
+const resetForm = () => {
+  form.title = '';
+  form.dateInput = '';
+  form.discription = '';
+  form.btn_link = '';
+  form.btn_tytle = '';
+  form.pic = '';
+  selectedFile.value = null;
+  previewImage.value = '';
+  isEditing.value = false;
+  editingId.value = null;
+};
+
+// Обновлённый обработчик выбора файла. Добавлены логи для отладки.
+const handleFileChange = (info: any) => {
+  console.log("a-upload change event:", info);
+  // Пытаемся получить объект файла из originFileObj или используем сам info.file
+  const file = info.file?.originFileObj || info.file;
+  if (file) {
+    selectedFile.value = file;
+    previewImage.value = URL.createObjectURL(file);
+    console.log("Selected file:", file);
+  } else {
+    console.warn("Файл не найден в событии a-upload");
+  }
+};
+
+const submitNews = async () => {
+  try {
+    if (selectedFile.value) {
+      const fileData = new FormData();
+      fileData.append('file', selectedFile.value);
+      
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: fileData,
+      });
+      
+      if (!uploadResponse.ok) {
+        throw new Error('Ошибка загрузки изображения');
+      }
+      
+      const uploadResult = await uploadResponse.json();
+      form.pic = uploadResult.filename;
+      console.log("Upload result:", uploadResult);
+    }
+    
+    const payload = {
+      title: form.title,
+      date: form.dateInput,
+      discription: form.discription,
+      btn_link: form.btn_link,
+      btn_tytle: form.btn_tytle,
+      pic: form.pic,
+    };
+    
+    if (isEditing.value && editingId.value) {
+      const putResponse = await fetch(`/api/news/${editingId.value}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      
+      if (!putResponse.ok) {
+        throw new Error('Ошибка обновления новости');
+      }
+    } else {
+      const postResponse = await fetch('/api/news', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      
+      if (!postResponse.ok) {
+        throw new Error('Ошибка создания новости');
+      }
+    }
+    
+    resetForm();
+    isModalVisible.value = false;
+    fetchNews();
+  } catch (error) {
+    console.error('Ошибка при отправке формы:', error);
+  }
+};
+
+const handleOk = async () => {
+  await submitNews();
+};
+
+const handleCancel = () => {
+  resetForm();
+  isModalVisible.value = false;
+};
+
+const editNews = (item: Card & { _id: string }) => {
+  form.title = item.title;
+  form.dateInput = item.date.format('YYYY-MM-DD');
+  form.discription = item.discription;
+  form.btn_link = item.btn_link;
+  form.btn_tytle = item.btn_tytle;
+  form.pic = item.pic;
+  isEditing.value = true;
+  editingId.value = item._id;
+  previewImage.value = item.pic;
+  isModalVisible.value = true;
+};
+
+const showModalForAdd = () => {
+  resetForm();
+  isModalVisible.value = true;
+};
+
+const deleteNews = async (id: string) => {
+  try {
+    const deleteResponse = await fetch(`/api/news/${id}`, { method: 'DELETE' });
+    if (!deleteResponse.ok) {
+      throw new Error('Ошибка удаления новости');
+    }
+    fetchNews();
+  } catch (error) {
+    console.error('Ошибка при удалении новости:', error);
+  }
+};
+
+const columns = [
+  {
+    title: 'Заголовок',
+    dataIndex: 'title',
+    key: 'title',
+  },
+  {
+    title: 'Дата',
+    dataIndex: 'date',
+    key: 'date',
+    width: '160px',
+  },
+  {
+    title: 'Описание',
+    dataIndex: 'discription',
+    key: 'discription',
+  },
+  {
+    title: 'Изображение',
+    dataIndex: 'pic',
+    key: 'pic',
+  },
+  {
+    title: 'Кнопка',
+    dataIndex: 'btn_link',
+    key: 'btn_link',
+  },
+  {
+    title: 'Действия',
+    key: 'actions',
+  },
+];
+</script>
+
 <template>
-    <div class="news-admin">
-      <h1>Управление новостями</h1>
-      <button @click="resetForm">Создать новую новость</button>
-  
-      <!-- Список новостей -->
-      <table>
-        <thead>
-          <tr>
-            <th>Заголовок</th>
-            <th>Дата</th>
-            <th>Описание</th>
-            <th>Изображение</th>
-            <th>Кнопка</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in news_cards" :key="item._id">
-            <td>{{ item.title }}</td>
-            <td>{{ item.date.format('YYYY-MM-DD') }}</td>
-            <td>{{ item.discription }}</td>
-            <td>
-              <img :src="item.pic" alt="Изображение" width="100" />
-            </td>
-            <td>
-              <!-- Если кнопка нужна, можно отобразить ссылку -->
-              <a :href="item.btn_link" target="_blank">{{ item.btn_tytle }}</a>
-            </td>
-            <td>
-              <button @click="editNews(item)">Редактировать</button>
-              <button @click="deleteNews(item._id)">Удалить</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  
-      <!-- Форма создания/редактирования новости -->
-      <form @submit.prevent="submitNews">
-        <div>
-          <label>Заголовок:</label>
-          <input v-model="form.title" type="text" required />
-        </div>
-        <div>
-          <label>Дата:</label>
-          <input v-model="form.dateInput" type="date" required />
-        </div>
-        <div>
-          <label>Описание:</label>
-          <textarea v-model="form.discription" required></textarea>
-        </div>
-        <div>
-          <label>Ссылка кнопки:</label>
-          <input v-model="form.btn_link" type="text" placeholder="(опционально)" />
-        </div>
-        <div>
-          <label>Текст кнопки:</label>
-          <input v-model="form.btn_tytle" type="text" placeholder="(опционально)" />
-        </div>
-        <div>
-          <label>Изображение:</label>
-          <input type="file" @change="handleFileChange" />
-          <div v-if="previewImage">
+  <div class="news-admin">
+    <h1>Управление новостями</h1>
+    <a-button type="primary" @click="showModalForAdd" style="margin-bottom: 16px">
+      Создать новость
+    </a-button>
+
+    <a-table bordered :dataSource="news_cards" :columns="columns" rowKey="_id">
+      <template #bodyCell="{ column, text, record }">
+        <template v-if="column.dataIndex === 'title'">
+          {{ text }}
+        </template>
+        <template v-else-if="column.dataIndex === 'date'">
+          {{ text.format('YYYY-MM-DD') }}
+        </template>
+        <template v-else-if="column.dataIndex === 'discription'">
+          {{ text }}
+        </template>
+        <template v-else-if="column.dataIndex === 'pic'">
+          <img :src="text" alt="Изображение" width="100" class="img" />
+        </template>
+        <template v-else-if="column.dataIndex === 'btn_link'">
+          <a :href="record.btn_link" target="_blank">{{ record.btn_tytle }}</a>
+        </template>
+        <template v-else-if="column.key === 'actions'">
+          <a-button type="primary" @click="editNews(record)" style="margin-right: 8px">
+            Редактировать
+          </a-button>
+          <a-popconfirm title="Вы уверены, что хотите удалить?" @confirm="deleteNews(record._id)">
+            <template #default>
+              <a-button type="primary" danger>Удалить</a-button>
+            </template>
+          </a-popconfirm>
+        </template>
+        <template v-else>
+          {{ text }}
+        </template>
+      </template>
+    </a-table>
+
+    <a-modal
+      v-model:visible="isModalVisible"
+      :title="isEditing ? 'Редактировать новость' : 'Создать новость'"
+      :okText="isEditing ? 'Обновить' : 'Добавить'"
+      style="top: 20px"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      destroyOnClose
+    >
+      <a-form layout="vertical">
+        <a-form-item label="Заголовок" required>
+          <a-input v-model:value="form.title" placeholder="Введите заголовок" />
+        </a-form-item>
+
+        <a-form-item label="Дата" required>
+          <a-date-picker
+            v-model:value="form.dateInput"
+            value-format="YYYY-MM-DD"
+            style="width: 100%;"
+            placeholder="Выберите дату"
+          />
+        </a-form-item>
+
+        <a-form-item label="Описание" required>
+          <a-textarea v-model:value="form.discription" rows="4" placeholder="Введите описание" />
+        </a-form-item>
+
+        <a-form-item label="Ссылка кнопки">
+          <a-input v-model:value="form.btn_link" placeholder="(опционально)" />
+        </a-form-item>
+
+        <a-form-item label="Текст кнопки">
+          <a-input v-model:value="form.btn_tytle" placeholder="(опционально)" />
+        </a-form-item>
+
+        <a-form-item label="Изображение">
+          <a-upload 
+            :show-upload-list="false" 
+            :beforeUpload="() => false"
+            @change="handleFileChange"
+          >
+            <a-button>Выбрать файл</a-button>
+          </a-upload>
+          <div v-if="previewImage" style="margin-top: 8px;">
             <img :src="previewImage" alt="Превью" width="100" />
           </div>
-        </div>
-        <div>
-          <button type="submit">{{ isEditing ? 'Обновить' : 'Добавить' }}</button>
-        </div>
-      </form>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, reactive, onMounted } from 'vue';
-  import dayjs from 'dayjs';
-  import { news_cards, fetchNews, type Card } from './news';
-  
-  // Флаги для определения режима работы формы
-  const isEditing = ref(false);
-  const editingId = ref<string | null>(null);
-  
-  // Форма – локальное состояние для редактирования / создания новости
-  const form = reactive({
-    title: '',
-    // Для поля даты используем строковый формат (input type="date")
-    dateInput: '',
-    discription: '',
-    btn_link: '',
-    btn_tytle: '',
-    pic: '' // сюда будет записано имя/URL изображения после загрузки
-  });
-  
-  // Для выбранного файла и превью
-  const selectedFile = ref<File | null>(null);
-  const previewImage = ref('');
-  
-  // При монтировании компонента получаем новости
-  onMounted(() => {
-    fetchNews();
-  });
-  
-  // Сброс формы в начальное состояние
-  const resetForm = () => {
-    form.title = '';
-    form.dateInput = '';
-    form.discription = '';
-    form.btn_link = '';
-    form.btn_tytle = '';
-    form.pic = '';
-    selectedFile.value = null;
-    previewImage.value = '';
-    isEditing.value = false;
-    editingId.value = null;
-  };
-  
-  // Обработка выбора файла
-  const handleFileChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files[0]) {
-      selectedFile.value = target.files[0];
-      previewImage.value = URL.createObjectURL(selectedFile.value);
-    }
-  };
-  
-  // Отправка формы: если выбран файл, сначала загружаем его на сервер,
-  // затем отправляем POST (создание) или PUT (редактирование) запрос
-  const submitNews = async () => {
-    try {
-      // Если выбран файл, загружаем его через эндпоинт /api/upload
-      if (selectedFile.value) {
-        const fileData = new FormData();
-        fileData.append('file', selectedFile.value);
-    
-        const uploadResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: fileData
-        });
-    
-        if (!uploadResponse.ok) {
-          throw new Error('Ошибка загрузки изображения');
-        }
-    
-        const uploadResult = await uploadResponse.json();
-        // Ожидается, что сервер вернёт объект { filename: string }
-        form.pic = uploadResult.filename;
-      }
-    
-      // Готовим payload. Для даты можно отправлять в виде строки (например, YYYY-MM-DD)
-      const payload = {
-        title: form.title,
-        date: form.dateInput,
-        discription: form.discription,
-        btn_link: form.btn_link,
-        btn_tytle: form.btn_tytle,
-        pic: form.pic
-      };
-    
-      if (isEditing.value && editingId.value) {
-        // Редактирование: обновляем новость методом PUT
-        const putResponse = await fetch(`/api/news/${editingId.value}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-    
-        if (!putResponse.ok) {
-          throw new Error('Ошибка обновления новости');
-        }
-      } else {
-        // Создание новой новости методом POST
-        const postResponse = await fetch('/api/news', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-    
-        if (!postResponse.ok) {
-          throw new Error('Ошибка создания новости');
-        }
-      }
-    
-      resetForm();
-      fetchNews();
-    } catch (error) {
-      console.error('Ошибка при отправке формы:', error);
-    }
-  };
-  
-  // При нажатии кнопки "Редактировать" заполняем форму данными выбранной новости
-  const editNews = (item: Card & { _id: string }) => {
-    form.title = item.title;
-    form.dateInput = item.date.format('YYYY-MM-DD');
-    form.discription = item.discription;
-    form.btn_link = item.btn_link;
-    form.btn_tytle = item.btn_tytle;
-    form.pic = item.pic;
-    isEditing.value = true;
-    editingId.value = item._id;
-    previewImage.value = item.pic;
-  };
-  
-  // Удаление новости по её идентификатору
-  const deleteNews = async (id: string) => {
-    try {
-      const deleteResponse = await fetch(`/api/news/${id}`, {
-        method: 'DELETE'
-      });
-    
-      if (!deleteResponse.ok) {
-        throw new Error('Ошибка удаления новости');
-      }
-    
-      fetchNews();
-    } catch (error) {
-      console.error('Ошибка при удалении новости:', error);
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .news-admin {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-  }
-  .news-admin table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  .news-admin th,
-  .news-admin td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  .news-admin th {
-    background-color: #f2f2f2;
-  }
-  .news-admin form > div {
-    margin-bottom: 15px;
-  }
-  </style>
-  
+        </a-form-item>
+      </a-form>
+    </a-modal>
+  </div>
+</template>
+
+<style scoped>
+.news-admin {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+.img {
+  border-radius: 4px;
+}
+</style>
