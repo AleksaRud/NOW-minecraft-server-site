@@ -12,6 +12,7 @@ const theme = {
     "colorTextDescription": "rgba(255, 255, 255, 0.5)",
     "fontSize": 18,
     "colorBgTextHover": "#1f3c5b66",
+    "colorInfoBg":"#151b22",
   },
   components: {
     Tabs: {
@@ -55,6 +56,9 @@ const theme = {
       "controlItemBgHover": "rgba(255, 255, 255, 0.1)",
             "colorIcon": "rgba(255, 255, 255, 0.45)",
       "colorIconHover": "rgba(255, 255, 255, 0.85)"
+    },
+    Popover: {
+      "colorBgElevated": "#121619",
     }
   },
 

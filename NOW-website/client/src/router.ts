@@ -10,6 +10,7 @@ import CatalogCategory from './components/CatalogCategory.vue'
 import Product from './components/Product.vue'
 import { createWebHistory, createRouter} from 'vue-router'
 import AllNews from './components/AllNews.vue'
+import Cart from './components/Cart.vue'
 
 const router = createRouter({
   routes: [
@@ -24,6 +25,7 @@ const router = createRouter({
     {path:'/catalog/:category_id/:product_id', name: 'Product', component: Product},
     {path:'/account', component: Account},
     {path: '/:pathMatch(.*)*', component: PageNotFound},
+    {path: '/cart', component: Cart}
   ],
   history: createWebHistory(),
   scrollBehavior(_to, _from, _savedPosition) {

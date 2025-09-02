@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, type Ref } from 'vue';
 import { news_cards, fetchNews, type Card } from './news';
-
+import { h } from 'vue';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
 const isEditing = ref(false);
 const editingId = ref<string | null>(null);
 
@@ -36,10 +37,8 @@ const resetForm = () => {
   editingId.value = null;
 };
 
-// Обновлённый обработчик выбора файла. Добавлены логи для отладки.
 const handleFileChange = (info: any) => {
   console.log("a-upload change event:", info);
-  // Пытаемся получить объект файла из originFileObj или используем сам info.file
   const file = info.file?.originFileObj || info.file;
   if (file) {
     selectedFile.value = file;
@@ -161,11 +160,6 @@ const columns = [
     width: '160px',
   },
   {
-    title: 'Описание',
-    dataIndex: 'discription',
-    key: 'discription',
-  },
-  {
     title: 'Изображение',
     dataIndex: 'pic',
     key: 'pic',
@@ -178,6 +172,7 @@ const columns = [
   {
     title: 'Действия',
     key: 'actions',
+    width: '360px',
   },
 ];
 </script>
@@ -207,12 +202,12 @@ const columns = [
           <a :href="record.btn_link" target="_blank">{{ record.btn_tytle }}</a>
         </template>
         <template v-else-if="column.key === 'actions'">
-          <a-button type="primary" @click="editNews(record)" style="margin-right: 8px">
+          <a-button type="primary" :icon="h(EditOutlined)" @click="editNews(record)" style="margin-right: 8px">
             Редактировать
           </a-button>
           <a-popconfirm title="Вы уверены, что хотите удалить?" @confirm="deleteNews(record._id)">
             <template #default>
-              <a-button type="primary" danger>Удалить</a-button>
+              <a-button type="primary"  :icon="h(DeleteOutlined)"  danger>Удалить</a-button>
             </template>
           </a-popconfirm>
         </template>
@@ -226,9 +221,12 @@ const columns = [
       v-model:visible="isModalVisible"
       :title="isEditing ? 'Редактировать новость' : 'Создать новость'"
       :okText="isEditing ? 'Обновить' : 'Добавить'"
+      :cancelText="'Отмена'"
       style="top: 20px"
+      width="100%"
       @ok="handleOk"
       @cancel="handleCancel"
+      wrap-class-name="full-modal"
       destroyOnClose
     >
       <a-form layout="vertical">
@@ -282,5 +280,22 @@ const columns = [
 }
 .img {
   border-radius: 4px;
+}
+
+.full-modal {
+  .ant-modal {
+    max-width: 100%;
+    top: 0;
+    padding-bottom: 0;
+    margin: 0;
+  }
+  .ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh);
+  }
+  .ant-modal-body {
+    flex: 1;
+  }
 }
 </style>

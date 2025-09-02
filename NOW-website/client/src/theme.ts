@@ -12,6 +12,7 @@ const theme = {
     "colorTextDescription": "rgba(255, 255, 255, 0.5)",
     "fontSize": 18,
     "colorBgTextHover": "#1f3c5b66",
+    "colorInfoBg":"#151b22",
   },
   components: {
     Tabs: {
@@ -39,12 +40,10 @@ const theme = {
       "colorPrimaryActive": "#3d84bd",
       "colorPrimaryHover": "#7bb3dc"
     },
-    
     Modal: {
       "colorBgElevated": "#121619"
     }
   },
-
 }
 
 const theme_mobile = {

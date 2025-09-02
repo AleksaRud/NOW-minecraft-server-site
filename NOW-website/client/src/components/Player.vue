@@ -3,12 +3,38 @@ import { onMounted, ref } from 'vue';
 import { goToLink, getSource } from './links';
 import { fetchPlayerById, player } from './players';
 import { useRoute } from 'vue-router';
+
 onMounted(() => {
     const id = route.params.player_id as string;
     fetchPlayerById(id)
 });
 let route = useRoute();
 const pageWidth = document.documentElement.scrollWidth;
+
+import { reactive } from 'vue';
+
+// Объект для отслеживания состояния наведения каждого элемента
+const hovered = reactive<Record<number, boolean>>({});
+
+// Функция для обновления состояния наведения по индексу
+const setHover = (index: number, state: boolean): void => {
+  hovered[index] = state;
+};
+
+const getButtonStyle = (link: string, isHover: boolean = false) => {
+  const source = getSource(link);
+  return {
+    color: isHover ? '#ffffff' : source.color,
+    backgroundColor: isHover ? source.color : 'transparent',
+    borderColor: isHover ? source.color : '#858585',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderRadius: '4px',
+    padding: '8px 16px',
+    transition: 'all 0.3s ease'
+  };
+};
+
 </script>
 
 <template>
@@ -23,7 +49,17 @@ const pageWidth = document.documentElement.scrollWidth;
                 <div class="nickname">{{ player?.nickname }}</div>
                 <div class="info" v-html="player?.info"></div>
                 <div v-if="player?.links" class="links">
-                    <a-button v-for="link in player?.links" class="btn" @click = goToLink(link)>{{ getSource(link) }}</a-button>
+                        <a-button
+      v-for="(link, index) in player?.links"
+      :key="index"
+      :class="hovered[index] ? 'btn-hover' : 'btn'"
+      :style="getButtonStyle(link, hovered[index])"
+      @mouseover="setHover(index, true)"
+      @mouseleave="setHover(index, false)"
+      @click="goToLink(link)"
+    >
+      {{ getSource(link).text }}
+    </a-button>
                 </div>
             </div>
         </div>
@@ -91,6 +127,18 @@ const pageWidth = document.documentElement.scrollWidth;
         box-sizing: border-box;
         height: 48px;
         width: 144px;
+
+        border-color: currentColor;
+        color: aliceblue;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn-hover {
+        height: 48px;
+        width: 144px;
+        color: #f0f0f0;
+        border-color: #a3d9e0;
+        
     }
     .pics{
         width: 100%;

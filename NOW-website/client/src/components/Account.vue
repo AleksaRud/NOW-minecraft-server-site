@@ -8,7 +8,6 @@ import LoginForm from './LoginForm.vue';
 <template>
     
     <div class="account">
-        <LoginForm/>
         <div class="account-info">
             <div class="photo">
                 <div class="pic"></div>
@@ -33,7 +32,7 @@ import LoginForm from './LoginForm.vue';
             </div>
             <a-button>Редактировать</a-button>
         </div>
-        <div class="statistics">
+        <div class="statistics" >
             <div class="title">Статистика</div>
             <div class="stat-data">
                 <div class="group">

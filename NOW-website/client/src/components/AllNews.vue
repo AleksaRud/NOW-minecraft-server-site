@@ -37,7 +37,7 @@ const handleOk = () => {
                     </div>
                     <div class="description">{{ card.discription }}</div>
                     <a-button type="link" @click="showModal(card)" class="link-btn">Подробнее</a-button>
-                    <a-modal class="modal" style="top: 20px" v-model:open="open" :title="selectedCard?.title" width="800px" @ok="handleOk" :closable="true">
+                    <a-modal class="modal" style="top: 20px" v-model:open="open" :title="selectedCard?.title" width="800px" :footer="null" @ok="handleOk" :closable="true">
                         <div class="pic" v-bind:style="{ background: 'url(' + selectedCard?.pic + ')', backgroundPosition: 'center', backgroundSize: 'cover' }"></div>
                         <div class="title-date">
                             <div class="news-title-modal">{{ selectedCard?.title }}</div>

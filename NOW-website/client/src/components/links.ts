@@ -4,15 +4,15 @@ function goToLink( link: string ){
 function getSource( link: string ){
     switch(true){
         case link.includes('t.me'):
-            return 'Telegram';
+            return {text:'Telegram', color: 'rgb(46, 147, 224)'};
         case link.includes('vk.com'):
-            return 'Вк';
+            return {text: 'Вк', color:'rgb(0, 106, 255)'};
         case link.includes('youtube.com'):
-            return 'YouTube';
+            return {text:'YouTube', color: 'rgb(255, 0, 0)'};
         case link.includes('twitch'):
-            return 'Twitch';
+            return {text: 'Twitch', color: 'rgb(116, 10, 255)'};
         default: 
-            return 'Другое';
+            return {text:'Другое', color: '#5a8fba'};
     }
 } 
 

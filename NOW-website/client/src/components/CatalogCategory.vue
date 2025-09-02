@@ -5,73 +5,117 @@ import { products, fetchProductsByCategory, sortProducts } from './products';
 import { categories, fetchCategories } from './categories';
 
 const route = useRoute();
-
 const currentCategoryId = ref(route.params.category_id as string);
 
-onMounted(async () => {
-	await fetchCategories();
-	await fetchProductsByCategory(currentCategoryId.value);
-});
+// Определяем реактивные переменные для фильтров
+const filter_status = ref<{ status: string; is_checked: boolean }[]>([]);
+const price = ref<[number, number]>([0, 100]);
 
-watch(
-	() => route.params.category_id,
-	async (newId) => {
-		if (newId) {
-			currentCategoryId.value = newId as string;
-			await fetchProductsByCategory(currentCategoryId.value);
-		}
-	},
-	{ immediate: true }
-);
-
-const selected_category = computed(() =>
-	categories.value.find(item => item.category_id === currentCategoryId.value)
-);
-
-const category_catalog = computed(() =>
-	products.value.filter(item => item.category_id === currentCategoryId.value)
-);
-
-watch(category_catalog, (newCatalog) => {
-	sortProducts(newCatalog);
-}, { immediate: true });
-
-const product_status = computed(() => {
-	return [...new Set(category_catalog.value.map(item => item.status))];
-});
-
-const filter_status = ref(
-	product_status.value.map(status => ({ status, is_checked: false }))
-);
-watch(product_status, (newStatuses) => {
-	filter_status.value = newStatuses.map(status => ({ status, is_checked: false }));
-}, { immediate: true });
-
-const filtered_catalog = ref(category_catalog.value);
-watch(category_catalog, (newCatalog) => {
-	filtered_catalog.value = newCatalog;
-}, { immediate: true });
-
-function UpdateCatalog(e: Event) {
-	if (filter_status.value.every(item => !item.is_checked)) {
-		filtered_catalog.value = category_catalog.value.filter(item =>
-			item.price >= price.value[0] && item.price <= price.value[1]
-		);
-	} else {
-		filtered_catalog.value = category_catalog.value.filter(item =>
-			filter_status.value.some(status_obj => status_obj.status === item.status && status_obj.is_checked) &&
-			item.price >= price.value[0] && item.price <= price.value[1]
-		);
-	}
+// Функция для сохранения фильтров в cookie
+function saveFiltersToCookie() {
+  const filters = {
+    filter_status: filter_status.value,
+    price: price.value
+  };
+  // Сохраняем cookie на 7 дней (max-age в секундах)
+  document.cookie = `filters=${encodeURIComponent(JSON.stringify(filters))}; path=/; max-age=${7 * 24 * 60 * 60}`;
 }
 
-const price = ref<[number, number]>([0, 100]);
+// Функция для чтения cookie по имени
+function getCookie(name: string): string | null {
+  const cookieArr = document.cookie.split(';');
+  for (let cookie of cookieArr) {
+    cookie = cookie.trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring((name + '=').length);
+    }
+  }
+  return null;
+}
+
+// Вычисляем список всех уникальных статусов товаров
+const category_catalog = computed(() =>
+  products.value.filter(item => item.category_id === currentCategoryId.value)
+);
+const product_status = computed(() => {
+  return [...new Set(category_catalog.value.map(item => item.status))];
+});
+
+// Функция, которая обновляет фильтрованный список товаров
+const filtered_catalog = ref(category_catalog.value);
+function UpdateCatalog(e: Event) {
+  if (filter_status.value.every(item => !item.is_checked)) {
+    filtered_catalog.value = category_catalog.value.filter(item =>
+      item.price >= price.value[0] && item.price <= price.value[1]
+    );
+  } else {
+    filtered_catalog.value = category_catalog.value.filter(item =>
+      filter_status.value.some(status_obj => status_obj.status === item.status && status_obj.is_checked) &&
+      item.price >= price.value[0] && item.price <= price.value[1]
+    );
+  }
+}
+
+// При монтировании загружаем cookie и устанавливаем фильтры
+onMounted(async () => {
+  await fetchCategories();
+  await fetchProductsByCategory(currentCategoryId.value);
+  
+  // Если сохранённые фильтры найдены, используем их, иначе берем значения по умолчанию
+  const savedFiltersStr = getCookie('filters');
+  if (savedFiltersStr) {
+    try {
+      const savedFilters = JSON.parse(decodeURIComponent(savedFiltersStr));
+      if (savedFilters.filter_status) {
+        filter_status.value = savedFilters.filter_status;
+      }
+      if (savedFilters.price) {
+        price.value = savedFilters.price;
+      }
+    } catch (error) {
+      console.error("Ошибка при чтении cookie с фильтрами", error);
+      // Если парсинг не удался, инициализируем фильтр по статусам по умолчанию
+      filter_status.value = product_status.value.map(status => ({ status, is_checked: false }));
+    }
+  } else {
+    // Если cookie нет, устанавливаем дефолтные значения
+    filter_status.value = product_status.value.map(status => ({ status, is_checked: false }));
+  }
+  
+  // Далее применяем фильтрацию уже с восстановленными значениями
+  UpdateCatalog(new Event('change'));
+});
+
+// Если меняется выбранная категория, перезагружаем товары
+watch(
+  () => route.params.category_id,
+  async (newId) => {
+    if (newId) {
+      currentCategoryId.value = newId as string;
+      await fetchProductsByCategory(currentCategoryId.value);
+    }
+  },
+  { immediate: true }
+);
+
+// Если список товаров меняется (например, после запроса), сортируем и фильтруем
+watch(category_catalog, (newCatalog) => {
+  sortProducts(newCatalog);
+  UpdateCatalog(new Event('change'));
+}, { immediate: true });
+
+// Если пользователь меняет фильтры (чекбоксы или диапазон цены), сохраняем их в cookie
+watch([filter_status, price], () => {
+  saveFiltersToCookie();
+}, { deep: true });
+
 const formatter = (value: number) => `${value} BYN`;
 
 const onChange = (value: number) => {
+  // Дополнительная логика (при необходимости)
 };
 const onAfterChange = (value: number) => {
-	UpdateCatalog(new Event('change'));
+  UpdateCatalog(new Event('change'));
 };
 
 const pageWidth = document.documentElement.scrollWidth;
@@ -83,123 +127,128 @@ const showModal = () => {
 const handleOk = () => {
   open.value = false;
 };
+
+const selected_category = computed(() =>
+  categories.value.find(item => item.category_id === currentCategoryId.value)
+);
 </script>
 
 <template>
-	<div class="catalog-page">
-		<a-breadcrumb>
-			<a-breadcrumb-item>
-				<RouterLink to="/catalog">Каталог</RouterLink>
-			</a-breadcrumb-item>
-			<a-breadcrumb-item>{{ selected_category?.name || 'Загрузка...' }}</a-breadcrumb-item>
-		</a-breadcrumb>
+  <div class="catalog-page">
+    <a-breadcrumb>
+      <a-breadcrumb-item>
+        <RouterLink to="/catalog">Каталог</RouterLink>
+      </a-breadcrumb-item>
+      <a-breadcrumb-item>{{ selected_category?.name || 'Загрузка...' }}</a-breadcrumb-item>
+    </a-breadcrumb>
 
-		<div class="category-name">
-			{{ selected_category?.name || 'Загрузка...' }}
-		</div>
-		<div class="category-catalog">
-			<a-button type="link" @click="showModal()" class="link-btn" v-if="pageWidth < 425">Фильтры</a-button>
-			<a-modal class="filters" style="top: 20px" v-model:open="open" title="Фильтры" width="800px" @ok="handleOk" :closable="true">
-				<div class="hint">Статус</div>
-				<div class="checkboxes">
-					<a-checkbox
-						v-for="status in filter_status"
-						:key="status.status"
-						v-model:checked="status.is_checked"
-						@change="UpdateCatalog">
-						{{ status.status }}
-					</a-checkbox>
-				</div>
-				<div class="hint">Цена</div>
-				<a-slider
-					v-model:value="price"
-					range
-					:step="1"
-					:tip-formatter="formatter"
-					@change="onChange"
-					@afterChange="onAfterChange"
-					class="price-slider" />
-				<div class="price-inputs">
-					<a-input-number
-						:controls="false"
-						:formatter="formatter"
-						v-model:value="price[0]"
-						:min="0"
-						:max="price[1]"
-						class="price-input" />
-					<a-input-number
-						:controls="false"
-						:formatter="formatter"
-						v-model:value="price[1]"
-						:min="price[0]"
-						class="price-input" />
-				</div>
-			</a-modal>
-			<div class="filters" v-if="pageWidth >= 425">
-				<div class="hint">Статус</div>
-				<div class="checkboxes">
-					<a-checkbox
-						v-for="status in filter_status"
-						:key="status.status"
-						v-model:checked="status.is_checked"
-						@change="UpdateCatalog">
-						{{ status.status }}
-					</a-checkbox>
-				</div>
-				<div class="hint">Цена</div>
-				<a-slider
-					v-model:value="price"
-					range
-					:step="1"
-					:tip-formatter="formatter"
-					@change="onChange"
-					@afterChange="onAfterChange"
-					class="price-slider" />
-				<div class="price-inputs">
-					<a-input-number
-						:controls="false"
-						:formatter="formatter"
-						v-model:value="price[0]"
-						:min="0"
-						:max="price[1]"
-						class="price-input" />
-					<a-input-number
-						:controls="false"
-						:formatter="formatter"
-						v-model:value="price[1]"
-						:min="price[0]"
-						class="price-input" />
-				</div>
-			</div>
-			<div class="catalog">
-				<div v-for="product in filtered_catalog">
-					<RouterLink :to="{
-						name: 'Product',
-						params: {
-							category_id: product.category_id,
-							product_id: product.product_id
-						}
-					}" class="product-card">
-						<div class="pic" :style="{
-								background: 'url(' + product.pic + ') no-repeat center/contain, #D5EAFFDE'
-							}"></div>
-						<div class="group">
-							<div class="name">
-								{{ product.name }}
-							</div>
-							<div class="rate">
-								<div>{{ product.avgRating }}</div>
-								<div class="star"></div>
-							</div>
-						</div>
-						<div class="status">{{ product.status }}</div>
-						<div class="price">{{ product.price }} BYN</div>
-					</RouterLink>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="category-name">
+      {{ selected_category?.name || 'Загрузка...' }}
+    </div>
+    <div class="category-catalog">
+      <a-button type="link" @click="showModal()" class="link-btn" v-if="pageWidth < 425">Фильтры</a-button>
+      <a-modal class="filters" style="top: 20px" v-model:open="open" title="Фильтры" width="800px" @ok="handleOk" :closable="true">
+        <div class="hint">Статус</div>
+        <div class="checkboxes">
+          <a-checkbox
+            v-for="status in filter_status"
+            :key="status.status"
+            v-model:checked="status.is_checked"
+            @change="UpdateCatalog">
+            {{ status.status }}
+          </a-checkbox>
+        </div>
+        <div class="hint">Цена</div>
+        <a-slider
+          v-model:value="price"
+          range
+          :step="1"
+          :tip-formatter="formatter"
+          @change="onChange"
+          @afterChange="onAfterChange"
+          class="price-slider" />
+        <div class="price-inputs">
+          <a-input-number
+            :controls="false"
+            :formatter="formatter"
+            v-model:value="price[0]"
+            :min="0"
+            :max="price[1]"
+            class="price-input" />
+          <a-input-number
+            :controls="false"
+            :formatter="formatter"
+            v-model:value="price[1]"
+            :min="price[0]"
+            class="price-input" />
+        </div>
+      </a-modal>
+      <div class="filters" v-if="pageWidth >= 425">
+        <div class="hint">Статус</div>
+        <div class="checkboxes">
+          <a-checkbox
+            v-for="status in filter_status"
+            :key="status.status"
+            v-model:checked="status.is_checked"
+            @change="UpdateCatalog">
+            {{ status.status }}
+          </a-checkbox>
+        </div>
+        <div class="hint">Цена</div>
+        <a-slider
+          v-model:value="price"
+          range
+          :step="1"
+          :tip-formatter="formatter"
+          @change="onChange"
+          @afterChange="onAfterChange"
+          class="price-slider" />
+        <div class="price-inputs">
+          <a-input-number
+            :controls="false"
+            :formatter="formatter"
+            v-model:value="price[0]"
+            :min="0"
+            :max="price[1]"
+            class="price-input" />
+          <a-input-number
+            :controls="false"
+            :formatter="formatter"
+            v-model:value="price[1]"
+            :min="price[0]"
+            class="price-input" />
+        </div>
+      </div>
+      <div class="catalog">
+        <div v-for="product in filtered_catalog" :key="product.product_id">
+          <RouterLink :to="{
+            name: 'Product',
+            params: {
+              category_id: product.category_id,
+              product_id: product.product_id
+            }
+          }" class="product-card">
+            <div class="pic" :style="{
+                background: 'url(' + product.pic + ') no-repeat center/contain, #D5EAFFDE'
+              }"></div>
+            <div class="group">
+              <div class="name">
+                {{ product.name }}
+              </div>
+              <div class="rate">
+                <div>{{ product.avgRating }}</div>
+                <div class="star"></div>
+              </div>
+            </div>
+            <div class="status">{{ product.status }}</div>
+            <div class="price">{{ product.price }} BYN</div>
+          </RouterLink>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+
 
 <style scoped>
  .category-catalog a{

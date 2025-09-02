@@ -14,7 +14,11 @@ onMounted(() => {
             
                 <div v-for="category in categories">
                     <RouterLink :to="`/catalog/${category.category_id}`" class="category" >
-                        <div class="pic" v-bind:style="{ background: 'url(' + category.pic + '), #a5b8e388', backgroundPosition: 'center', backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }"></div>
+                        <div class="pic" v-bind:style="{
+                            background: 'url(' + category.pic + '), #a5b8e388',
+                            backgroundPosition: 'center', backgroundSize: 'contain', 
+                            backgroundRepeat: 'no-repeat' }">
+                        </div>
                         <div class="name">{{ category.name }}</div>
                     </RouterLink>
                 </div>

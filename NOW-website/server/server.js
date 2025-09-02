@@ -1,7 +1,7 @@
-// server.js
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session')
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,6 +22,37 @@ mongoose.connect('mongodb://localhost:27017/NOW-DB', {
   .catch(err => console.error('Ошибка подключения к MongoDB:', err));
 
 
+// Настройка сессии
+app.use(session({
+  secret: 'sefcbvyWEd3EW3v79',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+
+app.post('/api/cart/add', (req, res) => {
+  const product = req.body;
+  if (!req.session.cart) {
+    req.session.cart = [];
+  }
+  const index = req.session.cart.findIndex(item => item.product_id === product.product_id);
+  if (index !== -1) {
+    req.session.cart[index].quantity += product.quantity;
+  } else {
+    req.session.cart.push(product);
+  }
+  res.json({ success: true, cart: req.session.cart });
+});
+
+app.get('/session/cart', (req, res) => {
+  res.json({ cart: req.session.cart || [] });
+});
+
+// Эндпоинт для получения корзины
+app.get('/api/cart', (req, res) => {
+  res.json({ cart: req.session.cart || [] });
+});
+
 const newsSchema = new mongoose.Schema({
   title: { type: String, required: true },
   date: { type: String, required: true },
@@ -32,7 +63,7 @@ const newsSchema = new mongoose.Schema({
 });
 
 const News = mongoose.model('News', newsSchema);
-
+/* GET /api/news — получение всех новостей */
 app.get('/api/news', async (req, res) => {
   try {
     
@@ -55,13 +86,10 @@ const fileUpload = require('express-fileupload');
 const fs = require('fs');
 
 
-// middleware для обработки файлов, загруженных формой
 app.use(fileUpload());
 
-// Раздаем статику для доступа к файлам
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Эндпоинт загрузки файла
 function transliterate(text) {
   const rus = {
     'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g',
@@ -82,8 +110,7 @@ function transliterate(text) {
     .join('')
     .replace(/\s+/g, '_');
 }
-
-// Эндпоинт загрузки файла
+/* POST /api/upload — загрузка файла (например, картинки) */
 app.post('/api/upload', (req, res) => {
   if (!req.files || !req.files.file) {
     return res.status(400).json({ error: 'Файл не предоставлен' });
@@ -92,18 +119,14 @@ app.post('/api/upload', (req, res) => {
   const uploadedFile = req.files.file;
   const uploadDir = path.join(__dirname, 'uploads', 'news');
 
-  // Создаем папку, если ее нет
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
-  // Преобразуем оригинальное имя файла (например, заменяет русские символы на латинские)
   const safeFileName = transliterate(uploadedFile.name);
-  // Добавляем уникальность, используя timestamp
   const uniqueName = `file-${Date.now()}-${safeFileName}`;
   const uploadPath = path.join(uploadDir, uniqueName);
 
-  // Перемещаем файл в целевую папку
   uploadedFile.mv(uploadPath, (err) => {
     if (err) {
       console.error('Ошибка при перемещении файла:', err);
@@ -112,16 +135,6 @@ app.post('/api/upload', (req, res) => {
     res.json({ filename: uniqueName });
   });
 });
-
-/* =========== */
-/* Эндпоинты */
-/* =========== */
-
-/* POST /api/upload — загрузка файла (например, картинки) */
-
-
-
-/* GET /api/news — получение всех новостей */
 
 
 /* POST /api/news — создание новой новости */
@@ -145,7 +158,7 @@ app.put('/api/news/:id', async (req, res) => {
     const updatedNews = await News.findByIdAndUpdate(
       id,
       { title, date, discription, pic, btn_link, btn_tytle },
-      { new: true } // вернуть обновлённый документ
+      { new: true }
     );
     if (!updatedNews) {
       return res.status(404).json({ error: 'Новость не найдена' });
@@ -464,7 +477,54 @@ app.get('/api/reviews', async (req, res) => {
   }
 });
 
+const nodemailer = require('nodemailer');
 
+// Создаём тестовый аккаунт и транспортёра один раз при запуске сервера
+nodemailer.createTestAccount((err, testAccount) => {
+  if (err) {
+    console.error('Ошибка создания тестового аккаунта:', err);
+    return;
+  }
+
+  // Создаём транспорт с данными тестового аккаунта
+  const transporter = nodemailer.createTransport({
+    host: testAccount.smtp.host,
+    port: testAccount.smtp.port,
+    secure: testAccount.smtp.secure, // true для 465, false для других портов
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass,
+    },
+    connectionTimeout: 10000,
+  });
+
+  app.post('/api/send-email', async (req, res) => {
+    const { from, to, subject, text } = req.body;
+    const mailOptions = { from, to, subject, text };
+
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      const previewUrl = nodemailer.getTestMessageUrl(info);
+      console.log('Письмо отправлено успешно! Preview URL:', previewUrl);
+      res.json({ message: 'Письмо отправлено успешно', previewUrl });
+    } catch (error) {
+      console.error('Ошибка при отправке письма:', error);
+      res.status(500).json({ error: 'Ошибка при отправке письма' });
+    }
+  });
+
+  app.get('/', (req, res) => {
+    res.send('Сервер работает');
+  });
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () =>
+    console.log(`Сервер запущен на порту ${PORT}`)
+  );
+});
+
+
+/*
 app.listen(3000, () => {
   console.log('Сервер запущен на порту 3000');
-});
+});*/
